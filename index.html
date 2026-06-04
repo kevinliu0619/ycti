@@ -254,6 +254,15 @@ body::before {
   50% { box-shadow: 0 0 18px rgba(232,168,80,.25); }
 }
 
+/* Author Credit */
+.author-credit {
+  font-size: 11px;
+  color: rgba(255,255,255,.18);
+  text-align: center;
+  margin-top: 16px;
+  letter-spacing: 1px;
+}
+
 /* Toast */
 .toast {
   position: fixed;
@@ -293,6 +302,7 @@ body::before {
         从 50 题题库中随机抽取 25 题，找到属于你的露营人格。
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
+      <div class="author-credit">@悠哉日常大囧</div>
     </div>
   </div>
 
@@ -320,6 +330,7 @@ body::before {
         <button class="btn btn-primary" onclick="shareResult()">📸 保存分享图</button>
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
       </div>
+      <div class="author-credit">@悠哉日常大囧</div>
     </div>
   </div>
 </div>
@@ -922,6 +933,7 @@ function shareResult() {
   ctx.fillStyle = 'rgba(255,255,255,.15)';
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
+  ctx.fillText('@悠哉日常大囧', 240, 710);
   
   // Download
   const link = document.createElement('a');
