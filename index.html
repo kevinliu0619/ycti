@@ -262,6 +262,12 @@ body::before {
   margin-top: 16px;
   letter-spacing: 1px;
 }
+.version-tag {
+  font-size: 9px;
+  color: rgba(255,255,255,.10);
+  text-align: center;
+  margin-top: 2px;
+}
 
 /* Toast */
 .toast {
@@ -299,10 +305,11 @@ body::before {
       <div class="campfire">🔥</div>
       <div class="desc">
         本栖湖畔的篝火，富士山下的晨曦。<br>
-        从 50 题题库中随机抽取 25 题，找到属于你的露营人格。
+        找到属于你的摇曳露营人格。
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
+      <div class="version-tag">v0.4</div>
     </div>
   </div>
 
@@ -331,6 +338,7 @@ body::before {
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
+      <div class="version-tag">v0.4</div>
     </div>
   </div>
 </div>
@@ -376,7 +384,7 @@ const PERSONALITIES = {
 };
 
 // ============================================================
-// DATA: 50 Questions — 25 randomly selected each test
+// DATA: 50 Questions — 20 randomly selected each test
 // ============================================================
 const QUESTIONS = [
   { text:'你在本栖湖畔搭好帐篷，篝火燃起，天黑了。这时候你……', options:[
@@ -660,9 +668,9 @@ function showScreen(id) {
 function startQuiz() {
   scores = {};
   currentQ = 0;
-  // Select 25 questions from the 50-question bank
+  // Select 20 questions from the 50-question bank
   const allIndices = shuffle([...Array(QUESTIONS.length).keys()]);
-  const selectedIndices = allIndices.slice(0, 25);
+  const selectedIndices = allIndices.slice(0, 20);
   questionOrder = selectedIndices;
   shuffledQuestions = selectedIndices.map(i => QUESTIONS[i]);
   showScreen('quizScreen');
@@ -934,6 +942,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
+  ctx.fillText('v0.4', 240, 715);
   
   // Download
   const link = document.createElement('a');
