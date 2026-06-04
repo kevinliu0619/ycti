@@ -180,6 +180,26 @@ body::before {
 
 /* Result Screen */
 .result-screen { text-align: center; padding: 20px 0 32px; }
+/* Result theme colors */
+.result-screen.theme-rin { background: linear-gradient(180deg, #1a2a3d 0%, #141428 60%, #1a1a35 100%); }
+.result-screen.theme-rin .result-code { color: #7eb8da; text-shadow: 0 0 30px rgba(126,184,218,.3); }
+.result-screen.theme-rin .result-badge { color: #7eb8da; }
+.result-screen.theme-nadeshiko { background: linear-gradient(180deg, #2d1a24 0%, #141428 60%, #1a1a35 100%); }
+.result-screen.theme-nadeshiko .result-code { color: #e8a0b0; text-shadow: 0 0 30px rgba(232,160,176,.3); }
+.result-screen.theme-nadeshiko .result-badge { color: #e8a0b0; }
+.result-screen.theme-chiaki { background: linear-gradient(180deg, #251d33 0%, #141428 60%, #1a1a35 100%); }
+.result-screen.theme-chiaki .result-code { color: #b89ad4; text-shadow: 0 0 30px rgba(184,154,212,.3); }
+.result-screen.theme-chiaki .result-badge { color: #b89ad4; }
+.result-screen.theme-aoi { background: linear-gradient(180deg, #1f2418 0%, #141428 60%, #1a1a35 100%); }
+.result-screen.theme-aoi .result-code { color: #a8b878; text-shadow: 0 0 30px rgba(168,184,120,.3); }
+.result-screen.theme-aoi .result-badge { color: #a8b878; }
+.result-screen.theme-ena { background: linear-gradient(180deg, #1a1a28 0%, #141428 60%, #1a1a35 100%); }
+.result-screen.theme-ena .result-code { color: #c0b8a8; text-shadow: 0 0 30px rgba(192,184,168,.3); }
+.result-screen.theme-ena .result-badge { color: #c0b8a8; }
+.result-screen.theme-easter { background: linear-gradient(180deg, #2a2218 0%, #141428 60%, #1a1a35 100%); }
+.result-screen.theme-easter .result-code { color: #d4b840; text-shadow: 0 0 30px rgba(212,184,64,.4); }
+.result-screen.theme-easter .result-badge { color: #d4b840; }
+
 .result-badge {
   font-size: 11px; color: var(--warm); letter-spacing: 3px;
   margin-bottom: 16px; text-transform: uppercase;
@@ -309,7 +329,7 @@ body::before {
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.4</div>
+      <div class="version-tag">v0.5</div>
     </div>
   </div>
 
@@ -338,7 +358,7 @@ body::before {
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.4</div>
+      <div class="version-tag">v0.5</div>
     </div>
   </div>
 </div>
@@ -350,37 +370,37 @@ body::before {
 // DATA: 30 Personalities
 // ============================================================
 const PERSONALITIES = {
-  LONE:  { code:'LONE',  role:'凛',  tag:'独狼凛',  quote:'"一个人最自在。篝火+书+咖啡=完美世界。"', desc:'你在爷爷的影响下爱上了露营，但比起一群人热热闹闹，你更享受一个人的节奏。搭好帐篷，烧起篝火，泡杯咖啡，翻开书——这就是你的理想假期。朋友约你你也会去，但内心最深处，你知道最好的露营地是只有自己知道的那个。', partner:'NOM', partnerText:'她会闯进你的营地，然后你发现自己居然没赶她走。', easter:false },
-  TSUN:  { code:'TSUN',  role:'凛',  tag:'傲娇凛',  quote:'"我才不是为了你们才来的。"',  desc:'然后默默帮所有人劈好了柴，查好了天气，还偷偷通知了老师来救场。你嘴上说着"麻烦""不要"，但每次朋友有需要，你总是第一个到。你只是不擅长把关心说出口，但行动从不撒谎。', partner:'SUNNY', partnerText:'她总能一眼看穿你的"不要"其实是"好吧"。', easter:false },
-  PAGE:  { code:'PAGE',  role:'凛',  tag:'文艺凛',  quote:'"露营的终极奥义，是换个风景好的地方看书。"', desc:'你选择露营地的标准不是设施好不好，而是——那里安静吗？能看见富士山吗？光线适合看书吗？你会在篝火旁读到深夜，然后第二天清晨被鸟鸣叫醒。世界很吵，但你有自己的节奏。', partner:'LONE', partnerText:'你们会安静地坐在一起，各自看书，偶尔抬头对视一眼，又继续低头。', easter:false },
-  OWL:   { code:'OWL',   role:'凛',  tag:'夜猫子凛',  quote:'"深夜才是主场。凌晨三点的富士山，只属于醒着的人。"', desc:'你习惯在别人都睡着之后，一个人坐在篝火旁。有时候看星星，有时候就是发呆。你不是失眠——你只是觉得夜晚比白天更诚实。凌晨的风吹过来的时候，你觉得全世界都是你的。', partner:'LURK', partnerText:'她也在线。你们在不同的地方，看同一片星空。', easter:false },
-  SPA:   { code:'SPA',   role:'凛',  tag:'温泉凛',  quote:'"露营地选在温泉旁边不是偶然，是信仰。"', desc:'对你来说，露营的终极享受不是帐篷也不是篝火——是泡完温泉后那一瞬间。你愿意为了一个有温泉的营地多骑几十公里。泡在热水里看着远山的时候，你觉得人生没有过不去的坎。', partner:'SEYANA', partnerText:'她泡温泉的时候一句话不说，你们都很享受这种沉默。', easter:false },
-  NOM:   { code:'NOM',   role:'抚子', tag:'饿鬼抚子',  quote:'"露营的终极奥义就是吃！50个饺子只是开胃菜！"', desc:'你看到美食的眼神会让朋友害怕。你的露营计划核心不是"去哪"，而是"吃什么"。你可以在吃完2kg汉堡肉+超大份炒面+拉面之后，说一句"又饿了"——并且是认真的。但你也从不吝啬分享，你做的饭永远够所有人吃。', partner:'CHEF', partnerText:'或者更准确地说，你们就是同一个人。做饭和吃饭，都是你。', easter:false },
-  SUNNY: { code:'SUNNY', role:'抚子', tag:'小太阳抚子', quote:'"好耶！一起去！大家一起去！"', desc:'你像一只金毛——看到谁都热情，去哪都开心，遇到什么事都先笑。你的快乐不需要理由，而且传染性极强。三分钟前还陌生的人，聊完就觉得认识很久了。你不是没有烦恼，你只是觉得没必要让烦恼占太多时间。', partner:'LONE', partnerText:'你是唯一能让她露出笑容的那个人。', easter:false },
-  'BOO!':{ code:'BOO!', role:'抚子', tag:'胆小鬼抚子', quote:'"别讲了别讲了别讲了——"', desc:'怕黑、怕鬼、怕怪谈。听到帐篷外有奇怪的声音会缩进睡袋最深处。但奇怪的是——为了给朋友拍夜景照，你可以一个人走半小时的黑暗山路。恐惧不会让你停下，你只是需要先尖叫一下。', partner:'MOM', partnerText:'她会一边说"真拿你没办法"一边陪你走夜路。', easter:false },
-  CHEF:  { code:'CHEF',  role:'抚子', tag:'实验料理王抚子',  quote:'"试试这个——巧克力放进咖喱里？还有这个熏制奶酪……"', desc:'你对料理没有边界感。锡纸包整颗蔬菜烤？甜酒曲奇？咖喱里放巧克力？你什么都敢试。有时候成功，有时候翻车，但翻车了你也会笑着吃完。你的厨房（或者说篝火旁）永远是最热闹的地方。', partner:'NOM', partnerText:'她负责吃，你负责做，完美循环。', easter:false },
-  CHOO:  { code:'CHOO',  role:'抚子', tag:'铁道宅抚子',  quote:'"坐齿轨列车比露营还兴奋！露营只是顺便啦。"', desc:'你本来只是去露营，结果在途中迷上了Abt式齿轨列车、蒸汽机车、无人车站。你开始研究铁道时刻表，买印着铁道发明家头像的T恤。朋友说"我们不是来露营的吗"，你说"对啊，但你看这个列车——"', partner:'DRIVE', partnerText:'她开车，你坐电车，在不同的轨道上奔赴同一个方向。', easter:false },
-  CHAOS: { code:'CHAOS', role:'千明', tag:'整活王千明',  quote:'"把自己打包成快递寄到露营地？我觉得可行！"', desc:'你就是野活部叫"整活部"的原因。你的脑洞没有边界，你的行动力也没有。你策划的露营计划永远包含至少一个离谱的环节，但最后总能莫名其妙地成功。朋友说你是"麻烦制造机"，你说"不，我是惊喜制造机"。', partner:'DASH', partnerText:'整活需要执行，你们就是彼此的加速器。', easter:false },
-  WEEP:  { code:'WEEP',  role:'千明', tag:'爱哭鬼千明',  quote:'"呜呜呜这个露营场太棒了我好感动——"', desc:'你是嗓门最大的人，也是泪腺最浅的人。篝火旁聊着聊着突然哭了，看日出哭了，看到朋友偷偷给你准备的生日惊喜哭得更凶。你从不掩饰自己的情绪，哭完笑完，继续整活。', partner:'MOM', partnerText:'她会默默递纸巾，然后假装没看见你哭。', easter:false },
-  BROKE: { code:'BROKE', role:'千明', tag:'穷鬼千明',  quote:'"700日元！买了个爹！"', desc:'你的露营装备几乎全是二手店淘的。你买过700日元的木碗（后来变成了仙人掌盆），用劣化吊床替代露营椅，自制的熏制器用纸箱做的。你不觉得穷是问题——你觉得穷是创意的催化剂。', partner:'CARB', partnerText:'两人一起逛二手店，互相怂恿"这个可以买"。', easter:false },
-  DASH:  { code:'DASH',  role:'千明', tag:'热血笨蛋千明',  quote:'"迷路也是体验！反正会被救的——大概吧！"', desc:'你是那种想到什么就冲的人。先出发再查路线，先买了再说怎么用。你经常搞砸，但从不后悔。因为最棒的故事往往来自最离谱的意外。而且你有一个（或者好几个）无论如何都会来救你的朋友。', partner:'DRIVE', partnerText:'她会开车来救你。虽然嘴上骂你，但油门下得很稳。', easter:false },
-  SEYANA:{ code:'SEYANA',role:'葵',  tag:'佛系葵',  quote:'"せやな～"', desc:'天塌下来？主打一个随缘。你是那个在所有人焦虑的时候说"まあ、なんとかなる"（总会有办法的）的人。你说话带着关西腔的慵懒，行动带着一种从容的节奏。不是不在乎，而是你知道——急也没用。', partner:'CHAOS', partnerText:'她是龙卷风，你是风眼。没有你，她早就把自己吹飞了。', easter:false },
-  MOM:   { code:'MOM',   role:'葵',  tag:'老妈子葵',  quote:'"先把饭做好，热水烧好，然后你们再闹。"', desc:'你是野活组真正的幕后支柱。千明负责整活，你负责善后；抚子负责吃，你负责做。你记得每个人的口味，知道谁需要加衣服，在所有人疯完闹完之后，你已经默默把一切收拾好了。你从不说"我来照顾你们"，但每个人都知道你会的。', partner:'WEEP', partnerText:'她哭的时候，只有你知道什么时候该递纸巾，什么时候该假装没看见。', easter:false },
-  BLUFF: { code:'BLUFF', role:'葵',  tag:'大话精葵',  quote:'"我跟你们说，上次我骑自行车……"', desc:'你的浓眉一挑，死鱼眼一翻，一段真假难辨的故事即将出口。你编故事的时候面不改色，细节丰富到让人怀疑"难道是真的？"——但谢天谢地，你从不拿重要的事开玩笑。你的谎言是野活组的保留节目。', partner:'TROLL', partnerText:'你们俩凑在一起，没人能分清哪句是真的。', easter:false },
-  CARB:  { code:'CARB',  role:'葵',  tag:'碳水狂魔葵',  quote:'"骑车40公里？不，是为了去那个便利店看看有没有新出的面包。"', desc:'你的骑行路线规划不是按距离，是按沿途便利店的数量。你能骑出41km/h的速度——但每次停下来都是因为"这家店看起来不错"。你骑车是为了吃，吃是为了骑车，这是一个完美的循环。', partner:'NOM', partnerText:'你们一起骑车，一起吃饭，一起感叹"人生啊"。', easter:false },
-  LURK:  { code:'LURK',  role:'惠那', tag:'云露营惠那',  quote:'"人在被炉，心在营地。点赞从不缺席，出门下次一定。"', desc:'你是野活组的编外成员——从未正式加入，但每次露营的群聊你都全程在线。你远程给凛提供建议，撮合野活组和凛认识，偶尔还通风报信。你的参与感不靠到场，靠信息量。你知道的永远比在场的人多。', partner:'OWL', partnerText:'你们在不同的地方，看着同一片星空，互相发消息。', easter:false },
-  TROLL: { code:'TROLL', role:'惠那', tag:'搞事精惠那',  quote:'"りんりん～抚子说她马上到哦～"', desc:'其实你根本没告诉抚子。你最大的乐趣不是自己搞事，是看别人因为你的安排而相遇。你促成了凛和野活组的第一次接触，方式是"卖队友"。你笑眯眯地站在幕后，看着一切如你所料地发生。', partner:'CHAOS', partnerText:'你们俩的整活组合，能让整个营地鸡飞狗跳。', easter:false },
-  DOGGO: { code:'DOGGO', role:'惠那', tag:'狗奴惠那',  quote:'"竹轮在哪我在哪。露营可以不去，狗不能不撸。"', desc:'你给竹轮买了35000日元的专属露营装备——包括一顶10000日元的狗帐篷。你计划18岁考驾照，不是为了自己，是为了带竹轮去更远的地方。别人问你为什么不加入野活部，你说"还没打算从归宅部毕业"——其实就是想多陪竹轮。', partner:'WAN!', partnerText:'你们不需要语言。你懂它，它懂你。', easter:false },
-  COZY:  { code:'COZY',  role:'惠那', tag:'被炉星人惠那',  quote:'"被炉是宇宙的中心。冬天+被炉+零食+手机=幸福。"', desc:'你的作息极其不规律，早起是你最大的敌人。你可以在被炉里度过整个冬天，靠手机远程参与一切社交活动。你知道这样不太好——但被炉真的很暖和，手机真的很好玩，外面的世界可以再等等。', partner:'SEYANA', partnerText:'你们一起躺在被炉里，一句话不说，但都觉得"这样就挺好"。', easter:false },
+  LONE:  { code:'LONE',  role:'凛',  tag:'独狼凛',  quote:'"一个人最自在。篝火+书+咖啡=完美世界。"', desc:'你在爷爷的影响下爱上了露营，但比起一群人热热闹闹，你更享受一个人的节奏。搭好帐篷，烧起篝火，泡杯咖啡，翻开书——这就是你的理想假期。朋友约你你也会去，但内心最深处，你知道最好的露营地是只有自己知道的那个。', partner:'NOM', partnerText:'她会闯进你的营地，然后你发现自己居然没赶她走。', theme:'rin',easter:false },
+  TSUN:  { code:'TSUN',  role:'凛',  tag:'傲娇凛',  quote:'"我才不是为了你们才来的。"',  desc:'然后默默帮所有人劈好了柴，查好了天气，还偷偷通知了老师来救场。你嘴上说着"麻烦""不要"，但每次朋友有需要，你总是第一个到。你只是不擅长把关心说出口，但行动从不撒谎。', partner:'SUNNY', partnerText:'她总能一眼看穿你的"不要"其实是"好吧"。', theme:'rin',easter:false },
+  PAGE:  { code:'PAGE',  role:'凛',  tag:'文艺凛',  quote:'"露营的终极奥义，是换个风景好的地方看书。"', desc:'你选择露营地的标准不是设施好不好，而是——那里安静吗？能看见富士山吗？光线适合看书吗？你会在篝火旁读到深夜，然后第二天清晨被鸟鸣叫醒。世界很吵，但你有自己的节奏。', partner:'LONE', partnerText:'你们会安静地坐在一起，各自看书，偶尔抬头对视一眼，又继续低头。', theme:'rin',easter:false },
+  OWL:   { code:'OWL',   role:'凛',  tag:'夜猫子凛',  quote:'"深夜才是主场。凌晨三点的富士山，只属于醒着的人。"', desc:'你习惯在别人都睡着之后，一个人坐在篝火旁。有时候看星星，有时候就是发呆。你不是失眠——你只是觉得夜晚比白天更诚实。凌晨的风吹过来的时候，你觉得全世界都是你的。', partner:'LURK', partnerText:'她也在线。你们在不同的地方，看同一片星空。', theme:'rin',easter:false },
+  SPA:   { code:'SPA',   role:'凛',  tag:'温泉凛',  quote:'"露营地选在温泉旁边不是偶然，是信仰。"', desc:'对你来说，露营的终极享受不是帐篷也不是篝火——是泡完温泉后那一瞬间。你愿意为了一个有温泉的营地多骑几十公里。泡在热水里看着远山的时候，你觉得人生没有过不去的坎。', partner:'SEYANA', partnerText:'她泡温泉的时候一句话不说，你们都很享受这种沉默。', theme:'rin',easter:false },
+  NOM:   { code:'NOM',   role:'抚子', tag:'饿鬼抚子',  quote:'"露营的终极奥义就是吃！50个饺子只是开胃菜！"', desc:'你看到美食的眼神会让朋友害怕。你的露营计划核心不是"去哪"，而是"吃什么"。你可以在吃完2kg汉堡肉+超大份炒面+拉面之后，说一句"又饿了"——并且是认真的。但你也从不吝啬分享，你做的饭永远够所有人吃。', partner:'CHEF', partnerText:'或者更准确地说，你们就是同一个人。做饭和吃饭，都是你。', theme:'nadeshiko',easter:false },
+  SUNNY: { code:'SUNNY', role:'抚子', tag:'小太阳抚子', quote:'"好耶！一起去！大家一起去！"', desc:'你像一只金毛——看到谁都热情，去哪都开心，遇到什么事都先笑。你的快乐不需要理由，而且传染性极强。三分钟前还陌生的人，聊完就觉得认识很久了。你不是没有烦恼，你只是觉得没必要让烦恼占太多时间。', partner:'LONE', partnerText:'你是唯一能让她露出笑容的那个人。', theme:'nadeshiko',easter:false },
+  'BOO!':{ code:'BOO!', role:'抚子', tag:'胆小鬼抚子', quote:'"别讲了别讲了别讲了——"', desc:'怕黑、怕鬼、怕怪谈。听到帐篷外有奇怪的声音会缩进睡袋最深处。但奇怪的是——为了给朋友拍夜景照，你可以一个人走半小时的黑暗山路。恐惧不会让你停下，你只是需要先尖叫一下。', partner:'MOM', partnerText:'她会一边说"真拿你没办法"一边陪你走夜路。', theme:'nadeshiko',easter:false },
+  CHEF:  { code:'CHEF',  role:'抚子', tag:'实验料理王抚子',  quote:'"试试这个——巧克力放进咖喱里？还有这个熏制奶酪……"', desc:'你对料理没有边界感。锡纸包整颗蔬菜烤？甜酒曲奇？咖喱里放巧克力？你什么都敢试。有时候成功，有时候翻车，但翻车了你也会笑着吃完。你的厨房（或者说篝火旁）永远是最热闹的地方。', partner:'NOM', partnerText:'她负责吃，你负责做，完美循环。', theme:'nadeshiko',easter:false },
+  CHOO:  { code:'CHOO',  role:'抚子', tag:'铁道宅抚子',  quote:'"坐齿轨列车比露营还兴奋！露营只是顺便啦。"', desc:'你本来只是去露营，结果在途中迷上了Abt式齿轨列车、蒸汽机车、无人车站。你开始研究铁道时刻表，买印着铁道发明家头像的T恤。朋友说"我们不是来露营的吗"，你说"对啊，但你看这个列车——"', partner:'DRIVE', partnerText:'她开车，你坐电车，在不同的轨道上奔赴同一个方向。', theme:'nadeshiko',easter:false },
+  CHAOS: { code:'CHAOS', role:'千明', tag:'整活王千明',  quote:'"把自己打包成快递寄到露营地？我觉得可行！"', desc:'你就是野活部叫"整活部"的原因。你的脑洞没有边界，你的行动力也没有。你策划的露营计划永远包含至少一个离谱的环节，但最后总能莫名其妙地成功。朋友说你是"麻烦制造机"，你说"不，我是惊喜制造机"。', partner:'DASH', partnerText:'整活需要执行，你们就是彼此的加速器。', theme:'chiaki',easter:false },
+  WEEP:  { code:'WEEP',  role:'千明', tag:'爱哭鬼千明',  quote:'"呜呜呜这个露营场太棒了我好感动——"', desc:'你是嗓门最大的人，也是泪腺最浅的人。篝火旁聊着聊着突然哭了，看日出哭了，看到朋友偷偷给你准备的生日惊喜哭得更凶。你从不掩饰自己的情绪，哭完笑完，继续整活。', partner:'MOM', partnerText:'她会默默递纸巾，然后假装没看见你哭。', theme:'chiaki',easter:false },
+  BROKE: { code:'BROKE', role:'千明', tag:'穷鬼千明',  quote:'"700日元！买了个爹！"', desc:'你的露营装备几乎全是二手店淘的。你买过700日元的木碗（后来变成了仙人掌盆），用劣化吊床替代露营椅，自制的熏制器用纸箱做的。你不觉得穷是问题——你觉得穷是创意的催化剂。', partner:'CARB', partnerText:'两人一起逛二手店，互相怂恿"这个可以买"。', theme:'chiaki',easter:false },
+  DASH:  { code:'DASH',  role:'千明', tag:'热血笨蛋千明',  quote:'"迷路也是体验！反正会被救的——大概吧！"', desc:'你是那种想到什么就冲的人。先出发再查路线，先买了再说怎么用。你经常搞砸，但从不后悔。因为最棒的故事往往来自最离谱的意外。而且你有一个（或者好几个）无论如何都会来救你的朋友。', partner:'DRIVE', partnerText:'她会开车来救你。虽然嘴上骂你，但油门下得很稳。', theme:'chiaki',easter:false },
+  SEYANA:{ code:'SEYANA',role:'葵',  tag:'佛系葵',  quote:'"せやな～"', desc:'天塌下来？主打一个随缘。你是那个在所有人焦虑的时候说"まあ、なんとかなる"（总会有办法的）的人。你说话带着关西腔的慵懒，行动带着一种从容的节奏。不是不在乎，而是你知道——急也没用。', partner:'CHAOS', partnerText:'她是龙卷风，你是风眼。没有你，她早就把自己吹飞了。', theme:'aoi',easter:false },
+  MOM:   { code:'MOM',   role:'葵',  tag:'老妈子葵',  quote:'"先把饭做好，热水烧好，然后你们再闹。"', desc:'你是野活组真正的幕后支柱。千明负责整活，你负责善后；抚子负责吃，你负责做。你记得每个人的口味，知道谁需要加衣服，在所有人疯完闹完之后，你已经默默把一切收拾好了。你从不说"我来照顾你们"，但每个人都知道你会的。', partner:'WEEP', partnerText:'她哭的时候，只有你知道什么时候该递纸巾，什么时候该假装没看见。', theme:'aoi',easter:false },
+  USOYARE: { code:'USOYARE', role:'葵',  tag:'嘘やれ葵',  quote:'"我跟你们说，上次我骑自行车……"', desc:'你的浓眉一挑，死鱼眼一翻，一段真假难辨的故事即将出口。你编故事的时候面不改色，细节丰富到让人怀疑"难道是真的？"——但谢天谢地，你从不拿重要的事开玩笑。你的「嘘やれ」是野活组的保留节目。', partner:'TROLL', partnerText:'你们俩凑在一起，没人能分清哪句是真的。', theme:'aoi',easter:false },
+  CARB:  { code:'CARB',  role:'葵',  tag:'碳水狂魔葵',  quote:'"骑车40公里？不，是为了去那个便利店看看有没有新出的面包。"', desc:'你的骑行路线规划不是按距离，是按沿途便利店的数量。你能骑出41km/h的速度——但每次停下来都是因为"这家店看起来不错"。你骑车是为了吃，吃是为了骑车，这是一个完美的循环。', partner:'NOM', partnerText:'你们一起骑车，一起吃饭，一起感叹"人生啊"。', theme:'aoi',easter:false },
+  LURK:  { code:'LURK',  role:'惠那', tag:'云露营惠那',  quote:'"人在被炉，心在营地。点赞从不缺席，出门下次一定。"', desc:'你是野活组的编外成员——从未正式加入，但每次露营的群聊你都全程在线。你远程给凛提供建议，撮合野活组和凛认识，偶尔还通风报信。你的参与感不靠到场，靠信息量。你知道的永远比在场的人多。', partner:'OWL', partnerText:'你们在不同的地方，看着同一片星空，互相发消息。', theme:'ena',easter:false },
+  TROLL: { code:'TROLL', role:'惠那', tag:'搞事精惠那',  quote:'"りんりん～抚子说她马上到哦～"', desc:'其实你根本没告诉抚子。你最大的乐趣不是自己搞事，是看别人因为你的安排而相遇。你促成了凛和野活组的第一次接触，方式是"卖队友"。你笑眯眯地站在幕后，看着一切如你所料地发生。', partner:'CHAOS', partnerText:'你们俩的整活组合，能让整个营地鸡飞狗跳。', theme:'ena',easter:false },
+  DOGGO: { code:'DOGGO', role:'惠那', tag:'爱犬惠那',  quote:'"竹轮在哪我在哪。露营可以不去，狗不能不撸。"', desc:'你给竹轮买了35000日元的专属露营装备——包括一顶10000日元的狗帐篷。你计划18岁考驾照，不是为了自己，是为了带竹轮去更远的地方。别人问你为什么不加入野活部，你说"还没打算从归宅部毕业"——其实就是想多陪竹轮。', partner:'WAN!', partnerText:'你们不需要语言。你懂它，它懂你。', theme:'ena',easter:false },
+  COZY:  { code:'COZY',  role:'惠那', tag:'被炉星人惠那',  quote:'"被炉是宇宙的中心。冬天+被炉+零食+手机=幸福。"', desc:'你的作息极其不规律，早起是你最大的敌人。你可以在被炉里度过整个冬天，靠手机远程参与一切社交活动。你知道这样不太好——但被炉真的很暖和，手机真的很好玩，外面的世界可以再等等。', partner:'SEYANA', partnerText:'你们一起躺在被炉里，一句话不说，但都觉得"这样就挺好"。', theme:'ena',easter:false },
   // Easter eggs
-  'WAN!': { code:'WAN!', role:'竹轮', tag:'竹轮本犬', quote:'"汪！"', desc:'你是齐藤惠那的吉娃娃，品种虽小，待遇极大——35000日元的专属露营套装的含金量，人类们自己体会。圣诞露营时你被装扮成兔子、驯鹿，你忍了。你最大的愿望是：被窝+摸摸，永远不要停。人类露营关你什么事？你有狗帐篷。', partner:'DOGGO', partnerText:'她是你的全世界，你是她的全部。', easter:true },
-  '6CAN': { code:'6CAN', role:'老师', tag:'酒鬼老师', quote:'"六罐姐可不是白叫的。"', desc:'你表面上是温柔贤淑的新人教师，每天下班后光顾酒庄，雷打不动买半打啤酒。喝醉之后你像换了一个人，眼神从眯眯眼变成死鱼眼。你的学生叫你"六罐姐"，你的妹妹吐槽你，你戒酒期间迷上了黄油曲奇——但戒酒结束后又开了一瓶。', partner:'BLUFF', partnerText:'喝醉后听她讲故事，你分不清是自己醉了还是故事太离谱。', easter:true },
-  SAGE:  { code:'SAGE',  role:'爷爷', tag:'露营仙人', quote:'"你年轻时帐篷还是帆布的。"', desc:'你是凛露营的起点。你骑Triumph THRUXTON 1200R，一整年都在旅行。你把自己用过的露营装备传给凛，就像把一种生活方式悄悄种进她的生命。你在mono里帮路人修过摩托车，然后继续上路。你从不教人怎么露营——你只是做给他们看。', partner:'LONE', partnerText:'她是你生命中最满意的作品，虽然你从没说出来。', easter:true },
-  '3776': { code:'3776', role:'中毒者', tag:'富士山中毒者', quote:'"3776。这不是数字，是信仰。"', desc:'你对富士山的爱超越了理性。你能从任何角度认出富士山，你能说出每个观景点的最佳时间，你的手机号码尾号是3776——你说只是巧合，没人信。你看到富士山的时候，会停下一切，安静地看很久。然后脱口而出："3776米……"', partner:'PAGE', partnerText:'和她一起安静地看富士山，不用说话，就是最好的陪伴。', easter:true },
-  CHILL: { code:'CHILL', role:'绫乃', tag:'慵懒骑士绫乃', quote:'"绫乃的体力是三人中最差的——但没关系，反正骑完摩托瘫在地上也很舒服。"', desc:'你是抚子的青梅竹马，和凛一样骑摩托。你说话拖长音，动作懒洋洋，长距离骑行后会直接瘫在地上。但你对朋友的心意从不打折——你从滨松骑到山梨，只为了兑现"总有一天一起露营"的约定。', partner:'TSUN', partnerText:'你们在酷道152上并排骑行，她开得快，你开得慢，但最后都会在露营地碰头。', easter:true },
-  DRIVE: { code:'DRIVE', role:'樱姐', tag:'飙车党樱姐', quote:'"いいよ。"', desc:'两个字，背后是深夜三小时山路。你是抚子的大学生姐姐，爱车是一台蓝色的日产Rasheen。你表面冷淡，实则重度妹控。你强迫初中时的抚子每天骑车绕滨名湖一圈，把她从"抚壮壮"变成了体力怪物。你和凛不约而同跟踪抚子的首次单人露营，在山下偶遇，相视一笑——然后你请她吃了晚饭。', partner:'DASH', partnerText:'你嘴上骂她冒失，但每次都是你开车去救她。', easter:true },
-  ASAKA: { code:'ASAKA', role:'亚咲花', tag:'露营之声亚咲花', quote:'"SHINY DAYS. Seize The Day. The Sunshower. Sun Is Coming Up. So Precious. 六首歌，一部露营。"', desc:'你是摇曳露营的音乐代言人。你的声音响起的瞬间，粉丝就知道——又要出发了。你17岁出道，SHINY DAYS成了露营粉的国歌。但你不止唱了一首，你唱了六首。每一季的OP，每一部剧场版，你的声音都在。你不是露营者，但你是露营的空气。', partner:'AFRO', partnerText:'没有他创造的世界，就没有你的歌声。你们是彼此的因果。', easter:true },
-  AFRO:  { code:'AFRO',  role:'Afro老师', tag:'部活创世神', quote:'"爆炸头是本体，露营是信仰。想不出故事的时候就出去取材。"', desc:'你是静冈县滨松市出身的漫画家，笔名来自爆炸头发型。你创造了摇曳露营，创造了mono，顺便创造了无数人的露营梦想。你喜欢大型犬，喜欢摩托车，喜欢粗眉角色，喜欢在作品里埋各种彩蛋。你画的露营装备都是真实品牌，你画的露营地后来都成了圣地。', partner:'ASAKA', partnerText:'你的世界给了她歌唱的理由，她的歌声让你的世界有了温度。', easter:true },
+  'WAN!': { code:'WAN!', role:'竹轮', tag:'竹轮本犬', quote:'"汪！"', desc:'你是齐藤惠那的吉娃娃，品种虽小，待遇极大——35000日元的专属露营套装的含金量，人类们自己体会。圣诞露营时你被装扮成兔子、驯鹿，你忍了。你最大的愿望是：被窝+摸摸，永远不要停。人类露营关你什么事？你有狗帐篷。', partner:'DOGGO', partnerText:'她是你的全世界，你是她的全部。', theme:'easter',easter:true },
+  '6CAN': { code:'6CAN', role:'老师', tag:'酒鬼老师', quote:'"六罐姐可不是白叫的。"', desc:'你表面上是温柔贤淑的新人教师，每天下班后光顾酒庄，雷打不动买半打啤酒。喝醉之后你像换了一个人，眼神从眯眯眼变成死鱼眼。你的学生叫你"六罐姐"，你的妹妹吐槽你，你戒酒期间迷上了黄油曲奇——但戒酒结束后又开了一瓶。', partner:'USOYARE', partnerText:'喝醉后听她讲故事，你分不清是自己醉了还是故事太离谱。', theme:'easter',easter:true },
+  SAGE:  { code:'SAGE',  role:'爷爷', tag:'露营仙人', quote:'"你年轻时帐篷还是帆布的。"', desc:'你是凛露营的起点。你骑Triumph THRUXTON 1200R，一整年都在旅行。你把自己用过的露营装备传给凛，就像把一种生活方式悄悄种进她的生命。你在mono里帮路人修过摩托车，然后继续上路。你从不教人怎么露营——你只是做给他们看。', partner:'LONE', partnerText:'她是你生命中最满意的作品，虽然你从没说出来。', theme:'easter',easter:true },
+  '3776': { code:'3776', role:'中毒者', tag:'富士山中毒者', quote:'"3776。这不是数字，是信仰。"', desc:'你对富士山的爱超越了理性。你能从任何角度认出富士山，你能说出每个观景点的最佳时间，你的手机号码尾号是3776——你说只是巧合，没人信。你看到富士山的时候，会停下一切，安静地看很久。然后脱口而出："3776米……"', partner:'PAGE', partnerText:'和她一起安静地看富士山，不用说话，就是最好的陪伴。', theme:'easter',easter:true },
+  CHILL: { code:'CHILL', role:'绫乃', tag:'慵懒骑士绫乃', quote:'"绫乃的体力是三人中最差的——但没关系，反正骑完摩托瘫在地上也很舒服。"', desc:'你是抚子的青梅竹马，和凛一样骑摩托。你说话拖长音，动作懒洋洋，长距离骑行后会直接瘫在地上。但你对朋友的心意从不打折——你从滨松骑到山梨，只为了兑现"总有一天一起露营"的约定。', partner:'TSUN', partnerText:'你们在酷道152上并排骑行，她开得快，你开得慢，但最后都会在露营地碰头。', theme:'easter',easter:true },
+  DRIVE: { code:'DRIVE', role:'樱姐', tag:'飙车党樱姐', quote:'"いいよ。"', desc:'两个字，背后是深夜三小时山路。你是抚子的大学生姐姐，爱车是一台蓝色的日产Rasheen。你表面冷淡，实则重度妹控。你强迫初中时的抚子每天骑车绕滨名湖一圈，把她从"抚壮壮"变成了体力怪物。你和凛不约而同跟踪抚子的首次单人露营，在山下偶遇，相视一笑——然后你请她吃了晚饭。', partner:'DASH', partnerText:'你嘴上骂她冒失，但每次都是你开车去救她。', theme:'easter',easter:true },
+  ASAKA: { code:'ASAKA', role:'亚咲花', tag:'露营之声亚咲花', quote:'"SHINY DAYS. Seize The Day. The Sunshower. Sun Is Coming Up. So Precious. 六首歌，一部露营。"', desc:'你是摇曳露营的音乐代言人。你的声音响起的瞬间，粉丝就知道——又要出发了。你17岁出道，SHINY DAYS成了露营粉的国歌。但你不止唱了一首，你唱了六首。每一季的OP，每一部剧场版，你的声音都在。你不是露营者，但你是露营的空气。', partner:'AFRO', partnerText:'没有他创造的世界，就没有你的歌声。你们是彼此的因果。', theme:'easter',easter:true },
+  AFRO:  { code:'AFRO',  role:'Afro老师', tag:'部活创世神', quote:'"爆炸头是本体，露营是信仰。想不出故事的时候就出去取材。"', desc:'你是静冈县滨松市出身的漫画家，笔名来自爆炸头发型。你创造了摇曳露营，创造了mono，顺便创造了无数人的露营梦想。你喜欢大型犬，喜欢摩托车，喜欢粗眉角色，喜欢在作品里埋各种彩蛋。你画的露营装备都是真实品牌，你画的露营地后来都成了圣地。', partner:'ASAKA', partnerText:'你的世界给了她歌唱的理由，她的歌声让你的世界有了温度。', theme:'easter',easter:true },
 };
 
 // ============================================================
@@ -409,7 +429,7 @@ const QUESTIONS = [
   ]},
   { text:'冬天一个人在山中露营。下雪了，帐篷外一片白，温度降到零下……', options:[
     {text:'检查了一遍装备，把暖宝宝贴好，继续看书——这点雪算什么', scores:{SPA:2,LONE:1,OWL:1}},
-    {text:'在心里列了一张清单：下次要买更好的睡袋、更好的防潮垫、更好的……', scores:{BROKE:2,CARB:1,AFRO:1,BLUFF:1}},
+    {text:'在心里列了一张清单：下次要买更好的睡袋、更好的防潮垫、更好的……', scores:{BROKE:2,CARB:1,AFRO:1,USOYARE:1}},
     {text:'拍了段视频发给朋友：「你看，在下雪诶，超美的～」手机还剩2%电', scores:{LURK:2,DOGGO:1,ASAKA:1}}
   ]},
   { text:'你的LINE头像是一张篝火照片。有人评论「好想一起去」，你……', options:[
@@ -420,12 +440,12 @@ const QUESTIONS = [
   { text:'社团经费捉襟见肘。有人从二手店买回来一个「超便宜的碗」，发现……', options:[
     {text:'「一千日元买了个破碗？下次经费申请必须过我这关」', scores:{MOM:2,'6CAN':1,CARB:1}},
     {text:'「七百日元！你被人骗了吧？！」笑得最大声，但也帮忙想办法', scores:{CHAOS:2,BROKE:1,CHEF:1}},
-    {text:'「算了算了，反正可以拿回家给我妈装仙人掌」——反正不是你的钱', scores:{SEYANA:2,BLUFF:1,WEEP:1}}
+    {text:'「算了算了，反正可以拿回家给我妈装仙人掌」——反正不是你的钱', scores:{SEYANA:2,USOYARE:1,WEEP:1}}
   ]},
   { text:'大家决定去泡温泉。脱了衣服发现旁边池子里居然是熟人……', options:[
     {text:'装作若无其事继续泡。内心：「为什么她们也在」——但也没走', scores:{SPA:2,LONE:1,TSUN:1}},
     {text:'「哇好巧好巧好巧！」——直接跨池子过来了', scores:{SUNNY:1,CHAOS:1,NOM:1,CHEF:1}},
-    {text:'泡在温泉里闭着眼，一句话没说，脸不知道是被蒸气烫的还是别的什么原因', scores:{BLUFF:2,ASAKA:1,CHILL:1}}
+    {text:'泡在温泉里闭着眼，一句话没说，脸不知道是被蒸气烫的还是别的什么原因', scores:{USOYARE:2,ASAKA:1,CHILL:1}}
   ]},
   { text:'圣诞节。社团决定办圣诞露营，每个人要带一份礼物来交换……', options:[
     {text:'非常认真地挑了一个实用露营装备，包装得工工整整', scores:{DOGGO:2,LONE:1,MOM:1}},
@@ -455,7 +475,7 @@ const QUESTIONS = [
   { text:'隔壁营地的人煮了一锅超级香的料理，香味飘过来了……', options:[
     {text:'闻着香味继续吃自己的泡面——别人的是别人的', scores:{LONE:1,TSUN:1,SPA:1,OWL:1}},
     {text:'端着自己的碗走过去：「你们在吃什么呀？闻起来好香！」——然后被分了一碗', scores:{NOM:2,DASH:1,WEEP:1,CHEF:1}},
-    {text:'心里盘算着要不要假装没带够吃的，然后被某个热情的人发现并投喂', scores:{BLUFF:2,COZY:1,NOM:1}}
+    {text:'心里盘算着要不要假装没带够吃的，然后被某个热情的人发现并投喂', scores:{USOYARE:2,COZY:1,NOM:1}}
   ]},
   { text:'露营时手机信号不好，一整晚没收到任何消息……', options:[
     {text:'本来也没打算看手机。没有信号=真正的露营', scores:{OWL:2,LONE:1,PAGE:1}},
@@ -465,12 +485,12 @@ const QUESTIONS = [
   { text:'你在山路上看到骑摩托车旅行的陌生人停下来休息。你……', options:[
     {text:'如果对方需要帮助，会停下来帮忙——但不会主动搭话', scores:{LONE:2,OWL:1,DRIVE:1}},
     {text:'「这个型号的车好酷！你骑了多远？从哪来的？路上有什么好玩的？」', scores:{SUNNY:2,CHOO:1,CHAOS:1}},
-    {text:'拍了张对方的摩托车背影，心里想「也许有一天我也能这样」', scores:{BLUFF:2,DASH:1,DRIVE:1}}
+    {text:'拍了张对方的摩托车背影，心里想「也许有一天我也能这样」', scores:{USOYARE:2,DASH:1,DRIVE:1}}
   ]},
   { text:'社团的LINE群里，有人深夜三点发了一条「好想去看星星」……', options:[
     {text:'第二天早上看到，回了一句「看到了。下次去。晚安。」', scores:{LONE:1,TSUN:1,PAGE:1,TROLL:1}},
     {text:'「走啊！！现在就去！！」——然后发现只有自己在激动，其他人全在睡', scores:{CHAOS:2,TROLL:1,CHILL:1}},
-    {text:'你也是凌晨三点没睡的人。你回了一句「走吧」，然后真的拿着车钥匙出门了', scores:{DRIVE:2,DASH:1,BLUFF:1}}
+    {text:'你也是凌晨三点没睡的人。你回了一句「走吧」，然后真的拿着车钥匙出门了', scores:{DRIVE:2,DASH:1,USOYARE:1}}
   ]},
   { text:'你最喜欢的一件露营装备，它的故事是……', options:[
     {text:'是爷爷用过的老式煤油灯，有几十年的历史，上面的划痕都是故事', scores:{SAGE:2,LONE:1,'WAN!':1}},
@@ -491,7 +511,7 @@ const QUESTIONS = [
   { text:'你在餐厅打工攒钱买露营装备。有顾客来买东西，你发现他买的都是露营相关的东西……', options:[
     {text:'默默算了一下总价，心想「这位也是露营人啊」', scores:{PAGE:2,MOM:1,TSUN:1}},
     {text:'「这个炉子超好用的！上次我用它烧水泡了杯咖喱面，绝了！」', scores:{SUNNY:2,NOM:1,'6CAN':1}},
-    {text:'结完账对着顾客的背影说了一句「一路顺风」，虽然不知道对方要去哪', scores:{MOM:2,BLUFF:1,SEYANA:1}}
+    {text:'结完账对着顾客的背影说了一句「一路顺风」，虽然不知道对方要去哪', scores:{MOM:2,USOYARE:1,SEYANA:1}}
   ]},
   { text:'学校文化祭，社团的展位该怎么布置？', options:[
     {text:'用卡纸搭了个迷你帐篷展示区，简洁实在，旁边放了真实露营装备给人摸', scores:{CARB:2,MOM:1,CHEF:1}},
@@ -521,12 +541,12 @@ const QUESTIONS = [
   { text:'你的朋友在营地煮了一大锅咖喱，结果盐放多了，咸得不行……', options:[
     {text:'默默加了点水，什么都没说。反正能喝', scores:{TSUN:2,SPA:1,OWL:1}},
     {text:'「没事没事，配米饭吃刚刚好！再来一碗！」——然后真的又添了一碗', scores:{NOM:2,SUNNY:1,CHEF:1}},
-    {text:'「啊……我好像忘了买饮料。算了，咸了就多喝水吧」——其实根本没帮上忙', scores:{SEYANA:2,WEEP:1,BLUFF:1}}
+    {text:'「啊……我好像忘了买饮料。算了，咸了就多喝水吧」——其实根本没帮上忙', scores:{SEYANA:2,WEEP:1,USOYARE:1}}
   ]},
   { text:'大家围坐在篝火旁，有人提议每个人讲一个自己最糗的露营经历……', options:[
     {text:'「第一次露营忘了带打火机，用放大镜生的火」——讲完发现大家看你的眼神不太对', scores:{PAGE:2,LONE:1,CARB:1}},
     {text:'「我上次把帐篷搭在斜坡上，半夜滚到了帐篷底部，像睡在滑梯上」——边说边笑到岔气', scores:{CHAOS:2,BROKE:1,DASH:1}},
-    {text:'「我……我没什么糗事。真的。」——但脸已经红到篝火都黯然失色', scores:{BLUFF:2,'BOO!':1,DOGGO:1}}
+    {text:'「我……我没什么糗事。真的。」——但脸已经红到篝火都黯然失色', scores:{USOYARE:2,'BOO!':1,DOGGO:1}}
   ]},
   { text:'一个雨天，你本来计划去露营但取消了。在家你怎么过？', options:[
     {text:'搭了个室内帐篷，泡了杯咖啡，打开露营视频当背景音——假装自己在山里', scores:{SPA:2,LONE:1,COZY:1}},
@@ -536,7 +556,7 @@ const QUESTIONS = [
   { text:'社团需要决定下一个露营地点。大家在讨论……', options:[
     {text:'「我推荐这个营地，海拔1500米，有温泉，晚上能看到银河。」——资料已经整理好了', scores:{LURK:2,PAGE:1,'3776':1}},
     {text:'「去哪都行！只要有好吃的！上次那个营地的烤红薯真的太绝了！」', scores:{NOM:2,CHEF:1,SUNNY:1}},
-    {text:'「随便。你们定吧，反正我跟着去就行。」——其实心里已经想好了三个备选方案', scores:{SEYANA:2,BLUFF:1,MOM:1}}
+    {text:'「随便。你们定吧，反正我跟着去就行。」——其实心里已经想好了三个备选方案', scores:{SEYANA:2,USOYARE:1,MOM:1}}
   ]},
   { text:'樱花季，你来到一个樱花树下的露营地点。樱花正满开……', options:[
     {text:'把帐篷搭在花瓣飘不到的地方（要清理很麻烦），然后安静地看书赏花', scores:{LONE:1,PAGE:1,SPA:1,'WAN!':1}},
@@ -546,7 +566,7 @@ const QUESTIONS = [
   { text:'夏天露营，蚊虫非常多。你的防蚊策略是……', options:[
     {text:'全身喷满防蚊喷雾，带了蚊香，帐篷有防蚊网——三重防护，万无一失', scores:{MOM:2,LONE:1,CARB:1}},
     {text:'「蚊子也是大自然的一部分嘛～」——十分钟后，「蚊子太多了救命啊啊啊」', scores:{'BOO!':2,WEEP:1,CHAOS:1}},
-    {text:'「穿长袖长裤就行了吧？」——结果只有脸被咬了，看起来像过敏', scores:{SEYANA:2,BLUFF:1,'6CAN':1}}
+    {text:'「穿长袖长裤就行了吧？」——结果只有脸被咬了，看起来像过敏', scores:{SEYANA:2,USOYARE:1,'6CAN':1}}
   ]},
   { text:'秋天露营，营地周围全是红叶。你……', options:[
     {text:'泡了杯茶，坐在折叠椅上，看着红叶发呆——这就是秋天的正确打开方式', scores:{SPA:2,OWL:1,PAGE:1}},
@@ -555,7 +575,7 @@ const QUESTIONS = [
   ]},
   { text:'你在露营时看到一只野生小动物（松鼠/狐狸/鹿）靠近营地……', options:[
     {text:'一动不动，屏住呼吸，用眼睛记录这一刻——不想打扰它', scores:{OWL:2,PAGE:1,LONE:1}},
-    {text:'「好可爱好可爱好可爱！！！」——小声尖叫，然后疯狂拍照，结果把动物吓跑了', scores:{SUNNY:1,'BOO!':1,ASAKA:1,BLUFF:1}},
+    {text:'「好可爱好可爱好可爱！！！」——小声尖叫，然后疯狂拍照，结果把动物吓跑了', scores:{SUNNY:1,'BOO!':1,ASAKA:1,USOYARE:1}},
     {text:'「别过来别过来，我什么都没带给你吃……」——但其实偷偷掰了一小块饼干放在远处', scores:{DOGGO:2,TSUN:1,'WAN!':1}}
   ]},
   { text:'露营时突然下起大雨，你的帐篷开始漏水……', options:[
@@ -611,7 +631,7 @@ const QUESTIONS = [
   { text:'你在地铁/公交上看到有人背着大包露营装备……', options:[
     {text:'默默观察对方的装备品牌和型号，心里评估了一下搭配', scores:{LURK:2,CHOO:1,CARB:1}},
     {text:'「您好！请问您是要去露营吗？去哪？用什么帐篷？推荐吗？」——对方可能想换车厢', scores:{SUNNY:1,CHAOS:1,AFRO:1,BROKE:1}},
-    {text:'看了一眼，然后继续看手机。但嘴角微微上扬——「同好」', scores:{TSUN:2,LONE:1,BLUFF:1}}
+    {text:'看了一眼，然后继续看手机。但嘴角微微上扬——「同好」', scores:{TSUN:2,LONE:1,USOYARE:1}}
   ]},
   { text:'你觉得「露营」对你来说，最接近什么？', options:[
     {text:'一种重置。把城市的噪音从脑子里清空，回来又是一个干净的人', scores:{OWL:2,SPA:1,LONE:1}},
@@ -774,8 +794,12 @@ function showResult() {
   
   showScreen('resultScreen');
   
+  // Apply theme color
+  const rs = document.getElementById('resultScreen').querySelector('.result-screen');
+  rs.className = 'result-screen theme-' + (p.theme || 'rin');
+  
   document.getElementById('easterTag').innerHTML = result.easter ? '<span class="easter-tag">🔒 隐藏人格解锁</span>' : '';
-  document.getElementById('resultBadge').textContent = result.easter ? 'YCTI · 隐藏人格' : 'YCTI · 露营人格';
+  document.getElementById('resultBadge').textContent = 'YCTI · 露营人格';
   document.getElementById('resultCode').textContent = p.code;
   document.getElementById('resultRole').textContent = p.tag;
   document.getElementById('resultQuote').textContent = p.quote;
@@ -785,7 +809,7 @@ function showResult() {
   
   // Store for sharing
   window._resultData = { code: p.code, tag: p.tag, quote: p.quote, desc: p.desc, 
-    partnerCode: partner.code, partnerTag: partner.tag, partnerText: p.partnerText, easter: result.easter };
+    partnerCode: partner.code, partnerTag: partner.tag, partnerText: p.partnerText, easter: result.easter, theme: p.theme };
 }
 
 function restartQuiz() {
@@ -803,11 +827,22 @@ function shareResult() {
   const ctx = canvas.getContext('2d');
   const W = 480, H = 720;
   
+  // Theme colors
+  const themeColors = {
+    rin: ['#1a2a3d','#141428','#1a1a35'],
+    nadeshiko: ['#2d1a24','#141428','#1a1a35'],
+    chiaki: ['#251d33','#141428','#1a1a35'],
+    aoi: ['#1f2418','#141428','#1a1a35'],
+    ena: ['#1a1a28','#141428','#1a1a35'],
+    easter: ['#2a2218','#141428','#1a1a35']
+  };
+  const tc = themeColors[d.theme] || themeColors.rin;
+  
   // Background gradient
   const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, '#0d0d1f');
-  bg.addColorStop(0.4, '#141428');
-  bg.addColorStop(1, '#1a1a35');
+  bg.addColorStop(0, tc[0]);
+  bg.addColorStop(0.4, tc[1]);
+  bg.addColorStop(1, tc[2]);
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
   
@@ -846,7 +881,7 @@ function shareResult() {
   // YCTI badge
   ctx.font = 'bold 12px sans-serif';
   ctx.fillStyle = '#e8a850';
-  ctx.fillText(d.easter ? 'YCTI · 隐藏人格' : 'YCTI · 露营人格', 240, 110);
+  ctx.fillText('YCTI · 露营人格', 240, 110);
   
   // Easter tag
   if (d.easter) {
@@ -942,7 +977,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.4', 240, 715);
+  ctx.fillText('v0.5', 240, 715);
   
   // Download
   const link = document.createElement('a');
