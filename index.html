@@ -329,7 +329,7 @@ body::before {
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.6.2</div>
+      <div class="version-tag">v0.6</div>
     </div>
   </div>
 
@@ -358,7 +358,7 @@ body::before {
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.6.2</div>
+      <div class="version-tag">v0.6</div>
     </div>
   </div>
 </div>
@@ -401,6 +401,8 @@ const PERSONALITIES = {
   DRIVE: { code:'DRIVE', role:'樱姐', tag:'飙车党樱姐', quote:'"いいよ。"', desc:'两个字，背后是深夜三小时山路。你是抚子的大学生姐姐，爱车是一台蓝色的日产Rasheen。你表面冷淡，实则重度妹控。你强迫初中时的抚子每天骑车绕滨名湖一圈，把她从"抚壮壮"变成了体力怪物。你和凛不约而同跟踪抚子的首次单人露营，在山下偶遇，相视一笑——然后你请她吃了晚饭。', partner:'DASH', partnerText:'你嘴上骂她冒失，但每次都是你开车去救她。', theme:'easter',easter:true },
   ASAKA: { code:'ASAKA', role:'亚咲花', tag:'露营之声亚咲花', quote:'"SHINY DAYS. Seize The Day. The Sunshower. Sun Is Coming Up. So Precious. 六首歌，一部露营。"', desc:'你是摇曳露营的音乐代言人。你的声音响起的瞬间，粉丝就知道——又要出发了。你17岁出道，SHINY DAYS成了露营粉的国歌。但你不止唱了一首，你唱了六首。每一季的OP，每一部剧场版，你的声音都在。你不是露营者，但你是露营的空气。', partner:'AFRO', partnerText:'没有他创造的世界，就没有你的歌声。你们是彼此的因果。', theme:'easter',easter:true },
   AFRO:  { code:'AFRO',  role:'Afro老师', tag:'部活创世神', quote:'"爆炸头是本体，露营是信仰。想不出故事的时候就出去取材。"', desc:'你是静冈县滨松市出身的漫画家，笔名来自爆炸头发型。你创造了摇曳露营，创造了mono，顺便创造了无数人的露营梦想。你喜欢大型犬，喜欢摩托车，喜欢粗眉角色，喜欢在作品里埋各种彩蛋。你画的露营装备都是真实品牌，你画的露营地后来都成了圣地。', partner:'ASAKA', partnerText:'你的世界给了她歌唱的理由，她的歌声让你的世界有了温度。', theme:'easter',easter:true },
+  MONO:  { code:'MONO',  role:'摄影部', tag:'摄影部部员', quote:'"Afro老师画的又不只有露营——我们摄影部也是有连载的！"', desc:'你来自あfろ老师的另一部连载《mono》。你和户外活动部一样有一个社团——不过你们是摄影部。你们用镜头捕捉日常的闪光，就像露营者用帐篷捕捉山间的星光。爷爷在你的世界里客串过，帮路人修了摩托车然后继续上路。你们去本栖湖巡礼时，也碰到过一位骑着vino电动的少女——平行世界？不，同一个宇宙。', partner:'AFRO', partnerText:'他是你们共同的造物主。没有他，就没有露营，也没有摄影。', theme:'easter',easter:true },
+  AQUA:  { code:'AQUA',  role:'水水人', tag:'沼津水水人', quote:'"有人说静冈只有山，那是因为他们没来过沼津。海边的橘子，可比山里的咖喱面清爽多了。"', desc:'你是静冈县沼津市的海边住民——也是Aqours的粉丝，江湖人称"水水人"。当全世界的动画宅都涌向山梨和富士山的时候，你站在駿河湾边微微一笑。你知道静冈的动画圣地不只有露营——沼津的海岸线、淡岛的鸟居、内浦的海风，同样是无数人朝圣的理由。你去过本栖湖，也去过三津海岸。你心里的静冈地图，山和海各占一半。', partner:'3776', partnerText:'你们是静冈的一体两面：你爱海，她爱山。3776米加駿河湾，刚好拼成一个完整的静冈。', theme:'easter',easter:true },
 };
 
 // ============================================================
@@ -410,7 +412,8 @@ const QUESTIONS = [
   { text:'你在本栖湖畔搭好帐篷，篝火燃起，天黑了。这时候你……', camp:'rin', options:[
     {text:'掏出书，在火光下安静地读——这才是此行的目的',scores:{'OWL': 1}},
     {text:'用炉子烧了热水泡杯咖喱面，端着碗看湖面的富士山倒影',scores:{'NOM': 1, 'CHEF': 1, '3776': 1}},
-    {text:'拍了张篝火照片发到群里，配文「本栖湖～今晚在这里」',scores:{'LURK': 1, 'ASAKA': 1, 'COZY': 1}}
+    {text:'拍了张篝火照片发到群里，配文「本栖湖～今晚在这里」',scores:{'LURK': 1, 'ASAKA': 1, 'COZY': 1}},
+    {text:'拿出相机，拍了一张湖面倒映星空的照片——好了，现在可以安心发呆了',scores:{'MONO': 1}}
   ]},
   { text:'冬天一个人在山中露营。下雪了，帐篷外一片白，温度降到零下……', camp:'rin', options:[
     {text:'检查了一遍装备，把暖宝宝贴好，继续看书——这点雪算什么',scores:{'SPA': 2, 'LONE': 1, 'OWL': 1}},
@@ -425,17 +428,20 @@ const QUESTIONS = [
   { text:'一个人露营的清晨。天还没亮你自然醒了。拉开帐篷……', camp:'rin', options:[
     {text:'泡一杯手冲咖啡，对着富士山慢慢喝。没人说话，也不需要',scores:{'3776': 1, 'SPA': 1}},
     {text:'掏出手机狂拍十张富士山，立刻发给所有人：「你们看！！！」',scores:{'AFRO': 1, 'COZY': 1}},
-    {text:'愣了三秒，然后开始计算这座山海拔多少、从哪个角度拍最好',scores:{'CHOO': 2, 'PAGE': 1}}
+    {text:'愣了三秒，然后开始计算这座山海拔多少、从哪个角度拍最好',scores:{'CHOO': 2, 'PAGE': 1}},
+    {text:'走到湖边，发现湖面和天空是同一个颜色——掏出相机，拍了一张。这张照片后来洗出来，成了你最喜欢的之一',scores:{'MONO': 1, '3776': 1}}
   ]},
   { text:'露营时手机信号不好，一整晚没收到任何消息……', camp:'rin', options:[
     {text:'本来也没打算看手机。没有信号 = 真正的露营',scores:{'OWL': 1, 'SPA': 1, 'TROLL': 1}},
     {text:'突然觉得好孤独。拍了一段篝火视频，等有信号再发',scores:{'BOO!': 2, 'ASAKA': 1, 'WEEP': 1}},
-    {text:'信号断了之后，某个人发疯一样给你发了三十几条LINE消息——你明早才能看到',scores:{'TROLL': 2, 'CHAOS': 1, 'COZY': 1}}
+    {text:'信号断了之后，某个人发疯一样给你发了三十几条LINE消息——你明早才能看到',scores:{'TROLL': 2, 'CHAOS': 1, 'COZY': 1}},
+    {text:'太好了。没有信号的时候，反而能注意到更多细节——掏出相机拍了一组篝火的黑白照片',scores:{'MONO': 1}}
   ]},
   { text:'你在山路上看到骑摩托车旅行的陌生人停下来休息。你……', camp:'rin', options:[
     {text:'如果对方需要帮助，会停下来帮忙——但不会主动搭话',scores:{'OWL': 1, 'DRIVE': 1}},
     {text:'「这个型号的车好酷！你骑了多远？从哪来的？路上有什么好玩的？」',scores:{'CHOO': 1, 'CHAOS': 1}},
-    {text:'拍了张对方的摩托车背影，心里想「也许有一天我也能这样」',scores:{'USOYARE': 1, 'DASH': 1, 'DRIVE': 1}}
+    {text:'拍了张对方的摩托车背影，心里想「也许有一天我也能这样」',scores:{'USOYARE': 1, 'DASH': 1, 'DRIVE': 1}},
+    {text:'拍了张对方和摩托车的背影——不是偷拍，是觉得这个画面值得被记住',scores:{'MONO': 1, 'DRIVE': 1}}
   ]},
   { text:'露营时，有人在你旁边大声放音乐……', camp:'rin', options:[
     {text:'戴上降噪耳机，继续看书。各有各的玩法，不干涉',scores:{'OWL': 1, 'PAGE': 1, 'SEYANA': 1}},
@@ -525,7 +531,8 @@ const QUESTIONS = [
   { text:'社团需要决定下一个露营地点。大家在讨论……', camp:'aoi', options:[
     {text:'「我推荐这个营地，海拔1500米，有温泉，晚上能看到银河。」——资料已经整理好了',scores:{'LURK': 2, 'PAGE': 1, '3776': 1}},
     {text:'「去哪都行！只要有好吃的！上次那个营地的烤红薯真的太绝了！」',scores:{'NOM': 1, 'CHEF': 1}},
-    {text:'「随便。你们定吧，反正我跟着去就行。」——其实心里已经想好了三个备选方案',scores:{'SEYANA': 1, 'USOYARE': 1}}
+    {text:'「随便。你们定吧，反正我跟着去就行。」——其实心里已经想好了三个备选方案',scores:{'SEYANA': 1, 'USOYARE': 1}},
+    {text:'「山里去了很多次了，要不要试试海边？海边露营看日出不用爬山」',scores:{'AQUA': 1}}
   ]},
   { text:'你的朋友说「想尝试一个人露营但有点害怕」。你怎么回应？', camp:'aoi', options:[
     {text:'「一开始害怕很正常。先从离家近的营地开始，带上喜欢的书和吃的，慢慢就习惯了」',scores:{'MOM': 2, 'PAGE': 1}},
@@ -535,7 +542,8 @@ const QUESTIONS = [
   { text:'夏天露营，蚊虫非常多。你的防蚊策略是……', camp:'aoi', options:[
     {text:'全身喷满防蚊喷雾，带了蚊香，帐篷有防蚊网——三重防护，万无一失',scores:{'MOM': 2, 'LONE': 1, 'CARB': 1}},
     {text:'「蚊子也是大自然的一部分嘛～」——十分钟后，「蚊子太多了救命啊啊啊」',scores:{'BOO!': 2, 'WEEP': 1, 'CHAOS': 1}},
-    {text:'「穿长袖长裤就行了吧？」——结果只有脸被咬了，看起来像过敏',scores:{'SEYANA': 1, 'USOYARE': 1, '6CAN': 1}}
+    {text:'「穿长袖长裤就行了吧？」——结果只有脸被咬了，看起来像过敏',scores:{'SEYANA': 1, 'USOYARE': 1, '6CAN': 1}},
+    {text:'「海边就没那么多蚊子——海风吹着，蚊虫站不住脚」',scores:{'AQUA': 1}}
   ]},
   { text:'你正骑着自行车爬一个看不到尽头的上坡。导航显示还有3公里，但你的腿已经快没知觉了……', camp:'aoi', options:[
     {text:'「せやな～算了，下来推吧。」——推着车走也是一种骑行',scores:{'SEYANA': 2, 'COZY': 1}},
@@ -550,7 +558,8 @@ const QUESTIONS = [
   { text:'你在餐厅打工攒钱买露营装备。有顾客来买东西，你发现他买的都是露营相关的东西……', camp:'aoi', options:[
     {text:'默默算了一下总价，心想「这位也是露营人啊」',scores:{'PAGE': 1, 'MOM': 1, 'CARB': 1, 'BROKE': 1}},
     {text:'「这个炉子超好用的！上次我用它烧水泡了杯咖喱面，绝了！」',scores:{'SUNNY': 1, 'NOM': 1, '6CAN': 1, 'AFRO': 1}},
-    {text:'结完账对着顾客的背影说了一句「一路顺风」，虽然不知道对方要去哪',scores:{'MOM': 2, 'USOYARE': 1, 'SEYANA': 1}}
+    {text:'结完账对着顾客的背影说了一句「一路顺风」，虽然不知道对方要去哪',scores:{'MOM': 2, 'USOYARE': 1, 'SEYANA': 1}},
+    {text:'「您也是露营爱好者啊？山里还是海边？我两个都喜欢，但最近觉得海边也不错——」',scores:{'AQUA': 1}}
   ]},
   { text:'大家决定去泡温泉。脱了衣服发现旁边池子里居然是熟人……', camp:'aoi', options:[
     {text:'装作若无其事继续泡。内心：「为什么她们也在」——但也没走',scores:{'SPA': 2, 'LONE': 1, 'TSUN': 1}},
@@ -620,7 +629,8 @@ const QUESTIONS = [
   { text:'旅途中看到一个绝佳的拍照角度。你停下来，发现这个位置……', camp:'mixed', options:[
     {text:'安静地拍了一张，构图干净，存进手机相册，不发',scores:{'OWL': 1, 'PAGE': 1, 'LONE': 1}},
     {text:'从五个角度拍了十五张，选了最好看的那张，修图半小时，发SNS',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}},
-    {text:'掏出胶片相机，只按了一次快门，对自己说「剩下的等洗出来再看」',scores:{'CARB': 1, 'PAGE': 1, 'CHOO': 1}}
+    {text:'掏出胶片相机，只按了一次快门，对自己说「剩下的等洗出来再看」',scores:{'CARB': 1, 'PAGE': 1, 'CHOO': 1}},
+    {text:'「这个角度……如果等日落再拍，光线会更好。」——然后真的坐下来等了二十分钟',scores:{'MONO': 1}}
   ]},
   { text:'樱花季，你来到一个樱花树下的露营地点。樱花正满开……', camp:'mixed', options:[
     {text:'把帐篷搭在花瓣飘不到的地方（要清理很麻烦），然后安静地看书赏花',scores:{'LONE': 1, 'PAGE': 1, 'SPA': 1, 'WAN!': 1}},
@@ -656,7 +666,68 @@ const QUESTIONS = [
     {text:'瞬间点燃篝火。方便、实用、不废话',scores:{'SPA': 1, 'CARB': 1, '6CAN': 1, 'AFRO': 1}},
     {text:'和动物说话。想知道营地附近那只松鼠每天都在聊什么',scores:{'DOGGO': 2, 'WAN!': 1, 'SUNNY': 1}},
     {text:'让食物永远吃不完。野营最大的焦虑就是粮食不够',scores:{'NOM': 1, 'CHEF': 1, 'BROKE': 1}}
-  ]}
+  ]},
+  { text:'如果让你选一个地方发呆一整天，你会选……', camp:'mixed', options:[
+    {text:'山顶。云在脚下，世界在远处，安静得能听见自己的心跳',scores:{'3776': 1}},
+    {text:'海边。潮汐的声音有一种山无法替代的节奏——涨潮、退潮、再涨潮',scores:{'AQUA': 1}},
+    {text:'森林深处。阳光透过树叶洒下来，地上有松果和蘑菇，像走进另一个世界',scores:{'PAGE': 1}},
+    {text:'哪里都行——只要有一把舒服的椅子',scores:{'SEYANA': 1}}
+  ]},
+  { text:'你看到一个值得拍下来的画面，你的第一反应是……', camp:'easter', options:[
+    {text:'掏出手机，快拍，发了再说——好的画面转瞬即逝',scores:{'DASH': 1}},
+    {text:'先看，再想，最后拍。如果值得拍，多等几分钟也无妨——光线会变，构图可以更好',scores:{'MONO': 1}},
+    {text:'不拍。有些画面用眼睛看就够了，镜头反而会打断那个瞬间',scores:{'LONE': 1}},
+    {text:'拍了，但总觉得拍不出眼睛看到的感觉。算了，下次再试',scores:{'WEEP': 1}}
+  ]},
+  { text:'露营时，你最享受哪种「等待」？', camp:'easter', options:[
+    {text:'等篝火烧到最旺——那十分钟的火焰，值得之前半小时的添柴',scores:{'SPA': 1, 'OWL': 1}},
+    {text:'等日出。半夜起来摸黑走到观景点，看着天边一点点亮起来——每次都觉得值',scores:{'3776': 1}},
+    {text:'等一锅水烧开。泡面也好咖啡也好，等待让结果变得更好',scores:{'NOM': 1}},
+    {text:'等一卷胶卷冲洗出来。按快门时不知道结果，拿到照片那刻——那种惊喜，数码永远给不了',scores:{'MONO': 1, 'SAGE': 1}}
+  ]},
+  { text:'你的露营目的地偏好……', camp:'easter', options:[
+    {text:'山。越高越好，越安静越好，越接近天空越好',scores:{'LONE': 1}},
+    {text:'海。山是孤独的，海是开阔的——你更喜欢那种没有边界的辽阔感',scores:{'AQUA': 1}},
+    {text:'湖。不偏不倚，有山有水的倒影，比海安静比山温柔',scores:{'COZY': 1}},
+    {text:'无所谓。重要的是去，不是去哪',scores:{'DASH': 1}}
+  ]},
+  { text:'翻开手机相册，你发现露营时拍得最多的是……', camp:'mixed', options:[
+    {text:'风景。山、湖、日出、星空——它们不会跑，所以可以慢慢拍',scores:{'3776': 1}},
+    {text:'人。朋友在篝火旁的笑脸、一起做饭的背影——风景没有他们重要',scores:{'SUNNY': 1}},
+    {text:'食物。每一顿饭都值得被记录，拍完才准吃',scores:{'NOM': 1}},
+    {text:'细节。柴火堆上的纹理、帐篷拉链上的露珠、被踩弯的野草——这些才是真实的露营',scores:{'MONO': 1, 'PAGE': 1}}
+  ]},
+  { text:'你一个人在海边露营。天黑了，你坐在沙滩上看着海……', camp:'mixed', options:[
+    {text:'觉得有点无聊。海太开阔了，没有山的包围感——下次还是去山里吧',scores:{'3776': 1, 'LONE': 1}},
+    {text:'觉得刚刚好。海浪声比山里的风声更催眠，而且地平线比山脊线更好看',scores:{'AQUA': 1, 'CHILL': 1}},
+    {text:'掏出手机给朋友发消息：「海边也不错诶，下次一起来吧」',scores:{'SUNNY': 1, 'COZY': 1}},
+    {text:'拿相机拍了一张长曝光——海浪模糊成雾，星空清晰得像针尖',scores:{'MONO': 1, 'OWL': 1}}
+  ]},
+  { text:'除了露营，你平时最喜欢拍什么？', camp:'mixed', options:[
+    {text:'不怎么拍。露营的时候才想起来相机还有电',scores:{'TSUN': 1}},
+    {text:'什么都拍——路边的小花、咖啡杯里的倒影、街上偶遇的猫、朋友打瞌睡的样子',scores:{'MONO': 1}},
+    {text:'只拍家人和狗。风景是顺便的，他们才是主题',scores:{'DOGGO': 1}},
+    {text:'篝火旁的歌声。朋友在弹吉他，其他人在合唱——你录了一段，回来反复听',scores:{'AQUA': 1, 'CHOO': 1}}
+  ]},
+  { text:'你偶尔会想：如果没有喜欢上露营，现在的你会喜欢什么？', camp:'easter', options:[
+    {text:'还是会喜欢户外——可能是登山、骑行、钓鱼。反正离不开大自然',scores:{'CARB': 1}},
+    {text:'可能会喜欢摄影。本质上是一样的——一个人去没去过的地方，然后用自己的方式把它留下来',scores:{'MONO': 1}},
+    {text:'可能会住在海边，每天看潮起潮落。山有山的魅力，但海有海的自由',scores:{'AQUA': 1}},
+    {text:'想不出来。露营已经是你生活的一部分，就像呼吸一样，不需要替代品',scores:{'DASH': 1}}
+  ]},
+  { text:'如果有人送你一份「露营相关」的礼物，你最希望是……', camp:'easter', options:[
+    {text:'一本露营指南书。里面夹着爷爷年轻时手写的笔记',scores:{'SAGE': 1}},
+    {text:'一台老式胶片相机。虽然重，但每次过片的声音都让你觉得「这一张，值得认真对待」',scores:{'MONO': 1}},
+    {text:'一张海边的露营地年卡。365天，随时可以去看潮汐',scores:{'AQUA': 1}},
+    {text:'一个能装下所有食材的保冷箱。实用至上，浪漫靠边',scores:{'NOM': 1}}
+  ]},
+  { text:'如果有一天你老了，你会选择住在哪里？', camp:'easter', options:[
+    {text:'山脚下。推开窗就能看到富士山，每天清晨被鸟鸣叫醒',scores:{'3776': 1, 'SAGE': 1}},
+    {text:'海边。每天看一遍潮起潮落，海风会把所有烦恼吹走',scores:{'AQUA': 1, 'CHILL': 1}},
+    {text:'哪里都行，但旁边一定要有好吃的——老了更不能亏待自己的胃',scores:{'NOM': 1}},
+    {text:'一个有暗房的小房子。白天拍照，晚上冲洗，墙上挂满一辈子的快门',scores:{'MONO': 1, 'PAGE': 1}}
+  ]},
+
 ];
 
 // ============================================================
@@ -1011,7 +1082,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.6.2', 240, 715);
+  ctx.fillText('v0.6', 240, 715);
   
   // Download
   const link = document.createElement('a');
