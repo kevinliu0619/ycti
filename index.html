@@ -329,7 +329,7 @@ body::before {
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.6</div>
+      <div class="version-tag">v0.6.1</div>
     </div>
   </div>
 
@@ -358,7 +358,7 @@ body::before {
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.6</div>
+      <div class="version-tag">v0.6.1</div>
     </div>
   </div>
 </div>
@@ -479,7 +479,7 @@ const QUESTIONS = [
   ]},
   { text:'露营当晚，有人开始讲山里的怪谈。帐篷外有风声，远处有动物叫……', camp:'nadeshiko', options:[
     {text:'「别讲了别讲了别讲了——」整个人缩进睡袋，只露出眼睛',scores:{'BOO!': 2, 'WEEP': 1, 'NOM': 1}},
-    {text:'「せやな～」其实已经快睡着了，根本没在听',scores:{'SEYANA': 2, 'COZY': 1, 'CHILL': 1}},
+    {text:'「せやな～」其实已经快睡着了，根本没在听',scores:{'SEYANA': 3, 'COZY': 1}},
     {text:'面无表情听着，等讲到最恐怖的地方，突然冷冷地补了一句更吓人的',scores:{'TSUN': 2, 'TROLL': 1, 'BOO!': 1}}
   ]},
   { text:'出远门旅行时，你的包里一定会有……', camp:'nadeshiko', options:[
@@ -538,13 +538,13 @@ const QUESTIONS = [
     {text:'「穿长袖长裤就行了吧？」——结果只有脸被咬了，看起来像过敏',scores:{'SEYANA': 2, 'USOYARE': 1, '6CAN': 1}}
   ]},
   { text:'你正骑着自行车爬一个看不到尽头的上坡。导航显示还有3公里，但你的腿已经快没知觉了……', camp:'aoi', options:[
-    {text:'「せやな～算了，下来推吧。」——推着车走也是一种骑行',scores:{'SEYANA': 2, 'COZY': 1, 'CHILL': 1}},
+    {text:'「せやな～算了，下来推吧。」——推着车走也是一种骑行',scores:{'SEYANA': 3, 'COZY': 1}},
     {text:'咬牙继续踩——因为山顶有家面包店，据说他们家的蜜瓜包是附近最好吃的',scores:{'CARB': 2, 'NOM': 1, 'DASH': 1}},
     {text:'「这算什么！上次我从滨松骑到山梨都没死！」——然后开始跟路人吹自己骑过的最远距离',scores:{'USOYARE': 2, 'CHAOS': 1, 'DRIVE': 1}}
   ]},
   { text:'露营时，有人在你面前一本正经地讲了一个「亲身经历」——但你总觉得哪里不对……', camp:'aoi', options:[
     {text:'「真的假的？！」——然后全信了，还追问细节',scores:{'WEEP': 2, 'SUNNY': 1, 'BOO!': 1}},
-    {text:'「せやな～」——其实你一个字都不信，但懒得拆穿',scores:{'SEYANA': 2, 'TROLL': 1, 'CHILL': 1}},
+    {text:'「せやな～」——其实你一个字都不信，但懒得拆穿',scores:{'SEYANA': 3, 'TROLL': 1}},
     {text:'听完之后，面不改色地补了一句更离谱的，现在轮到他怀疑你了',scores:{'USOYARE': 2, 'TSUN': 1, 'CHAOS': 1}}
   ]},
   { text:'你在餐厅打工攒钱买露营装备。有顾客来买东西，你发现他买的都是露营相关的东西……', camp:'aoi', options:[
@@ -1011,7 +1011,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.6', 240, 715);
+  ctx.fillText('v0.6.1', 240, 715);
   
   // Download
   const link = document.createElement('a');
