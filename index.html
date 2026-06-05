@@ -329,7 +329,7 @@ body::before {
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.7</div>
+      <div class="version-tag">v0.7.1</div>
     </div>
   </div>
 
@@ -358,7 +358,7 @@ body::before {
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.7</div>
+      <div class="version-tag">v0.7.1</div>
     </div>
   </div>
 </div>
@@ -412,8 +412,8 @@ const QUESTIONS = [
   { text:'你在本栖湖畔搭好帐篷，篝火燃起，天黑了。这时候你……', camp:'rin', options:[
     {text:'掏出书，在火光下安静地读——这才是此行的目的',scores:{'OWL': 1}},
     {text:'用炉子烧了热水泡杯咖喱面，端着碗看湖面的富士山倒影',scores:{'NOM': 1, 'CHEF': 1, '3776': 1}},
-    {text:'拍了张篝火照片发到群里，配文「本栖湖～今晚在这里」',scores:{'LURK': 1, 'ASAKA': 1, 'COZY': 1}},
-    {text:'拿出相机，拍了一张湖面倒映星空的照片——好了，现在可以安心发呆了',scores:{'MONO': 1}}
+    {text:'发了条消息到群里：「本栖湖～今晚在这里」',scores:{'LURK': 1, 'ASAKA': 1, 'COZY': 1}},
+    {text:'安静地坐在湖边，看着湖面倒映的星空——好了，现在可以安心发呆了',scores:{'MONO': 1}}
   ]},
   { text:'冬天一个人在山中露营。下雪了，帐篷外一片白，温度降到零下……', camp:'rin', options:[
     {text:'检查了一遍装备，把暖宝宝贴好，继续看书——这点雪算什么',scores:{'SPA': 2, 'LONE': 1, 'OWL': 1}},
@@ -422,26 +422,26 @@ const QUESTIONS = [
   ]},
   { text:'你骑着摩托车在山路上转弯，富士山突然出现在眼前，大得不像话。你……', camp:'rin', options:[
     {text:'停下车，安静地看了五分钟。然后继续上路——但嘴角一直没下来',scores:{'3776': 1, 'SPA': 1, 'CHILL': 1}},
-    {text:'「富士山！！！」大叫一声，掏出手机拍了十五张，虽然每张角度都差不多',scores:{'3776': 1, 'DASH': 1}},
+    {text:'「富士山！！！」大叫一声，掏出手机连发了十五条消息，虽然每条内容都差不多',scores:{'3776': 1, 'DASH': 1}},
     {text:'「3776米……」喃喃自语，然后拿出便当，对着富士山吃了起来',scores:{'3776': 1, 'NOM': 1, 'PAGE': 1}}
   ]},
   { text:'一个人露营的清晨。天还没亮你自然醒了。拉开帐篷……', camp:'rin', options:[
     {text:'泡一杯手冲咖啡，对着富士山慢慢喝。没人说话，也不需要',scores:{'3776': 1, 'SPA': 1}},
-    {text:'掏出手机狂拍十张富士山，立刻发给所有人：「你们看！！！」',scores:{'AFRO': 1, 'COZY': 1}},
+    {text:'掏出手机狂发消息给所有人：「富士山！！你们看！！！」',scores:{'AFRO': 1, 'COZY': 1}},
     {text:'愣了三秒，然后开始计算这座山海拔多少、从哪个角度拍最好',scores:{'CHOO': 2, 'PAGE': 1}},
-    {text:'走到湖边，发现湖面和天空是同一个颜色——掏出相机，拍了一张。这张照片后来洗出来，成了你最喜欢的之一',scores:{'MONO': 1, '3776': 1}}
+    {text:'走到湖边，发现湖面和天空是同一个颜色。坐在那里看了整整一个小时。后来你经常想起这个黄昏',scores:{'MONO': 1, '3776': 1}}
   ]},
   { text:'露营时手机信号不好，一整晚没收到任何消息……', camp:'rin', options:[
     {text:'本来也没打算看手机。没有信号 = 真正的露营',scores:{'OWL': 1, 'SPA': 1, 'TROLL': 1}},
-    {text:'突然觉得好孤独。拍了一段篝火视频，等有信号再发',scores:{'BOO!': 2, 'ASAKA': 1, 'WEEP': 1}},
+    {text:'突然觉得好孤独。录了一段语音想发给朋友，等有信号再发',scores:{'BOO!': 2, 'ASAKA': 1, 'WEEP': 1}},
     {text:'信号断了之后，某个人发疯一样给你发了三十几条LINE消息——你明早才能看到',scores:{'TROLL': 2, 'CHAOS': 1, 'COZY': 1}},
-    {text:'太好了。没有信号的时候，反而能注意到更多细节——掏出相机拍了一组篝火的黑白照片',scores:{'MONO': 1}}
+    {text:'太好了。没有信号的时候，反而能注意到更多细节——篝火的火焰在黑暗中画出各种形状，一看就是半小时',scores:{'MONO': 1}}
   ]},
   { text:'你在山路上看到骑摩托车旅行的陌生人停下来休息。你……', camp:'rin', options:[
     {text:'如果对方需要帮助，会停下来帮忙——但不会主动搭话',scores:{'OWL': 1, 'DRIVE': 1}},
     {text:'「这个型号的车好酷！你骑了多远？从哪来的？路上有什么好玩的？」',scores:{'CHOO': 1, 'CHAOS': 1}},
-    {text:'拍了张对方的摩托车背影，心里想「也许有一天我也能这样」',scores:{'USOYARE': 1, 'DASH': 1, 'DRIVE': 1}},
-    {text:'拍了张对方和摩托车的背影——不是偷拍，是觉得这个画面值得被记住',scores:{'MONO': 1, 'DRIVE': 1}}
+    {text:'看着对方的摩托车背影，心里想「也许有一天我也能这样」',scores:{'USOYARE': 1, 'DASH': 1, 'DRIVE': 1}},
+    {text:'看着对方和摩托车的背影出了神——不是偷看，是觉得这个画面值得被记住',scores:{'MONO': 1, 'DRIVE': 1}}
   ]},
   { text:'露营时，有人在你旁边大声放音乐……', camp:'rin', options:[
     {text:'戴上降噪耳机，继续看书。各有各的玩法，不干涉',scores:{'OWL': 1, 'PAGE': 1, 'SEYANA': 1}},
@@ -450,7 +450,7 @@ const QUESTIONS = [
   ]},
   { text:'露营最后一晚，篝火快灭了。你……', camp:'rin', options:[
     {text:'看着最后一点火星慢慢熄灭，觉得这一刻和旅途本身一样重要',scores:{'OWL': 1, 'LONE': 1, 'SPA': 1}},
-    {text:'「不要灭啊——」往里面扔了最后几根柴，然后对着火焰拍了张照片当头像',scores:{'BOO!': 2, 'ASAKA': 1}},
+    {text:'「不要灭啊——」往里面扔了最后几根柴，然后对着火焰发了好一会儿呆',scores:{'BOO!': 2, 'ASAKA': 1}},
     {text:'已经睡着了。篝火？什么篝火？',scores:{'COZY': 1, 'SEYANA': 1, 'CHILL': 1}}
   ]},
   { text:'深夜，一个陌生女孩瑟瑟发抖地出现在你的营地——她骑车来看富士山，结果迷路到现在。你……', camp:'nadeshiko', options:[
@@ -476,7 +476,7 @@ const QUESTIONS = [
   { text:'你在便利店看到一款新出的「露营限定」口味零食……', camp:'nadeshiko', options:[
     {text:'拿起来看了看配料表，放下了。下次露营再说',scores:{'CARB': 1}},
     {text:'「露营限定？买了买了买了！！」——然后买了三包，当场拆了一包',scores:{'NOM': 1, 'DASH': 1}},
-    {text:'拍照发到社团群里：「这个有人吃过吗？好吃吗？在线等」——然后在便利店等了十分钟',scores:{'LURK': 1, 'TROLL': 1, 'WEEP': 1}}
+    {text:'发消息到社团群里：「这个有人吃过吗？好吃吗？在线等」——然后在便利店等了十分钟',scores:{'LURK': 1, 'TROLL': 1, 'WEEP': 1}}
   ]},
   { text:'你第一次一个人去露营。到了营地，搭好帐篷，天已经全黑了。篝火烧起来之后，你……', camp:'nadeshiko', options:[
     {text:'掏出手机给朋友发消息：「我一个人到了！这里好安静……有点害怕但又好开心！」',scores:{'SUNNY': 1, 'BOO!': 1, 'LURK': 1, 'WEEP': 1}},
@@ -485,7 +485,7 @@ const QUESTIONS = [
   ]},
   { text:'露营当晚，有人开始讲山里的怪谈。帐篷外有风声，远处有动物叫……', camp:'nadeshiko', options:[
     {text:'「别讲了别讲了别讲了——」整个人缩进睡袋，只露出眼睛',scores:{'BOO!': 2, 'WEEP': 1, 'NOM': 1}},
-    {text:'「せやな～」其实已经快睡着了，根本没在听',scores:{'SEYANA': 2, 'COZY': 1}},
+    {text:'「嗯～」其实已经快睡着了，根本没在听',scores:{'SEYANA': 2, 'COZY': 1}},
     {text:'面无表情听着，等讲到最恐怖的地方，突然冷冷地补了一句更吓人的',scores:{'TSUN': 2, 'TROLL': 1, 'BOO!': 1}}
   ]},
   { text:'出远门旅行时，你的包里一定会有……', camp:'nadeshiko', options:[
@@ -521,12 +521,12 @@ const QUESTIONS = [
   { text:'学校文化祭，社团的展位该怎么布置？', camp:'chiaki', options:[
     {text:'用卡纸搭了个迷你帐篷展示区，旁边放了真实露营装备给人摸',scores:{'CARB': 1, 'CHEF': 1}},
     {text:'搞了个「野活部咖啡厅」——卖手冲咖啡和烤棉花糖，生意好到排长队',scores:{'CHEF': 2, 'NOM': 1}},
-    {text:'「我们把被炉搬来吧！」——最后展位变成了一堆人挤在被炉里看露营照片',scores:{'COZY': 1, 'AFRO': 1, 'BROKE': 1}}
+    {text:'「我们把被炉搬来吧！」——最后展位变成了一堆人挤在被炉里聊露营趣事',scores:{'COZY': 1, 'AFRO': 1, 'BROKE': 1}}
   ]},
   { text:'你发现一条绝美的林间小路，地图上没有标注……', camp:'chiaki', options:[
     {text:'骑过去看看——大不了掉头。未知本身就是风景',scores:{'DASH': 2, 'LONE': 1, 'DRIVE': 1}},
     {text:'「这条路太棒了！回头一定要带大家来！」已经在心里列好了邀请名单',scores:{'SUNNY': 1, 'NOM': 1, 'DOGGO': 1}},
-    {text:'先用手机拍下路口做标记，记下坐标，查了一遍安全信息，再决定走不走',scores:{'LURK': 2, 'CHOO': 1, 'PAGE': 1}}
+    {text:'先用手机记下路口坐标，查了一遍安全信息，再决定走不走',scores:{'LURK': 2, 'CHOO': 1, 'PAGE': 1}}
   ]},
   { text:'社团需要决定下一个露营地点。大家在讨论……', camp:'aoi', options:[
     {text:'「我推荐这个营地，海拔1500米，有温泉，晚上能看到银河。」——资料已经整理好了',scores:{'LURK': 2, 'PAGE': 1, '3776': 1}},
@@ -546,13 +546,13 @@ const QUESTIONS = [
     {text:'「海边就没那么多蚊子——海风吹着，蚊虫站不住脚」',scores:{'AQUA': 1}}
   ]},
   { text:'你正骑着自行车爬一个看不到尽头的上坡。导航显示还有3公里，但你的腿已经快没知觉了……', camp:'aoi', options:[
-    {text:'「せやな～算了，下来推吧。」——推着车走也是一种骑行',scores:{'SEYANA': 2, 'COZY': 1}},
+    {text:'「嗯～算了，下来推吧。」——推着车走也是一种骑行',scores:{'SEYANA': 2, 'COZY': 1}},
     {text:'咬牙继续踩——因为山顶有家面包店，据说他们家的蜜瓜包是附近最好吃的',scores:{'CARB': 2, 'NOM': 1, 'DASH': 1}},
     {text:'「这算什么！上次我从滨松骑到山梨都没死！」——然后开始跟路人吹自己骑过的最远距离',scores:{'USOYARE': 2, 'CHAOS': 1}}
   ]},
   { text:'露营时，有人在你面前一本正经地讲了一个「亲身经历」——但你总觉得哪里不对……', camp:'aoi', options:[
     {text:'「真的假的？！」——然后全信了，还追问细节',scores:{'WEEP': 2, 'SUNNY': 1, 'BOO!': 1}},
-    {text:'「せやな～」——其实你一个字都不信，但懒得拆穿',scores:{'SEYANA': 2, 'TROLL': 1}},
+    {text:'「嘛～」——其实你一个字都不信，但懒得拆穿',scores:{'SEYANA': 2, 'TROLL': 1}},
     {text:'听完之后，面不改色地补了一句更离谱的，现在轮到他怀疑你了',scores:{'USOYARE': 2, 'TSUN': 1, 'CHAOS': 1}}
   ]},
   { text:'你在餐厅打工攒钱买露营装备。有顾客来买东西，你发现他买的都是露营相关的东西……', camp:'aoi', options:[
@@ -566,7 +566,7 @@ const QUESTIONS = [
     {text:'「哇好巧好巧好巧！」——直接跨池子过来了',scores:{'SUNNY': 1, 'CHAOS': 1, 'NOM': 1, 'CHEF': 1}},
     {text:'泡在温泉里闭着眼，一句话没说，脸不知道是被蒸气烫的还是别的什么原因',scores:{'USOYARE': 1, 'ASAKA': 1, 'CHILL': 1}}
   ]},
-  { text:'你的LINE头像是一张篝火照片。有人评论「好想一起去」，你……', camp:'ena', options:[
+  { text:'你的LINE状态栏写着「正在露营中」。有人评论「好想一起去」，你……', camp:'ena', options:[
     {text:'已读不回。默默计划着下次独自出发的路线',scores:{'OWL': 2, 'LONE': 1, 'PAGE': 1}},
     {text:'「来呀来呀！下次一起去！」——但你已经在群里发完定位了',scores:{'SUNNY': 1, 'COZY': 1, 'LURK': 1, 'TROLL': 1}},
     {text:'「りんりん～下次一起去怎么样？」——其实你根本没打算去，但不妨碍你撮合别人去',scores:{'TROLL': 1, 'WAN!': 1, 'CHILL': 1}}
@@ -604,7 +604,7 @@ const QUESTIONS = [
   { text:'露营结束，大家聚在居酒屋。有人提议干杯……', camp:'easter', options:[
     {text:'「先来六罐啤酒，一人一罐。」——然后一个人喝了四罐，开始讲年轻时露营的故事',scores:{'6CAN': 2, 'SAGE': 1, 'CHAOS': 1}},
     {text:'「我不喝酒，给我乌龙茶。」——但旁边的人都在说「你上次也这么说」',scores:{'USOYARE': 1, 'TROLL': 1}},
-    {text:'拍了一张所有人举杯的照片发到SNS，配文「又一次露营，又一次干杯」',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}}
+    {text:'发了一条动态到SNS：「又一次露营，又一次干杯」',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}}
   ]},
   { text:'你最喜欢的一件露营装备，它的故事是……', camp:'easter', options:[
     {text:'是爷爷用过的老式煤油灯，有几十年的历史，上面的划痕都是故事',scores:{'SAGE': 2, 'LONE': 1, 'WAN!': 1}},
@@ -624,27 +624,27 @@ const QUESTIONS = [
   { text:'毕业季。大家讨论毕业后各自的打算……', camp:'mixed', options:[
     {text:'「继续露营。一个人也好，一群人也罢，帐篷在哪我在哪」',scores:{'DASH': 2, 'LONE': 1, 'TSUN': 1}},
     {text:'「去哪不重要，重要的是露营的时候还能不能吃到好吃的……」',scores:{'NOM': 1, 'WEEP': 1, 'SUNNY': 1}},
-    {text:'「せやな～反正你们的群聊我不会退，到时候你们去哪我就跟去哪」',scores:{'SEYANA': 1, 'MOM': 1, 'COZY': 1}}
+    {text:'「嗯～反正你们的群聊我不会退，到时候你们去哪我就跟去哪」',scores:{'SEYANA': 1, 'MOM': 1, 'COZY': 1}}
   ]},
-  { text:'旅途中看到一个绝佳的拍照角度。你停下来，发现这个位置……', camp:'mixed', options:[
-    {text:'安静地拍了一张，构图干净，存进手机相册，不发',scores:{'OWL': 1, 'PAGE': 1, 'LONE': 1}},
-    {text:'从五个角度拍了十五张，选了最好看的那张，修图半小时，发SNS',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}},
-    {text:'掏出胶片相机，只按了一次快门，对自己说「剩下的等洗出来再看」',scores:{'CARB': 1, 'PAGE': 1, 'CHOO': 1}},
-    {text:'「这个角度……如果等日落再拍，光线会更好。」——然后真的坐下来等了二十分钟',scores:{'MONO': 1}}
+  { text:'旅途中看到一个绝佳的风景。你停下来，发现这个位置……', camp:'mixed', options:[
+    {text:'安静地看了很久，把它记在心里，不拍照不发动态',scores:{'OWL': 1, 'PAGE': 1, 'LONE': 1}},
+    {text:'从五个角度看了十五分钟，选了最好看的角度，发了一条SNS动态',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}},
+    {text:'掏出笔记本，只画了一张速写，对自己说「剩下的等回去再慢慢想」',scores:{'CARB': 1, 'PAGE': 1, 'CHOO': 1}},
+    {text:'「这个角度……如果等日落再看，光线会更好。」——然后真的坐下来等了二十分钟',scores:{'MONO': 1}}
   ]},
   { text:'樱花季，你来到一个樱花树下的露营地点。樱花正满开……', camp:'mixed', options:[
     {text:'把帐篷搭在花瓣飘不到的地方（要清理很麻烦），然后安静地看书赏花',scores:{'LONE': 1, 'PAGE': 1, 'SPA': 1, 'WAN!': 1}},
-    {text:'「樱花+露营！这是什么神仙组合！！」——拍了至少五十张照片，然后开始做樱花主题的露营便当',scores:{'CHEF': 1, 'SUNNY': 1, 'AFRO': 1}},
+    {text:'「樱花+露营！这是什么神仙组合！！」——激动得原地转了三圈，然后开始做樱花主题的露营便当',scores:{'CHEF': 1, 'SUNNY': 1, 'AFRO': 1}},
     {text:'把帐篷搭在樱花树下，然后躺在帐篷里透过天窗看花瓣飘落——被花瓣埋了半截帐篷也不在意',scores:{'COZY': 2, 'CHILL': 1, 'SEYANA': 1}}
   ]},
   { text:'秋天露营，营地周围全是红叶。你……', camp:'mixed', options:[
     {text:'泡了杯茶，坐在折叠椅上，看着红叶发呆——这就是秋天的正确打开方式',scores:{'SPA': 2, 'OWL': 1, 'PAGE': 1, 'CHILL': 1}},
     {text:'捡了一大把红叶，说要带回去做书签，结果一路掉了一大半',scores:{'DASH': 1, 'BOO!': 1, 'SUNNY': 1}},
-    {text:'拿了相机拍了一整卷胶片，说「等洗出来就知道拍得怎么样了」——可能要等半年',scores:{'CARB': 1, 'CHOO': 1, 'ASAKA': 1}}
+    {text:'捡了一大把红叶夹进笔记本里，说「等压干了就知道好不好看了」——可能要等半年',scores:{'CARB': 1, 'CHOO': 1, 'ASAKA': 1}}
   ]},
   { text:'你在露营时看到一只野生小动物（松鼠/狐狸/鹿）靠近营地……', camp:'mixed', options:[
     {text:'一动不动，屏住呼吸，用眼睛记录这一刻——不想打扰它',scores:{'OWL': 2, 'PAGE': 1, 'LONE': 1}},
-    {text:'「好可爱好可爱好可爱！！！」——小声尖叫，然后疯狂拍照，结果把动物吓跑了',scores:{'SUNNY': 1, 'BOO!': 1, 'ASAKA': 1, 'USOYARE': 1}},
+    {text:'「好可爱好可爱好可爱！！！」——小声尖叫，然后激动得手舞足蹈，结果把动物吓跑了',scores:{'SUNNY': 1, 'BOO!': 1, 'ASAKA': 1, 'USOYARE': 1}},
     {text:'「别过来别过来，我什么都没带给你吃……」——但其实偷偷掰了一小块饼干放在远处',scores:{'DOGGO': 2, 'TSUN': 1, 'WAN!': 1}}
   ]},
   { text:'露营时突然下起大雨，你的帐篷开始漏水……', camp:'mixed', options:[
@@ -673,17 +673,17 @@ const QUESTIONS = [
     {text:'森林深处。阳光透过树叶洒下来，地上有松果和蘑菇，像走进另一个世界',scores:{'PAGE': 1}},
     {text:'哪里都行——只要有一把舒服的椅子',scores:{'SEYANA': 1}}
   ]},
-  { text:'你看到一个值得拍下来的画面，你的第一反应是……', camp:'easter', options:[
-    {text:'掏出手机，快拍，发了再说——好的画面转瞬即逝',scores:{'DASH': 1}},
-    {text:'先看，再想，最后拍。如果值得拍，多等几分钟也无妨——光线会变，构图可以更好',scores:{'MONO': 1}},
-    {text:'不拍。有些画面用眼睛看就够了，镜头反而会打断那个瞬间',scores:{'LONE': 1}},
-    {text:'拍了，但总觉得拍不出眼睛看到的感觉。算了，下次再试',scores:{'WEEP': 1}}
+  { text:'你看到一片让人心动的风景，你的第一反应是……', camp:'easter', options:[
+    {text:'掏出手机，快记下来，发了再说——好的风景转瞬即逝',scores:{'DASH': 1}},
+    {text:'先看，再想，最后记录。如果值得，多等几分钟也无妨——光线会变，角度可以更好',scores:{'MONO': 1}},
+    {text:'不记录。有些风景用眼睛看就够了，任何记录反而会打断那个瞬间',scores:{'LONE': 1}},
+    {text:'记了，但总觉得记不住眼睛看到的感觉。算了，下次再来看',scores:{'WEEP': 1}}
   ]},
   { text:'露营时，你最享受哪种「等待」？', camp:'easter', options:[
     {text:'等篝火烧到最旺——那十分钟的火焰，值得之前半小时的添柴',scores:{'SPA': 1, 'OWL': 1}},
     {text:'等日出。半夜起来摸黑走到观景点，看着天边一点点亮起来——每次都觉得值',scores:{'3776': 1}},
     {text:'等一锅水烧开。泡面也好咖啡也好，等待让结果变得更好',scores:{'NOM': 1}},
-    {text:'等一卷胶卷冲洗出来。按快门时不知道结果，拿到照片那刻——那种惊喜，数码永远给不了',scores:{'MONO': 1, 'SAGE': 1}}
+    {text:'等天完全黑下来。从黄昏到黑夜，天空的颜色一层层变——那种渐变，赶时间的人永远看不到',scores:{'MONO': 1, 'SAGE': 1}}
   ]},
   { text:'你的露营目的地偏好……', camp:'easter', options:[
     {text:'山。越高越好，越安静越好，越接近天空越好',scores:{'LONE': 1}},
@@ -700,13 +700,13 @@ const QUESTIONS = [
   { text:'你一个人在海边露营。天黑了，你坐在沙滩上看着海……', camp:'mixed', options:[
     {text:'觉得有点无聊。海太开阔了，没有山的包围感——下次还是去山里吧',scores:{'3776': 1, 'LONE': 1}},
     {text:'觉得刚刚好。海浪声比山里的风声更催眠，而且地平线比山脊线更好看',scores:{'AQUA': 1, 'CHILL': 1}},
-    {text:'掏出手机给朋友发消息：「海边也不错诶，下次一起来吧」',scores:{'SUNNY': 1, 'COZY': 1}},
-    {text:'拿相机拍了一张长曝光——海浪模糊成雾，星空清晰得像针尖',scores:{'MONO': 1, 'OWL': 1}}
+    {text:'掏出手机给朋友发消息：「山顶也不错诶，下次一起来吧」',scores:{'SUNNY': 1, 'COZY': 1}},
+    {text:'看着远方发呆——山间的雾气像纱一样飘过，星空清晰得像针尖',scores:{'MONO': 1, 'OWL': 1}}
   ]},
-  { text:'除了露营，你平时最喜欢拍什么？', camp:'mixed', options:[
-    {text:'不怎么拍。露营的时候才想起来相机还有电',scores:{'TSUN': 1}},
-    {text:'什么都拍——路边的小花、咖啡杯里的倒影、街上偶遇的猫、朋友打瞌睡的样子',scores:{'MONO': 1}},
-    {text:'只拍家人和狗。风景是顺便的，他们才是主题',scores:{'DOGGO': 1}},
+  { text:'除了露营，你平时还有什么特别着迷的事？', camp:'mixed', options:[
+    {text:'没什么特别的。露营的时候才会想起来自己还有别的爱好',scores:{'TSUN': 1}},
+    {text:'什么都喜欢——路边的小花、咖啡杯里的倒影、街上偶遇的猫、朋友打瞌睡的样子，都值得好好看看',scores:{'MONO': 1}},
+    {text:'陪家人和狗。风景是顺便的，他们才是主题',scores:{'DOGGO': 1}},
     {text:'篝火旁的歌声。朋友在弹吉他，其他人在合唱——你录了一段，回来反复听',scores:{'AQUA': 1, 'CHOO': 1}}
   ]},
   { text:'你偶尔会想：如果没有喜欢上露营，现在的你会喜欢什么？', camp:'easter', options:[
@@ -1082,7 +1082,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.7', 240, 715);
+  ctx.fillText('v0.7.1', 240, 715);
   
   // Download
   const link = document.createElement('a');
