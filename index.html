@@ -122,6 +122,14 @@ body::before {
 }
 .btn-secondary:hover { background: var(--card-hover); border-color: #555; }
 
+.btn-outline {
+  background: transparent;
+  color: var(--warm);
+  border: 1px solid var(--warm);
+  opacity: 0.8;
+}
+.btn-outline:hover { background: rgba(232,168,80,0.1); border-color: var(--warm-glow); opacity: 1; }
+
 /* Quiz Screen */
 .quiz-screen { padding: 16px 0; }
 .progress-bar {
@@ -351,6 +359,7 @@ body::before {
       <div class="result-actions">
         <button class="btn btn-primary" onclick="shareResult()">📸 保存分享图</button>
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
+        <button class="btn btn-outline" onclick="window.open('https://ycti-stats.365283577.workers.dev','_blank')">📊 查看统计</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
       <div class="version-tag">v0.7.2</div>
@@ -361,6 +370,11 @@ body::before {
 <div class="toast" id="toast"></div>
 <canvas id="shareCanvas" width="480" height="720"></canvas>
 <script>
+// ============================================================
+// API
+// ============================================================
+const API_BASE = 'https://ycti-stats.365283577.workers.dev';
+
 // ============================================================
 // DATA: 30 Personalities
 // ============================================================
@@ -910,6 +924,13 @@ function showResult() {
   // Store for sharing
   window._resultData = { code: p.code, tag: p.tag, quote: p.quote, desc: p.desc, 
     partnerCode: partner.code, partnerTag: partner.tag, partnerText: p.partnerText, easter: result.easter, theme: p.theme };
+
+  // Submit to stats
+  fetch(API_BASE + '/api/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ personality: result.key })
+  }).catch(() => {}); // fire-and-forget
 }
 
 function restartQuiz() {
