@@ -368,14 +368,14 @@ body::before {
 </div>
 
 <!-- Stats Screen (fullscreen) -->
-<div id="statsScreen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:var(--bg);flex-direction:column;padding:16px;overflow-y:auto;">
+<div id="statsScreen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:var(--bg);flex-direction:column;padding:10px;overflow-y:auto;">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0 12px;max-width:800px;margin:0 auto;width:100%;">
     <button class="btn btn-outline" onclick="closeStats()" style="padding:8px 20px;font-size:14px;">← 返回结果</button>
     <span style="font-size:20px;font-weight:700;color:var(--warm);">📊 露营人格统计</span>
     <span style="width:80px;"></span>
   </div>
   <div id="statsInfo" style="text-align:center;font-size:15px;color:var(--warm-glow);margin:4px 0 8px;font-weight:600;"></div>
-  <div id="statsList" style="display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;max-height:90px;overflow-y:auto;padding:4px 0;max-width:800px;margin:0 auto;width:100%;"></div>
+  <div id="statsList" style="display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;max-height:64px;overflow-y:auto;padding:4px 0;max-width:800px;margin:0 auto;width:100%;"></div>
   <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0;">
     <canvas id="statsCanvas" style="max-width:100%;max-height:100%;border-radius:12px;cursor:pointer;"></canvas>
     <div id="treemapTooltip" style="display:none;position:fixed;z-index:200;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text);pointer-events:none;box-shadow:0 4px 16px var(--shadow);max-width:200px;text-align:center;"></div>
@@ -1242,13 +1242,12 @@ function closeStats() {
 async function loadStats() {
   const canvas = document.getElementById('statsCanvas');
   const ctx = canvas.getContext('2d');
-  // Dynamic canvas size — 3:4 portrait ratio for mobile, capped by container
+  // Dynamic canvas size — fill the container, mobile-optimized
   const container = canvas.parentElement;
-  const maxW = container.clientWidth - 32;
-  const maxH = container.clientHeight - 16;
-  const SIZE = Math.max(Math.min(Math.min(maxW, maxH), 600), 300);
-  const W = SIZE;
-  const H = Math.min(SIZE * 4/3, maxH); // 3:4 on portrait mobile, square when height-limited
+  const maxW = container.clientWidth - 16;
+  const maxH = container.clientHeight - 8;
+  const W = Math.max(Math.min(maxW, 600), 280);
+  const H = Math.max(Math.min(maxH, Math.round(W * 1.6)), 360);
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr;
   canvas.height = H * dpr;
