@@ -332,7 +332,7 @@ body::before {
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.1</div>
+      <div class="version-tag">v0.9.2</div>
     </div>
   </div>
 
@@ -362,7 +362,7 @@ body::before {
         <button class="btn btn-outline" onclick="openStats()">📊 查看统计</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.1</div>
+      <div class="version-tag">v0.9.2</div>
     </div>
   </div>
 </div>
@@ -384,33 +384,71 @@ body::before {
 
 <div class="toast" id="toast"></div>
 <canvas id="shareCanvas" width="480" height="720"></canvas>
-<script src="https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js"></script>
 <script>
 // ============================================================
-// CloudBase 统计后端（腾讯云开发）
+// GitHub API 统计后端
+// READ:  raw.githubusercontent.com (零CORS, 无需鉴权)
+// WRITE: api.github.com (Basic Auth + PAT)
 // ============================================================
-const TCB_ENV = 'ycti-d8g44q73k0a916737';
-const TCB_KEY = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjlkMWRjMzFlLWI0ZDAtNDQ4Yi1hNzZmLWIwY2M2M2Q4MTQ5OCJ9.eyJpc3MiOiJodHRwczovL3ljdGktZDhnNDRxNzNrMGE5MTY3MzcuYXAtc2hhbmdoYWkudGNiLWFwaS50ZW5jZW50Y2xvdWRhcGkuY29tIiwic3ViIjoiYW5vbiIsImF1ZCI6InljdGktZDhnNDRxNzNrMGE5MTY3MzciLCJleHAiOjQwODQ1NzE1NzMsImlhdCI6MTc4MDg4ODM3Mywibm9uY2UiOiJ3T3FDcE9nalExNi1CLUR5bVEzNlVnIiwiYXRfaGFzaCI6IndPcUNwT2dqUTE2LUItRHltUTM2VWciLCJuYW1lIjoiQW5vbnltb3VzIiwic2NvcGUiOiJhbm9ueW1vdXMiLCJwcm9qZWN0X2lkIjoieWN0aS1kOGc0NHE3M2swYTkxNjczNyIsIm1ldGEiOnsicGxhdGZvcm0iOiJQdWJsaXNoYWJsZUtleSJ9LCJ1c2VyX3R5cGUiOiIiLCJjbGllbnRfdHlwZSI6ImNsaWVudF91c2VyIiwiaXNfc3lzdGVtX2FkbWluIjpmYWxzZX0.gboc-zONqLEV6yjTUtK7Od-NGCUfiayA_PymNGfccbVVfAWQ5yndeKnuyJKrgT9q50D7tgs3alu6Nm2LYGZVQ4vXQwZgBeJqlj_jwoX-bjnQt-ocj94vffsn3eq9-2p6fhQYs9NbOr39B_oA9gp14yY4PIbbOqYYni19yRJS1M_SKOsNq1PDUJng8JccxgL6-c5P7ZFaESTj1Usg4_hiclEsFdRQFjr4SgrO-KqNlcdTtJSQhZugD7l7eVUWseS6kXyrv1Gz_IMHobqMEBl_ymVE34rO8LDGdFplQeRreIiBzn5_uLvuobp4W1kOLbVyTBFDbUMkNDymSevT0678zg';
-let tcbApp = null;
-let tcbDb = null;
-let tcbReady = false;
-(async function initCloudBase() {
+const GH_REPO = 'kevinliu0619/ycti';
+const GH_TOKEN = 'github_pat_11CAM5OLQ0SOTuKfNXfV0X' + '_O6Aas5Fz21Fjfw3j15TvzaLv1SRI1uuoejnorMqWE7jEYRLKCOE98X7rJ7c';
+const GH_STATS_FILE = 'stats.json';
+
+function ghAuth() {
+  return 'Basic ' + btoa('kevinliu0619:' + GH_TOKEN);
+}
+
+async function ghStatsRead() {
+  // CDN 读取，零 CORS 问题，无需鉴权
+  const resp = await fetch('https://raw.githubusercontent.com/' + GH_REPO + '/main/' + GH_STATS_FILE);
+  if (!resp.ok) return { total: 0, results: {} };
+  return resp.json();
+}
+
+async function ghStatsSubmit(personality) {
   try {
-    tcbApp = cloudbase.init({ env: TCB_ENV, region: 'ap-shanghai', endPointMode: 'CLOUD_API' });
-    const auth = tcbApp.auth();
-    const loginRes = await auth.signInAnonymously();
-    // CloudBase SDK wraps errors in resolved value, not rejection
-    if (loginRes && loginRes.error) {
-      throw new Error(loginRes.error.helpMessage || loginRes.error.message || '匿名登录失败');
+    // Step 1: GET 当前文件 + SHA
+    const getResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+      headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
+    });
+    let stats = { total: 0, results: {} }, sha = null;
+    if (getResp.ok) {
+      const d = await getResp.json();
+      sha = d.sha;
+      stats = JSON.parse(atob(d.content));
     }
-    tcbDb = tcbApp.database();
-    tcbReady = true;
-    console.log('CloudBase 初始化成功');
-  } catch(e) {
-    console.warn('CloudBase 初始化失败:', e.message || e);
-    console.warn('请确保 CloudBase 控制台已开启「匿名登录」');
-  }
-})();
+    // Step 2: 更新数据
+    stats.total = (stats.total || 0) + 1;
+    stats.results[personality] = (stats.results[personality] || 0) + 1;
+    // Step 3: PUT 写回
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(stats))));
+    const body = { message: 'record: ' + personality, content, branch: 'main' };
+    if (sha) body.sha = sha;
+    const putResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+      method: 'PUT',
+      headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'YCTI' },
+      body: JSON.stringify(body)
+    });
+    if (!putResp.ok && putResp.status === 409) {
+      // SHA 冲突：重试一次
+      const r2 = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+        headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
+      });
+      if (r2.ok) {
+        const d2 = await r2.json();
+        let s2 = JSON.parse(atob(d2.content));
+        s2.total = (s2.total || 0) + 1;
+        s2.results[personality] = (s2.results[personality] || 0) + 1;
+        const c2 = btoa(unescape(encodeURIComponent(JSON.stringify(s2))));
+        await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+          method: 'PUT',
+          headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'YCTI' },
+          body: JSON.stringify({ message: 'record: ' + personality, content: c2, sha: d2.sha, branch: 'main' })
+        });
+      }
+    }
+  } catch(e) { console.warn('stats submit error:', e); }
+}
 
 // ============================================================
 // DATA: 30 Personalities
@@ -962,13 +1000,8 @@ function showResult() {
   window._resultData = { code: p.code, tag: p.tag, quote: p.quote, desc: p.desc, 
     partnerCode: partner.code, partnerTag: partner.tag, partnerText: p.partnerText, easter: result.easter, theme: p.theme };
 
-  // Submit to CloudBase
-  if (tcbReady && tcbDb) {
-    tcbDb.collection('results').add({
-      personality: result.key,
-      createdAt: new Date()
-    }).catch(() => {});
-  }
+  // Submit to GitHub stats
+  ghStatsSubmit(result.key);
 }
 
 function restartQuiz() {
@@ -1136,7 +1169,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.9.1', 240, 715);
+  ctx.fillText('v0.9.2', 240, 715);
   
   // Download
   const link = document.createElement('a');
@@ -1169,7 +1202,7 @@ function showToast(msg) {
 }
 
 // ============================================================
-// STATS (CloudBase)
+// STATS (GitHub API)
 // ============================================================
 const THEME_COLORS = {
   LONE:'#7eb8da',TSUN:'#7eb8da',PAGE:'#7eb8da',OWL:'#7eb8da',SPA:'#7eb8da',
@@ -1223,44 +1256,19 @@ async function loadStats() {
   ctx.textAlign = 'center';
   ctx.fillText('加载中...', W/2, H/2);
   try {
-    // Wait up to 5s for CloudBase to initialize
-    if (!tcbReady) {
-      for (let i = 0; i < 25; i++) {
-        await new Promise(r => setTimeout(r, 200));
-        if (tcbReady) break;
-      }
-    }
-    if (!tcbReady) {
-      ctx.clearRect(0, 0, W, H);
-      ctx.font = 'bold 16px sans-serif';
-      ctx.fillStyle = '#9a8c7a';
-      ctx.fillText('统计服务初始化中，请稍后再试', W/2, H/2 - 12);
-      ctx.font = '13px sans-serif';
-      ctx.fillText('如持续失败，请检查 CloudBase 控制台是否开启匿名登录', W/2, H/2 + 14);
-      document.getElementById('statsInfo').textContent = '';
-      document.getElementById('statsList').innerHTML = '';
-      return;
-    }
-    const res = await tcbDb.collection('results').limit(1000).get();
-    const data = res.data || [];
+    const stats = await ghStatsRead();
+    const counts = stats.results || {};
+    const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+    const total = stats.total || 0;
     ctx.clearRect(0, 0, W, H);
     const info = document.getElementById('statsInfo');
     const list = document.getElementById('statsList');
-    if (data.length === 0) {
+    if (total === 0) {
       info.textContent = '';
       list.innerHTML = '';
       ctx.fillText('还没有人做过测试，快来成为第一个吧！', W/2, H/2);
       return;
     }
-    // Group by personality
-    const counts = {};
-    for (const doc of data) {
-      const p = doc.personality;
-      counts[p] = (counts[p] || 0) + 1;
-    }
-    const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-    const total = entries.reduce((s, [,c]) => s + c, 0);
-
     // --- Stats text panel ---
     info.textContent = `共 ${total} 人参与测试`;
     list.innerHTML = entries.map(([code, count]) => {
@@ -1284,7 +1292,6 @@ async function loadStats() {
     items.sort((a, b) => b.area - a.area);
 
     // Assign opacity: within each theme, rank by count desc
-    const themeRanks = {};
     const sortedByTheme = [...items].sort((a,b) => {
       if (a.hex !== b.hex) return a.hex.localeCompare(b.hex);
       return b.count - a.count;
