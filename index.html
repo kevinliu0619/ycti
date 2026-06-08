@@ -367,39 +367,50 @@ body::before {
   </div>
 </div>
 
-<!-- Stats Modal -->
-<div id="statsOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:1000;justify-content:center;align-items:center;padding:16px;" onclick="if(event.target===this)closeStats()">
-  <div style="background:var(--card);border-radius:16px;border:1px solid var(--border);max-width:580px;width:100%;padding:24px;max-height:90vh;overflow-y:auto;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:18px;font-weight:700;color:var(--warm);">
-      <span>📊 露营人格统计</span>
-      <button onclick="closeStats()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;">✕</button>
-    </div>
-    <div id="statsInfo" style="text-align:center;font-size:14px;color:var(--warm-glow);margin-bottom:12px;font-weight:600;"></div>
-    <div id="statsList" style="display:flex;flex-wrap:wrap;gap:6px 10px;margin-bottom:16px;max-height:180px;overflow-y:auto;justify-content:center;"></div>
-    <div style="text-align:center;">
-      <canvas id="statsCanvas" width="540" height="400" style="max-width:100%;border-radius:8px;"></canvas>
-      <div style="font-size:11px;color:var(--muted);margin-top:10px;">数据实时更新 · 每次测试都会计入</div>
-    </div>
+<!-- Stats Screen (fullscreen) -->
+<div id="statsScreen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:var(--bg);flex-direction:column;padding:16px;overflow-y:auto;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0 12px;max-width:800px;margin:0 auto;width:100%;">
+    <button class="btn btn-outline" onclick="closeStats()" style="padding:8px 20px;font-size:14px;">← 返回结果</button>
+    <span style="font-size:20px;font-weight:700;color:var(--warm);">📊 露营人格统计</span>
+    <span style="width:80px;"></span>
   </div>
+  <div id="statsInfo" style="text-align:center;font-size:15px;color:var(--warm-glow);margin:4px 0 8px;font-weight:600;"></div>
+  <div id="statsList" style="display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;max-height:90px;overflow-y:auto;padding:4px 0;max-width:800px;margin:0 auto;width:100%;"></div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0;">
+    <canvas id="statsCanvas" style="max-width:100%;max-height:100%;border-radius:8px;"></canvas>
+  </div>
+  <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 4px;">数据实时更新 · 每次测试都会计入</div>
 </div>
 
 <div class="toast" id="toast"></div>
 <canvas id="shareCanvas" width="480" height="720"></canvas>
-<script src="https://static.cloudbase.net/cloudbase-js-sdk/2.7.12/cloudbase.full.js"></script>
+<script src="https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js"></script>
 <script>
 // ============================================================
 // CloudBase 统计后端（腾讯云开发）
 // ============================================================
 const TCB_ENV = 'ycti-d8g44q73k0a916737';
-const TCB_KEY = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjlkMWRjMzFlLWI0ZDAtNDQ4Yi1hNzZmLWIwY2M2M2Q4MTQ5OCJ9.eyJpc3MiOiJodHRwczovL3ljdGktZDhnNDRxNzNrMGE5MTY3MzcuYXAtc2hhbmdoYWkudGNiLWFwaS50ZW5jZW50Y2xvdWRhcGkuY29tIiwic3ViIjoiYW5vbiIsImF1ZCI6InljdGktZDhnNDRxNzNrMGE5MTY3MzciLCJleHAiOjQwODQ1NzE1NzMsImlhdCI6MTc4MDg4ODM3Mywibm9uY2UiOiJ3T3FDcE9nalExNi1CLUR5bVEzNlVnIiwiYXRfaGFzaCI6IndPcUNwT2dqUTE2LUItRHltUTM2VWciLCJuYW1lIjoiQW5vbnltb3VzIiwic2NvcGUiOiJhbm9ueW1vdXMiLCJwcm9qZWN0X2lkIjoieWN0aS1kOGc0NHE3M2swYTkxNjczNyIsIm1ldGEiOnsicGxhdGZvcm0iOiJQdWJsaXNoYWJsZUtleSJ9LCJ1c2VyX3R5cGUiOiIiLCJjbGllbnRfdHlwZSI6ImNsaWVudF91c2VyIiwiaXNfc3lzdGVtX2FkbWluIjpmYWxzZX0.gboc-zONqLEV6yjTUtK7Od-NGCUfiayA_PymNGfccbVVfAWQ5yndeKnuyJKrgT9q50D7tgs3alu6Nm2LYGZVQ4vXQwZgBeJqlj_jwoX-bjnQt-ocj94vffsn3eq9-2p6fhQYs9NbOr39B_oA9gp14yY4PIbbOqYYni19yRJS1M_SKOsNq1PDUJng8JccxgL6-c5P7ZFaESTj1Usg4_hiclEsFdRQFjr4SgrO-KqNlcdTtJSQhZugD7l7eVUWseS6kXyrv1Gz_IMHobqMEBl_ymVE34rO8LDGdFplQeRreIiBzn5_uLvuobp4W1kOLbVyTBFDbUMkNDymSevT0678zg';
+const TCB_KEY = 'eyJhbG...78zg';
 let tcbApp = null;
 let tcbDb = null;
-try {
-  tcbApp = cloudbase.init({ env: TCB_ENV, publishableKey: TCB_KEY });
-  tcbDb = tcbApp.database();
-} catch(e) {
-  console.warn('CloudBase SDK 未加载，统计功能暂不可用', e);
-}
+let tcbReady = false;
+(async function initCloudBase() {
+  try {
+    tcbApp = cloudbase.init({ env: TCB_ENV, publishableKey: TCB_KEY });
+    const auth = tcbApp.auth();
+    const loginRes = await auth.signInAnonymously();
+    // CloudBase SDK wraps errors in resolved value, not rejection
+    if (loginRes && loginRes.error) {
+      throw new Error(loginRes.error.helpMessage || loginRes.error.message || '匿名登录失败');
+    }
+    tcbDb = tcbApp.database();
+    tcbReady = true;
+    console.log('CloudBase 初始化成功');
+  } catch(e) {
+    console.warn('CloudBase 初始化失败:', e.message || e);
+    console.warn('请确保 CloudBase 控制台已开启「匿名登录」');
+  }
+})();
 
 // ============================================================
 // DATA: 30 Personalities
@@ -952,7 +963,7 @@ function showResult() {
     partnerCode: partner.code, partnerTag: partner.tag, partnerText: p.partnerText, easter: result.easter, theme: p.theme };
 
   // Submit to CloudBase
-  if (tcbDb) {
+  if (tcbReady && tcbDb) {
     tcbDb.collection('results').add({
       personality: result.key,
       createdAt: new Date()
@@ -1180,27 +1191,48 @@ function hexToRgba(hex, alpha) {
 }
 
 function openStats() {
-  document.getElementById('statsOverlay').style.display = 'flex';
+  document.getElementById('resultScreen').classList.remove('active');
+  const ss = document.getElementById('statsScreen');
+  ss.style.display = 'flex';
   loadStats();
 }
 
 function closeStats() {
-  document.getElementById('statsOverlay').style.display = 'none';
+  document.getElementById('statsScreen').style.display = 'none';
+  document.getElementById('resultScreen').classList.add('active');
 }
 
 async function loadStats() {
   const canvas = document.getElementById('statsCanvas');
   const ctx = canvas.getContext('2d');
-  const W = 540, H = 400;
+  // Dynamic canvas size based on available space
+  const container = canvas.parentElement;
+  const maxW = container.clientWidth - 32;
+  const maxH = container.clientHeight - 16;
+  const W = Math.max(Math.min(maxW, 900), 300);
+  const H = Math.max(Math.min(maxH, 700), 300);
+  canvas.width = W;
+  canvas.height = H;
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = '#9a8c7a';
-  ctx.font = '13px sans-serif';
+  ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('加载中...', W/2, H/2);
   try {
-    if (!tcbDb) {
+    // Wait up to 5s for CloudBase to initialize
+    if (!tcbReady) {
+      for (let i = 0; i < 25; i++) {
+        await new Promise(r => setTimeout(r, 200));
+        if (tcbReady) break;
+      }
+    }
+    if (!tcbReady) {
       ctx.clearRect(0, 0, W, H);
-      ctx.fillText('统计服务暂不可用，请稍后再试', W/2, H/2);
+      ctx.font = 'bold 16px sans-serif';
+      ctx.fillStyle = '#9a8c7a';
+      ctx.fillText('统计服务初始化中，请稍后再试', W/2, H/2 - 12);
+      ctx.font = '13px sans-serif';
+      ctx.fillText('如持续失败，请检查 CloudBase 控制台是否开启匿名登录', W/2, H/2 + 14);
       document.getElementById('statsInfo').textContent = '';
       document.getElementById('statsList').innerHTML = '';
       return;
@@ -1354,9 +1386,10 @@ function drawItem(ctx, item, x, y, w, h) {
   if (w <= 0 || h <= 0) return;
   ctx.fillStyle = hexToRgba(item.hex, item.alpha);
   ctx.fillRect(x, y, w, h);
-  if (w > 36 && h > 20) {
+  if (w > 40 && h > 24) {
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 11px sans-serif';
+    const fontSize = Math.max(11, Math.min(Math.floor(Math.min(w, h) / 4), 18));
+    ctx.font = `bold ${fontSize}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(item.code, x + w/2, y + h/2);
