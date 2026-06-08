@@ -390,13 +390,13 @@ body::before {
 // CloudBase 统计后端（腾讯云开发）
 // ============================================================
 const TCB_ENV = 'ycti-d8g44q73k0a916737';
-const TCB_KEY = 'eyJhbG...78zg';
+const TCB_KEY = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjlkMWRjMzFlLWI0ZDAtNDQ4Yi1hNzZmLWIwY2M2M2Q4MTQ5OCJ9.eyJpc3MiOiJodHRwczovL3ljdGktZDhnNDRxNzNrMGE5MTY3MzcuYXAtc2hhbmdoYWkudGNiLWFwaS50ZW5jZW50Y2xvdWRhcGkuY29tIiwic3ViIjoiYW5vbiIsImF1ZCI6InljdGktZDhnNDRxNzNrMGE5MTY3MzciLCJleHAiOjQwODQ1NzE1NzMsImlhdCI6MTc4MDg4ODM3Mywibm9uY2UiOiJ3T3FDcE9nalExNi1CLUR5bVEzNlVnIiwiYXRfaGFzaCI6IndPcUNwT2dqUTE2LUItRHltUTM2VWciLCJuYW1lIjoiQW5vbnltb3VzIiwic2NvcGUiOiJhbm9ueW1vdXMiLCJwcm9qZWN0X2lkIjoieWN0aS1kOGc0NHE3M2swYTkxNjczNyIsIm1ldGEiOnsicGxhdGZvcm0iOiJQdWJsaXNoYWJsZUtleSJ9LCJ1c2VyX3R5cGUiOiIiLCJjbGllbnRfdHlwZSI6ImNsaWVudF91c2VyIiwiaXNfc3lzdGVtX2FkbWluIjpmYWxzZX0.gboc-zONqLEV6yjTUtK7Od-NGCUfiayA_PymNGfccbVVfAWQ5yndeKnuyJKrgT9q50D7tgs3alu6Nm2LYGZVQ4vXQwZgBeJqlj_jwoX-bjnQt-ocj94vffsn3eq9-2p6fhQYs9NbOr39B_oA9gp14yY4PIbbOqYYni19yRJS1M_SKOsNq1PDUJng8JccxgL6-c5P7ZFaESTj1Usg4_hiclEsFdRQFjr4SgrO-KqNlcdTtJSQhZugD7l7eVUWseS6kXyrv1Gz_IMHobqMEBl_ymVE34rO8LDGdFplQeRreIiBzn5_uLvuobp4W1kOLbVyTBFDbUMkNDymSevT0678zg';
 let tcbApp = null;
 let tcbDb = null;
 let tcbReady = false;
 (async function initCloudBase() {
   try {
-    tcbApp = cloudbase.init({ env: TCB_ENV, publishableKey: TCB_KEY });
+    tcbApp = cloudbase.init({ env: TCB_ENV, region: 'ap-shanghai', endPointMode: 'CLOUD_API' });
     const auth = tcbApp.auth();
     const loginRes = await auth.signInAnonymously();
     // CloudBase SDK wraps errors in resolved value, not rejection
@@ -1211,8 +1211,12 @@ async function loadStats() {
   const maxH = container.clientHeight - 16;
   const W = Math.max(Math.min(maxW, 900), 300);
   const H = Math.max(Math.min(maxH, 700), 300);
-  canvas.width = W;
-  canvas.height = H;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = '#9a8c7a';
   ctx.font = '14px sans-serif';
