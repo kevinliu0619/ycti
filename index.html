@@ -399,11 +399,13 @@ function ghAuth() {
 }
 
 async function ghStatsRead() {
-  // CDN 读取，零 CORS 问题，无需鉴权
-  // 加时间戳绕过 CDN 缓存（raw.githubusercontent.com 默认缓存 5 分钟）
-  const resp = await fetch('https://raw.githubusercontent.com/' + GH_REPO + '/main/' + GH_STATS_FILE + '?t=' + Date.now());
+  // 直读 GitHub API，不走 CDN，无缓存延迟
+  const resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+    headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
+  });
   if (!resp.ok) return { total: 0, results: {} };
-  return resp.json();
+  const d = await resp.json();
+  return JSON.parse(atob(d.content));
 }
 
 async function ghStatsSubmit(personality) {
