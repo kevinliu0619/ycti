@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>YCTI · 摇曳露营人格测试</title>
-<script src="https://static.cloudbase.net/cloudbase-js-sdk/2.7.12/cloudbase.full.js"></script>
 <style>
 :root {
   --bg-deep: #0d0d1f;
@@ -386,14 +385,21 @@ body::before {
 
 <div class="toast" id="toast"></div>
 <canvas id="shareCanvas" width="480" height="720"></canvas>
+<script src="https://static.cloudbase.net/cloudbase-js-sdk/2.7.12/cloudbase.full.js"></script>
 <script>
 // ============================================================
 // CloudBase 统计后端（腾讯云开发）
 // ============================================================
 const TCB_ENV = 'ycti-d8g44q73k0a916737';
 const TCB_KEY = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjlkMWRjMzFlLWI0ZDAtNDQ4Yi1hNzZmLWIwY2M2M2Q4MTQ5OCJ9.eyJpc3MiOiJodHRwczovL3ljdGktZDhnNDRxNzNrMGE5MTY3MzcuYXAtc2hhbmdoYWkudGNiLWFwaS50ZW5jZW50Y2xvdWRhcGkuY29tIiwic3ViIjoiYW5vbiIsImF1ZCI6InljdGktZDhnNDRxNzNrMGE5MTY3MzciLCJleHAiOjQwODQ1NzE1NzMsImlhdCI6MTc4MDg4ODM3Mywibm9uY2UiOiJ3T3FDcE9nalExNi1CLUR5bVEzNlVnIiwiYXRfaGFzaCI6IndPcUNwT2dqUTE2LUItRHltUTM2VWciLCJuYW1lIjoiQW5vbnltb3VzIiwic2NvcGUiOiJhbm9ueW1vdXMiLCJwcm9qZWN0X2lkIjoieWN0aS1kOGc0NHE3M2swYTkxNjczNyIsIm1ldGEiOnsicGxhdGZvcm0iOiJQdWJsaXNoYWJsZUtleSJ9LCJ1c2VyX3R5cGUiOiIiLCJjbGllbnRfdHlwZSI6ImNsaWVudF91c2VyIiwiaXNfc3lzdGVtX2FkbWluIjpmYWxzZX0.gboc-zONqLEV6yjTUtK7Od-NGCUfiayA_PymNGfccbVVfAWQ5yndeKnuyJKrgT9q50D7tgs3alu6Nm2LYGZVQ4vXQwZgBeJqlj_jwoX-bjnQt-ocj94vffsn3eq9-2p6fhQYs9NbOr39B_oA9gp14yY4PIbbOqYYni19yRJS1M_SKOsNq1PDUJng8JccxgL6-c5P7ZFaESTj1Usg4_hiclEsFdRQFjr4SgrO-KqNlcdTtJSQhZugD7l7eVUWseS6kXyrv1Gz_IMHobqMEBl_ymVE34rO8LDGdFplQeRreIiBzn5_uLvuobp4W1kOLbVyTBFDbUMkNDymSevT0678zg';
-const tcbApp = cloudbase.init({ env: TCB_ENV, publishableKey: TCB_KEY });
-const tcbDb = tcbApp.database();
+let tcbApp = null;
+let tcbDb = null;
+try {
+  tcbApp = cloudbase.init({ env: TCB_ENV, publishableKey: TCB_KEY });
+  tcbDb = tcbApp.database();
+} catch(e) {
+  console.warn('CloudBase SDK 未加载，统计功能暂不可用', e);
+}
 
 // ============================================================
 // DATA: 30 Personalities
@@ -946,10 +952,12 @@ function showResult() {
     partnerCode: partner.code, partnerTag: partner.tag, partnerText: p.partnerText, easter: result.easter, theme: p.theme };
 
   // Submit to CloudBase
-  tcbDb.collection('results').add({
-    personality: result.key,
-    createdAt: new Date()
-  }).catch(() => {});
+  if (tcbDb) {
+    tcbDb.collection('results').add({
+      personality: result.key,
+      createdAt: new Date()
+    }).catch(() => {});
+  }
 }
 
 function restartQuiz() {
@@ -1190,6 +1198,13 @@ async function loadStats() {
   ctx.textAlign = 'center';
   ctx.fillText('加载中...', W/2, H/2);
   try {
+    if (!tcbDb) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillText('统计服务暂不可用，请稍后再试', W/2, H/2);
+      document.getElementById('statsInfo').textContent = '';
+      document.getElementById('statsList').innerHTML = '';
+      return;
+    }
     const res = await tcbDb.collection('results').limit(1000).get();
     const data = res.data || [];
     ctx.clearRect(0, 0, W, H);
