@@ -1242,12 +1242,13 @@ function closeStats() {
 async function loadStats() {
   const canvas = document.getElementById('statsCanvas');
   const ctx = canvas.getContext('2d');
-  // Dynamic canvas size — force square-ish for squarified treemap
+  // Dynamic canvas size — 3:4 portrait ratio for mobile, capped by container
   const container = canvas.parentElement;
   const maxW = container.clientWidth - 32;
   const maxH = container.clientHeight - 16;
   const SIZE = Math.max(Math.min(Math.min(maxW, maxH), 600), 300);
-  const W = SIZE, H = SIZE;
+  const W = SIZE;
+  const H = Math.min(SIZE * 4/3, maxH); // 3:4 on portrait mobile, square when height-limited
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr;
   canvas.height = H * dpr;
