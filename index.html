@@ -391,7 +391,7 @@ body::before {
 // WRITE: api.github.com (Basic Auth + PAT)
 // ============================================================
 const GH_REPO = 'kevinliu0619/ycti';
-const GH_TOKEN = 'github_pat_11CAM5OLQ0SOTuKfNXfV0X' + '_O6Aas5Fz21Fjfw3j15TvzaLv1SRI1uuoejnorMqWE7jEYRLKCOE98X7rJ7c';
+const GH_TOKEN='github_pat_11CAM5OLQ0SOTuKfNXfV0X' + '_O6Aas5Fz21Fjfw3j15TvzaLv1SRI1uuoejnorMqWE7jEYRLKCOE98X7rJ7c';
 const GH_STATS_FILE = 'stats.json';
 
 function ghAuth() {
@@ -400,7 +400,8 @@ function ghAuth() {
 
 async function ghStatsRead() {
   // CDN 读取，零 CORS 问题，无需鉴权
-  const resp = await fetch('https://raw.githubusercontent.com/' + GH_REPO + '/main/' + GH_STATS_FILE);
+  // 加时间戳绕过 CDN 缓存（raw.githubusercontent.com 默认缓存 5 分钟）
+  const resp = await fetch('https://raw.githubusercontent.com/' + GH_REPO + '/main/' + GH_STATS_FILE + '?t=' + Date.now());
   if (!resp.ok) return { total: 0, results: {} };
   return resp.json();
 }
