@@ -332,7 +332,7 @@ body::before {
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.2</div>
+      <div class="version-tag">v0.9.4</div>
     </div>
   </div>
 
@@ -362,7 +362,7 @@ body::before {
         <button class="btn btn-outline" onclick="openStats()">📊 查看统计</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.2</div>
+      <div class="version-tag">v0.9.4</div>
     </div>
   </div>
 </div>
@@ -385,6 +385,7 @@ body::before {
 
 <div class="toast" id="toast"></div>
 <canvas id="shareCanvas" width="480" height="720"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3/dist/d3-hierarchy.min.js"></script>
 <script>
 // ============================================================
 // GitHub API 统计后端
@@ -1172,7 +1173,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.9.2', 240, 715);
+  ctx.fillText('v0.9.4', 240, 715);
   
   // Download
   const link = document.createElement('a');
@@ -1333,82 +1334,27 @@ async function loadStats() {
   }
 }
 
-// ---- Squarified Treemap Algorithm ----
+// ---- Squarified Treemap (D3.js d3-hierarchy) ----
 function squarifyTreemap(ctx, items, x, y, w, h) {
   if (items.length === 0 || w <= 0 || h <= 0) return;
   if (items.length === 1) {
     drawItem(ctx, items[0], x, y, w, h);
     return;
   }
-  const totalArea = items.reduce((s, i) => s + i.area, 0);
-  if (totalArea <= 0) return;
-  const isH = w >= h;
-  let row = [], rowSum = 0;
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    row.push(item);
-    rowSum += item.area;
-    const rowSize = isH ? h : w;
-    const rowLen = (rowSum / totalArea) * (isH ? w : h);
-    const worstAR = worstAspectRatio(row, rowSum, rowLen, rowSize);
-    let prevWorstAR = Infinity;
-    if (row.length > 1) {
-      const prevSum = rowSum - item.area;
-      const prevLen = (prevSum / totalArea) * (isH ? w : h);
-      prevWorstAR = worstAspectRatio(row.slice(0, -1), prevSum, prevLen, rowSize);
-    }
-    if (row.length > 1 && worstAR > prevWorstAR) {
-      row.pop();
-      const commitSum = rowSum - item.area;
-      const remaining = items.slice(i);
-      if (isH) {
-        const rowW = (commitSum / totalArea) * w;
-        drawRow(ctx, row, x, y, rowW, h, true);
-        squarifyTreemap(ctx, remaining, x + rowW, y, w - rowW, h);
-      } else {
-        const rowH = (commitSum / totalArea) * h;
-        drawRow(ctx, row, x, y, w, rowH, false);
-        squarifyTreemap(ctx, remaining, x, y + rowH, w, h - rowH);
-      }
-      return;
-    }
-  }
-  // Commit all
-  if (isH) {
-    const rowW = (rowSum / totalArea) * w;
-    drawRow(ctx, row, x, y, rowW, h, true);
-  } else {
-    const rowH = (rowSum / totalArea) * h;
-    drawRow(ctx, row, x, y, w, rowH, false);
-  }
-}
-
-function worstAspectRatio(row, rowSum, rowLen, rowSize) {
-  let worst = 0;
-  for (const item of row) {
-    const size = rowLen <= 0 ? 0 : (item.area / rowSum) * rowLen;
-    if (size <= 0 || rowSize <= 0) continue;
-    const ar = Math.max(size / rowSize, rowSize / size);
-    if (ar > worst) worst = ar;
-  }
-  return worst;
-}
-
-function drawRow(ctx, row, x, y, w, h, isH) {
-  const rowSum = row.reduce((s, r) => s + r.area, 0);
-  if (rowSum <= 0) return;
-  let offset = 0;
-  const GAP = 2;
-  for (const item of row) {
-    if (isH) {
-      const iw = Math.max(((item.area / rowSum) * w) - GAP, 4);
-      drawItem(ctx, item, x + offset + GAP/2, y + GAP/2, iw, h - GAP);
-      offset += iw + GAP;
-    } else {
-      const ih = Math.max(((item.area / rowSum) * h) - GAP, 4);
-      drawItem(ctx, item, x + GAP/2, y + offset + GAP/2, w - GAP, ih);
-      offset += ih + GAP;
-    }
+  // Build hierarchy tree for D3
+  const root = d3.hierarchy({ children: items })
+    .sum(d => d.area)
+    .sort((a, b) => b.value - a.value);
+  // Compute squarified treemap layout
+  d3.treemap()
+    .tile(d3.treemapSquarify)
+    .size([w, h])
+    .paddingInner(2)
+    .paddingOuter(1)
+    (root);
+  // Draw each leaf block
+  for (const leaf of root.leaves()) {
+    drawItem(ctx, leaf.data, x + leaf.x0, y + leaf.y0, leaf.x1 - leaf.x0, leaf.y1 - leaf.y0);
   }
 }
 
