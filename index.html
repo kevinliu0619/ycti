@@ -377,7 +377,8 @@ body::before {
   <div id="statsInfo" style="text-align:center;font-size:15px;color:var(--warm-glow);margin:4px 0 8px;font-weight:600;"></div>
   <div id="statsList" style="display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;max-height:90px;overflow-y:auto;padding:4px 0;max-width:800px;margin:0 auto;width:100%;"></div>
   <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0;">
-    <canvas id="statsCanvas" style="max-width:100%;max-height:100%;border-radius:8px;"></canvas>
+    <canvas id="statsCanvas" style="max-width:100%;max-height:100%;border-radius:12px;cursor:pointer;"></canvas>
+    <div id="treemapTooltip" style="display:none;position:fixed;z-index:200;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text);pointer-events:none;box-shadow:0 4px 16px var(--shadow);max-width:200px;text-align:center;"></div>
   </div>
   <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 4px;">数据实时更新 · 每次测试都会计入</div>
 </div>
@@ -387,8 +388,7 @@ body::before {
 <script>
 // ============================================================
 // GitHub API 统计后端
-// READ:  raw.githubusercontent.com (零CORS, 无需鉴权)
-// WRITE: api.github.com (Basic Auth + PAT)
+// 读写均走 api.github.com，无缓存延迟
 // ============================================================
 const GH_REPO = 'kevinliu0619/ycti';
 const GH_TOKEN='github_pat_11CAM5OLQ0SOTuKfNXfV0X' + '_O6Aas5Fz21Fjfw3j15TvzaLv1SRI1uuoejnorMqWE7jEYRLKCOE98X7rJ7c';
@@ -1241,12 +1241,12 @@ function closeStats() {
 async function loadStats() {
   const canvas = document.getElementById('statsCanvas');
   const ctx = canvas.getContext('2d');
-  // Dynamic canvas size based on available space
+  // Dynamic canvas size — force square-ish for squarified treemap
   const container = canvas.parentElement;
   const maxW = container.clientWidth - 32;
   const maxH = container.clientHeight - 16;
-  const W = Math.max(Math.min(maxW, 900), 300);
-  const H = Math.max(Math.min(maxH, 700), 300);
+  const SIZE = Math.max(Math.min(Math.min(maxW, maxH), 600), 300);
+  const W = SIZE, H = SIZE;
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr;
   canvas.height = H * dpr;
@@ -1272,21 +1272,16 @@ async function loadStats() {
       ctx.fillText('还没有人做过测试，快来成为第一个吧！', W/2, H/2);
       return;
     }
-    // --- Stats text panel ---
+    // --- Stats info ---
     info.textContent = `共 ${total} 人参与测试`;
-    list.innerHTML = entries.map(([code, count]) => {
-      const pct = ((count / total) * 100).toFixed(1);
-      const hex = THEME_COLORS[code] || '#888';
-      return `<span style="display:inline-flex;align-items:center;background:var(--bg);border-radius:6px;padding:3px 10px;border-left:3px solid ${hex};gap:5px;font-size:12px;white-space:nowrap;">
-        <b style="color:${hex}">${code}</b>
-        <span style="color:var(--muted)">${count}人 ${pct}%</span>
-      </span>`;
-    }).join('');
+    list.innerHTML = '';
 
     // --- Squarified Treemap ---
-    const PAD = 2;
+    const PAD = 3;
+    window._treemapBlocks = []; // store for click detection
     const items = entries.map(([code, count], idx) => ({
       code, count,
+      pct: ((count / total) * 100).toFixed(1),
       area: (count / total) * (W * H),
       hex: THEME_COLORS[code] || '#888',
       idx
@@ -1308,6 +1303,27 @@ async function loadStats() {
     }
 
     squarifyTreemap(ctx, items, PAD, PAD, W - 2*PAD, H - 2*PAD);
+
+    // Canvas click → tooltip
+    canvas.onclick = function(e) {
+      const rect = canvas.getBoundingClientRect();
+      const sx = canvas.width / rect.width;
+      const sy = canvas.height / rect.height;
+      const mx = (e.clientX - rect.left) * sx / dpr;
+      const my = (e.clientY - rect.top) * sy / dpr;
+      const tt = document.getElementById('treemapTooltip');
+      for (const b of window._treemapBlocks) {
+        if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) {
+          tt.innerHTML = `<b style="color:${b.hex};font-size:15px;">${b.code}</b><br><span style="color:var(--muted)">${b.count}人 · ${b.pct}%</span>`;
+          tt.style.display = 'block';
+          tt.style.left = Math.min(e.clientX + 12, window.innerWidth - 220) + 'px';
+          tt.style.top = (e.clientY - 40) + 'px';
+          setTimeout(() => { tt.style.display = 'none'; }, 2000);
+          return;
+        }
+      }
+      tt.style.display = 'none';
+    };
 
   } catch(e) {
     ctx.clearRect(0, 0, W, H);
@@ -1398,16 +1414,36 @@ function drawRow(ctx, row, x, y, w, h, isH) {
 
 function drawItem(ctx, item, x, y, w, h) {
   if (w <= 0 || h <= 0) return;
+  const R = Math.min(8, w/4, h/4); // rounded corner radius
   ctx.fillStyle = hexToRgba(item.hex, item.alpha);
-  ctx.fillRect(x, y, w, h);
-  if (w > 40 && h > 24) {
-    ctx.fillStyle = '#fff';
-    const fontSize = Math.max(11, Math.min(Math.floor(Math.min(w, h) / 4), 18));
-    ctx.font = `bold ${fontSize}px sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, R);
+  ctx.fill();
+
+  // Store block for click detection
+  window._treemapBlocks.push({ x, y, w, h, code: item.code, count: item.count, pct: item.pct, hex: item.hex });
+
+  // Text inside block
+  const minDim = Math.min(w, h);
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (minDim >= 50) {
+    // Big block: show code + count + pct
+    const fs = Math.max(11, Math.min(Math.floor(minDim / 5), 16));
+    ctx.font = `bold ${fs}px sans-serif`;
+    ctx.fillText(item.code, x + w/2, y + h/2 - fs/2);
+    ctx.font = `${Math.max(9, fs - 2)}px sans-serif`;
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.fillText(`${item.count}人 ${item.pct}%`, x + w/2, y + h/2 + fs/2);
+  } else if (minDim >= 30) {
+    // Medium block: show code only
+    const fs = Math.max(10, Math.floor(minDim / 4));
+    ctx.font = `bold ${fs}px sans-serif`;
     ctx.fillText(item.code, x + w/2, y + h/2);
   }
+  // Small block: no text, click for tooltip
 }
 </script>
 </body>
