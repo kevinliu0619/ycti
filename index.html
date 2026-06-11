@@ -54,14 +54,6 @@ body::before {
     radial-gradient(1.5px 1.5px at 78% 40%, rgba(255,255,255,.35), transparent);
   pointer-events: none; z-index: 0;
 }
-/* Fade stars + background to black at video area */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(180deg, transparent 0%, transparent 30%, #010108 55%, #010108 100%);
-  pointer-events: none; z-index: 0;
-}
 #app {
   width: 100%;
   max-width: 480px;
@@ -76,17 +68,18 @@ body::after {
 }
 
 /* Start Screen */
-.start-screen { text-align: center; padding: 8px 16px 32px; }
-.start-screen .logo { font-size: 48px; margin-bottom: 0; filter: drop-shadow(0 0 12px rgba(232,168,80,.2)); }
+.start-screen { text-align: center; padding: 20px 0 0; display: flex; flex-direction: column; min-height: 100dvh; }
+.start-screen .logo { font-size: 42px; margin-bottom: 2px; filter: drop-shadow(0 0 12px rgba(232,168,80,.2)); }
 .start-screen h1 {
-  font-size: 30px; font-weight: 800; color: var(--warm);
-  letter-spacing: 6px; margin-bottom: 0;
+  font-size: 28px; font-weight: 800; color: var(--warm);
+  letter-spacing: 6px; margin-bottom: 2px;
   text-shadow: 0 0 20px rgba(232,168,80,.25);
 }
 .start-screen .subtitle { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 6px; }
+.start-screen .subtitle-cn { font-size: 13px; color: var(--warm); letter-spacing: 2px; margin-bottom: 0; }
 
 .start-screen .desc {
-  font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto 14px; line-height: 1.8;
+  font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto 8px; line-height: 1.8;
   background: var(--card); padding: 10px 16px; border-radius: 14px; border: 1px solid var(--border);
 }
 .btn {
@@ -316,18 +309,27 @@ body::after {
 /* Homepage animation */
 .video-wrapper {
   width: 100%;
-  margin: 0 auto;
-  padding: 4px 0;
+  margin: 0;
+  padding: 0;
 }
 .home-video {
   width: 100%;
   display: block;
-  margin: 0 auto;
+  margin: 0;
   background: #010108;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+}
+
+/* Bottom bar (author + version) */
+.bottom-bar {
+  font-size: 11px;
+  color: rgba(255,255,255,.15);
+  text-align: center;
+  padding: 6px 0 4px;
+  letter-spacing: 1px;
 }
 </style>
 </head>
@@ -340,14 +342,16 @@ body::after {
       <div class="logo">🏕️</div>
       <h1>YCTI</h1>
       <div class="subtitle">Yuru Camp Type Indicator</div>
-      <div class="video-wrapper"><video class="home-video" src="home.mp4" autoplay loop muted playsinline disableRemotePlayback disablePictureInPicture></video></div>
+      <div class="subtitle-cn">摇曳露营人格测试</div>
+      <div style="flex:1;min-height:8px;"></div>
       <div class="desc">
         本栖湖畔的篝火，富士山下的晨曦。<br>
         找到属于你的摇曳露营人格。
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
-      <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.8</div>
+      <div style="flex:2;min-height:8px;"></div>
+      <div class="video-wrapper"><video class="home-video" src="home.mp4" autoplay loop muted playsinline disableRemotePlayback disablePictureInPicture></video></div>
+      <div class="bottom-bar">@悠哉日常大囧 · v0.9.8</div>
     </div>
   </div>
 
