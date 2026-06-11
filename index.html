@@ -365,7 +365,7 @@ body::before {
       <div class="subtitle-cn">摇曳露营人格测试</div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="video-wrapper"><video id="homeVideo" class="home-video" src="home.mp4" preload="auto" width="960" height="720" autoplay loop muted playsinline webkit-playsinline x5-video-player-type="h5-page" x5-video-player-fullscreen="false" disableRemotePlayback disablePictureInPicture></video></div>
-      <div class="bottom-bar">@悠哉日常大囧 · v0.10.4</div>
+      <div class="bottom-bar">@悠哉日常大囧 · v0.10.5</div>
     </div>
   </div>
 
@@ -394,7 +394,7 @@ body::before {
         <button class="btn btn-primary" onclick="openStats()">📊 查看统计</button>
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
       </div>
-      <div class="bottom-bar">@悠哉日常大囧 · v0.10.4</div>
+      <div class="bottom-bar">@悠哉日常大囧 · v0.10.5</div>
     </div>
   </div>
 </div>
@@ -536,16 +536,16 @@ const PERSONALITIES = {
   DOGGO: { code:'DOGGO', role:'惠那', tag:'爱犬惠那',  quote:'竹轮在哪我在哪。露营可以不去，狗不能不撸。', desc:'你给竹轮买了35000日元的专属露营装备——包括一顶10000日元的狗帐篷。你计划18岁考驾照，不是为了自己，是为了带竹轮去更远的地方。别人问你为什么不加入野活部，你说"还没打算从归宅部毕业"——其实就是想多陪竹轮。', partner:'WAN!', partnerText:'你们不需要语言。你懂它，它懂你。', theme:'ena',easter:false },
   COZY:  { code:'COZY',  role:'惠那', tag:'被炉星人惠那',  quote:'被炉是宇宙的中心。冬天+被炉+零食+手机=幸福。', desc:'你的作息极其不规律，早起是你最大的敌人。你可以在被炉里度过整个冬天，靠手机远程参与一切社交活动。你知道这样不太好——但被炉真的很暖和，手机真的很好玩，外面的世界可以再等等。', partner:'SEYANA', partnerText:'你们一起躺在被炉里，一句话不说，但都觉得"这样就挺好"。', theme:'ena',easter:false },
   // Easter eggs
-  'WAN!': { code:'WAN!', role:'竹轮', tag:'竹轮本犬', quote:'汪！', desc:'你是齐藤惠那的吉娃娃，品种虽小，待遇极大——35000日元的专属露营套装的含金量，人类们自己体会。圣诞露营时你被装扮成兔子、驯鹿，你忍了。你最大的愿望是：被窝+摸摸，永远不要停。人类露营关你什么事？你有狗帐篷。', partner:'DOGGO', partnerText:'她是你的全世界，你是她的全部。', theme:'easter',easter:true },
-  '6CAN': { code:'6CAN', role:'老师', tag:'酒鬼老师', quote:'六罐姐可不是白叫的。', desc:'你表面上是温柔贤淑的新人教师，每天下班后光顾酒庄，雷打不动买半打啤酒。喝醉之后你像换了一个人，眼神从眯眯眼变成死鱼眼。你的学生叫你"六罐姐"，你的妹妹吐槽你，你戒酒期间迷上了黄油曲奇——但戒酒结束后又开了一瓶。', partner:'USOYARE', partnerText:'喝醉后听她讲故事，你分不清是自己醉了还是故事太离谱。', theme:'easter',easter:true },
-  SAGE:  { code:'SAGE',  role:'爷爷', tag:'露营仙人', quote:'你年轻时帐篷还是帆布的。', desc:'你是凛露营的起点。你骑Triumph THRUXTON 1200R，一整年都在旅行。你把自己用过的露营装备传给凛，就像把一种生活方式悄悄种进她的生命。你在mono里帮路人修过摩托车，然后继续上路。你从不教人怎么露营——你只是做给他们看。', partner:'LONE', partnerText:'她是你生命中最满意的作品，虽然你从没说出来。', theme:'easter',easter:true },
-  '3776': { code:'3776', role:'中毒者', tag:'富士山中毒者', quote:'3776。这不是数字，是信仰。', desc:'你对富士山的爱超越了理性。你能从任何角度认出富士山，你能说出每个观景点的最佳时间，你的手机号码尾号是3776——你说只是巧合，没人信。你看到富士山的时候，会停下一切，安静地看很久。然后脱口而出："3776米……"', partner:'PAGE', partnerText:'和她一起安静地看富士山，不用说话，就是最好的陪伴。', theme:'easter',easter:true },
-  CHILL: { code:'CHILL', role:'绫乃', tag:'慵懒骑士绫乃', quote:'绫乃的体力是三人中最差的——但没关系，反正骑完摩托瘫在地上也很舒服。', desc:'你是抚子的青梅竹马，和凛一样骑摩托。你说话拖长音，动作懒洋洋，长距离骑行后会直接瘫在地上。但你对朋友的心意从不打折——你从滨松骑到山梨，只为了兑现"总有一天一起露营"的约定。', partner:'TSUN', partnerText:'你们在酷道152上并排骑行，她开得快，你开得慢，但最后都会在露营地碰头。', theme:'easter',easter:true },
-  DRIVE: { code:'DRIVE', role:'樱姐', tag:'飙车党樱姐', quote:'いいよ。', desc:'两个字，背后是深夜三小时山路。你是抚子的大学生姐姐，爱车是一台蓝色的日产Rasheen。你表面冷淡，实则重度妹控。你强迫初中时的抚子每天骑车绕滨名湖一圈，把她从"抚壮壮"变成了体力怪物。你和凛不约而同跟踪抚子的首次单人露营，在山下偶遇，相视一笑——然后你请她吃了晚饭。', partner:'DASH', partnerText:'你嘴上骂她冒失，但每次都是你开车去救她。', theme:'easter',easter:true },
-  ASAKA: { code:'ASAKA', role:'亚咲花', tag:'露营之声亚咲花', quote:'SHINY DAYS. Seize The Day. The Sunshower. Sun Is Coming Up. So Precious. 五首歌，一部露营。', desc:'你是摇曳露营的音乐代言人。你的声音响起的瞬间，粉丝就知道——又要出发了。你17岁出道，SHINY DAYS成了露营粉的国歌。但你不止唱了一首，你唱了五首。每一季的OP，每一部剧场版，你的声音都在。你不是露营者，但你是露营的空气。', partner:'AFRO', partnerText:'没有他创造的世界，就没有你的歌声。你们是彼此的因果。', theme:'easter',easter:true },
-  AFRO:  { code:'AFRO',  role:'Afro老师', tag:'部活创世神', quote:'爆炸头是本体，露营是信仰。想不出故事的时候就出去取材。', desc:'你是静冈县滨松市出身的漫画家，笔名来自爆炸头发型。你创造了摇曳露营，创造了mono，顺便创造了无数人的露营梦想。你喜欢大型犬，喜欢摩托车，喜欢粗眉角色，喜欢在作品里埋各种彩蛋。你画的露营装备都是真实品牌，你画的露营地后来都成了圣地。', partner:'ASAKA', partnerText:'你的世界给了她歌唱的理由，她的歌声让你的世界有了温度。', theme:'easter',easter:true },
-  MONO:  { code:'MONO',  role:'摄影部', tag:'摄影部部员', quote:'用镜头记录的日常，和用帐篷记录的星空，是同一种浪漫。', desc:'你有一双会发现美的眼睛。黄昏的光线穿过树叶的角度、路边野猫打哈欠的弧度、朋友笑到模糊的表情——这些别人忽略的瞬间，在你眼里全是宝藏。按下快门对你来说不是技术活，是本能：你觉得「这个世界值得被记住」的证据太多了，不拍下来太可惜。你有时候会一个人出门，带着相机走走停停，不知道会拍到什么——但你知道，一定会拍到什么。露营的时候，你比谁都安静，但你的眼睛里装满了别人没注意到的风景。', partner:'AFRO', partnerText:'你们都是「用画面讲故事」的人。一个画，一个拍——同一个世界，两种表达。', theme:'easter',easter:true },
-  AQUA:  { code:'AQUA',  role:'水水人', tag:'沼津水水人', quote:'山里的咖喱面确实不错。但你来沼津尝尝海边的橘子——那是另一种甜。', desc:'你是静冈县沼津市的海边住民——也是Aqours的粉丝，江湖人称"水水人"。当全世界的动画宅都涌向山梨和富士山的时候，你站在駿河湾边微微一笑。你知道静冈的动画圣地不只有露营——沼津的海岸线、淡岛的鸟居、内浦的海风，同样是无数人朝圣的理由。你去过本栖湖，也去过三津海岸。你心里的静冈地图，山和海各占一半。', partner:'3776', partnerText:'你们是静冈的一体两面：你爱海，她爱山。3776米加駿河湾，刚好拼成一个完整的静冈。', theme:'easter',easter:true },
+  'WAN!': { code:'WAN!', role:'竹轮', tag:'竹轮本犬', quote:'汪！', desc:'你不需要成为人群的焦点——你只需要一个人。你的世界不大：就是那个人 + 一个温暖的窝 + 永远摸不完的头。你的幸福公式很简单：被需要 = 幸福。人类露营关你什么事？你在你的小窝里等着就行——反正那个人会带你去。', partner:'DOGGO', partnerText:'她是你的全世界，你是她的全部。', theme:'easter',easter:true },
+  '6CAN': { code:'6CAN', role:'老师', tag:'酒鬼老师', quote:'六罐姐可不是白叫的。', desc:'白天你是所有人的依靠——靠谱、温和、永远在照顾别人。但下班铃一响，脱下外套，打开第一罐啤酒的那一刻，另一个你醒了。你不需要被理解，你只需要再来一罐。戒酒期间你迷上了黄油曲奇——但戒酒结束后又开了一瓶。', partner:'USOYARE', partnerText:'喝醉后听她讲故事，你分不清是自己醉了还是故事太离谱。', theme:'easter',easter:true },
+  SAGE:  { code:'SAGE',  role:'爷爷', tag:'露营仙人', quote:'你年轻时帐篷还是帆布的。', desc:'你走过很多路，修过很多车，认识很多人——但从不刻意。你从不教别人该怎么活，你只是活给他们看。有人问你去哪，你说"随便走走"——然后一走就是一年。你的装备不新，但每一样都有故事。你把帐篷、煤油灯、露营指南书传给下一个人，就像把一种生活方式悄悄种进他们的生命。', partner:'LONE', partnerText:'你们坐在一起，各自看书，偶尔抬头对视一眼。你从没说出来——但她是你见过最像你的人。', theme:'easter',easter:true },
+  '3776': { code:'3776', role:'中毒者', tag:'富士山中毒者', quote:'3776米。这不是数字，是信仰。', desc:'你对富士山的爱超越了理性。你能从任何角度认出富士山，你能说出每个观景点的最佳时间。你看到富士山的时候，会停下一切，安静地看很久。它不只是山——它是你心里的坐标系。不管走多远，只要能看到它，你就知道自己没走丢。', partner:'PAGE', partnerText:'和她一起安静地看富士山，不用说话，就是最好的陪伴。', theme:'easter',easter:true },
+  CHILL: { code:'CHILL', role:'绫乃', tag:'慵懒骑士绫乃', quote:'绫乃的体力是三人中最差的——但没关系，反正骑完摩托瘫在地上也很舒服。', desc:'答应朋友的事你可能拖了很久——但最后你还是骑着摩托、跨了几个县界到了。你体力不好？没事，躺在地上看星星也很舒服。你对朋友的心意从不打折——路上花了多久不重要，重要的是你来了。', partner:'TSUN', partnerText:'你们在路上并排骑行。她开得快，你开得慢，但最后都会在露营地碰头。她知道你一定会到，所以你迟到她也从不催。', theme:'easter',easter:true },
+  DRIVE: { code:'DRIVE', role:'樱姐', tag:'飙车党樱姐', quote:'いいよ。', desc:'你不说"我爱你"，你说"いいよ"。两个字，背后是深夜三小时的山路。朋友凌晨迷路了，你没说"你疯了"，你说"发我定位"。你开车穿过黑夜，不是因为你想露营——是因为有人在那个营地里等你。你表面冷淡，但方向盘从不犹豫。', partner:'DASH', partnerText:'你嘴上骂她冒失，但每次都是你开车去救她。她知道你会来，所以她才敢乱跑。', theme:'easter',easter:true },
+  ASAKA: { code:'ASAKA', role:'亚咲花', tag:'露营之声亚咲花', quote:'露营地放的歌，十首里有五首是你的。', desc:'你不一定在现场，但你的声音在。你唱过的歌变成了别人的露营BGM，变成了他们出发时的闹铃，变成了篝火旁的大合唱。你创造的不是音乐——是记忆的背景音。每一次有人按下播放键，你就陪他们又出发了一次。', partner:'AFRO', partnerText:'你们是彼此的因果。一支笔创造一个世界，一首歌给它温度。不需要见面——歌响起的时候，你们就在一起。', theme:'easter',easter:true },
+  AFRO:  { code:'AFRO',  role:'Afro老师', tag:'部活创世神', quote:'爆炸头是本体，露营是信仰。想不出故事的时候就出去取材。', desc:'你喜欢把去过的地方画进作品里，把认识的人变成角色，把路边吃过的咖喱面画成名场面。你的创作不是凭空想象——是你把生活嚼碎了，重新拼成一幅画。你画的露营地后来变成了别人出发的理由。', partner:'ASAKA', partnerText:'你的世界给了她歌唱的理由，她的歌声让你的世界有了温度。一支笔，一首歌——同一个世界，两种表达。', theme:'easter',easter:true },
+  MONO:  { code:'MONO',  role:'摄影部', tag:'摄影部部员', quote:'用镜头记录的日常，和用帐篷记录的星空，是同一种浪漫。', desc:'别人忽略的瞬间——黄昏的光线角度、路边野猫的哈欠——在你眼里全是宝藏。按下快门不是技术活，是本能。你带着相机走走停停，不知道会拍到什么——但你知道，一定会拍到什么。露营的时候，你比谁都安静，但你的眼里装满了别人没注意到的风景。', partner:'AFRO', partnerText:'你们都是「用画面讲故事」的人。一个画，一个拍——同一个世界，两种表达。', theme:'easter',easter:true },
+  AQUA:  { code:'AQUA',  role:'水水人', tag:'沼津水水人', quote:'山里的咖喱面确实不错。但你来沼津尝尝海边的橘子——那是另一种甜。', desc:'当全世界的露营爱好者都涌向山梨和富士山的时候，你站在駿河湾边微微一笑。你知道好风景不只在山里——海岸线、海上的鸟居、海风里的咸味，同样是出发的理由。你去过本栖湖，也去过海边。你心里的地图，山和海各占一半。', partner:'3776', partnerText:'你们是静冈的一体两面：你爱海，她爱山。3776米加駿河湾，刚好拼成一个完整的静冈。', theme:'easter',easter:true },
 };
 
 // ============================================================
@@ -1233,7 +1233,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.10.4', 240, 715);
+  ctx.fillText('v0.10.5', 240, 715);
   
   // Download
   const link = document.createElement('a');
