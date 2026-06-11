@@ -332,7 +332,7 @@ body::before {
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.7</div>
+      <div class="version-tag">v0.9.8</div>
     </div>
   </div>
 
@@ -362,17 +362,16 @@ body::before {
         <button class="btn btn-outline" onclick="openStats()">📊 查看统计</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.7</div>
+      <div class="version-tag">v0.9.8</div>
     </div>
   </div>
 </div>
 
 <!-- Stats Screen (fullscreen) -->
 <div id="statsScreen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:var(--bg);flex-direction:column;padding:10px;overflow-y:auto;">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0 12px;max-width:800px;margin:0 auto;width:100%;">
-    <button class="btn btn-outline" onclick="closeStats()" style="padding:8px 20px;font-size:14px;">← 返回结果</button>
-    <span style="font-size:20px;font-weight:700;color:var(--warm);">📊 露营人格统计</span>
-    <span style="width:80px;"></span>
+  <div style="display:flex;align-items:center;justify-content:center;padding:4px 0 12px;max-width:800px;margin:0 auto;width:100%;position:relative;">
+    <button onclick="closeStats()" style="position:absolute;left:0;background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:4px 8px;">← 返回</button>
+    <span style="font-size:20px;font-weight:700;color:var(--warm);">露营人格统计</span>
   </div>
   <div id="statsInfo" style="text-align:center;font-size:15px;color:var(--warm-glow);margin:4px 0 8px;font-weight:600;"></div>
   <div id="statsList" style="display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;max-height:64px;overflow-y:auto;padding:4px 0;max-width:800px;margin:0 auto;width:100%;"></div>
@@ -1174,7 +1173,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.9.7', 240, 715);
+  ctx.fillText('v0.9.8', 240, 715);
   
   // Download
   const link = document.createElement('a');
@@ -1271,11 +1270,11 @@ async function loadStats() {
     if (total === 0) {
       info.textContent = '';
       list.innerHTML = '';
-      ctx.fillText('还没有人做过测试，快来成为第一个吧！', W/2, H/2);
+      ctx.fillText('还没有人做过测试，快来留下第一份答卷吧！', W/2, H/2);
       return;
     }
     // --- Stats info ---
-    info.textContent = `共 ${total} 人参与测试`;
+    info.textContent = `共 ${total} 份答卷`;
     list.innerHTML = '';
 
     // --- Stacked Percentage Bar ---
@@ -1303,7 +1302,7 @@ async function loadStats() {
         const seg = document.createElement('div');
         seg.style.cssText = `width:${pct}%;background:${g.color};display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.3);`;
         seg.textContent = pct >= 3 ? g.short : '';
-        seg.title = `${g.name}: ${g.count}人 (${pct.toFixed(1)}%)`;
+        seg.title = `${g.name}: ${g.count}份 (${pct.toFixed(1)}%)`;
         barRow.appendChild(seg);
       }
       // Labels row below — percentages only
@@ -1314,7 +1313,7 @@ async function loadStats() {
         const lbl = document.createElement('div');
         lbl.style.cssText = `width:${pct}%;text-align:center;font-size:11px;color:var(--muted);min-width:0;overflow:hidden;white-space:nowrap;`;
         lbl.textContent = `${pct.toFixed(1)}%`;
-        lbl.title = `${g.name}: ${g.count}人 (${pct.toFixed(1)}%)`;
+        lbl.title = `${g.name}: ${g.count}份 (${pct.toFixed(1)}%)`;
         lblRow.appendChild(lbl);
       }
       barWrap.innerHTML = '';
@@ -1327,13 +1326,17 @@ async function loadStats() {
     // --- Squarified Treemap ---
     const PAD = 3;
     window._treemapBlocks = []; // store for click detection
-    const items = entries.map(([code, count], idx) => ({
-      code, count,
-      pct: ((count / total) * 100).toFixed(1),
-      area: (count / total) * (W * H),
-      hex: THEME_COLORS[code] || '#888',
-      idx
-    }));
+    const items = entries.map(([code, count], idx) => {
+      const p = PERSONALITIES[code];
+      return {
+        code, count,
+        pct: ((count / total) * 100).toFixed(1),
+        area: (count / total) * (W * H),
+        hex: THEME_COLORS[code] || '#888',
+        tag: p ? (p.easter ? '隐藏人格' : p.tag) : code,
+        idx
+      };
+    });
     // Sort by area descending
     items.sort((a, b) => b.area - a.area);
 
@@ -1362,7 +1365,7 @@ async function loadStats() {
       const tt = document.getElementById('treemapTooltip');
       for (const b of window._treemapBlocks) {
         if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) {
-          tt.innerHTML = `<b style="color:${b.hex};font-size:15px;">${b.code}</b><br><span style="color:var(--muted)">${b.count}人 · ${b.pct}%</span>`;
+          tt.innerHTML = `<b style="color:${b.hex};font-size:15px;">${b.code}</b> <span style="font-size:12px;color:var(--muted)">${b.tag}</span><br><span style="color:var(--muted)">${b.count}份 · ${b.pct}%</span>`;
           tt.style.display = 'block';
           tt.style.left = Math.min(e.clientX + 12, window.innerWidth - 220) + 'px';
           tt.style.top = (e.clientY - 40) + 'px';
@@ -1414,7 +1417,7 @@ function drawItem(ctx, item, x, y, w, h) {
   ctx.fill();
 
   // Store block for click detection
-  window._treemapBlocks.push({ x, y, w, h, code: item.code, count: item.count, pct: item.pct, hex: item.hex });
+  window._treemapBlocks.push({ x, y, w, h, code: item.code, count: item.count, pct: item.pct, hex: item.hex, tag: item.tag });
 
   // Text inside block
   const minDim = Math.min(w, h);
