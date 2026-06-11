@@ -332,7 +332,7 @@ body::before {
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.6</div>
+      <div class="version-tag">v0.9.7</div>
     </div>
   </div>
 
@@ -362,7 +362,7 @@ body::before {
         <button class="btn btn-outline" onclick="openStats()">📊 查看统计</button>
       </div>
       <div class="author-credit">@悠哉日常大囧</div>
-      <div class="version-tag">v0.9.6</div>
+      <div class="version-tag">v0.9.7</div>
     </div>
   </div>
 </div>
@@ -1174,7 +1174,7 @@ function shareResult() {
   ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
   ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
   ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.9.6', 240, 715);
+  ctx.fillText('v0.9.7', 240, 715);
   
   // Download
   const link = document.createElement('a');
@@ -1280,12 +1280,12 @@ async function loadStats() {
 
     // --- Stacked Percentage Bar ---
     const groups = [
-      { name:'凛', color:'#7eb8da', codes:['LONE','TSUN','PAGE','OWL','SPA'], count:0 },
-      { name:'抚子', color:'#e8a0b0', codes:['NOM','SUNNY','BOO!','CHEF','CHOO'], count:0 },
-      { name:'千明', color:'#b89ad4', codes:['CHAOS','WEEP','BROKE','DASH'], count:0 },
-      { name:'葵', color:'#a8b878', codes:['SEYANA','MOM','USOYARE','CARB'], count:0 },
-      { name:'惠那', color:'#c0b8a8', codes:['LURK','TROLL','DOGGO','COZY'], count:0 },
-      { name:'隐藏', color:'#d4b840', codes:['WAN!','6CAN','SAGE','3776','CHILL','DRIVE','ASAKA','AFRO','MONO','AQUA'], count:0 }
+      { name:'凛', short:'凛', color:'#7eb8da', codes:['LONE','TSUN','PAGE','OWL','SPA'], count:0 },
+      { name:'抚子', short:'抚', color:'#e8a0b0', codes:['NOM','SUNNY','BOO!','CHEF','CHOO'], count:0 },
+      { name:'千明', short:'千', color:'#b89ad4', codes:['CHAOS','WEEP','BROKE','DASH'], count:0 },
+      { name:'葵', short:'葵', color:'#a8b878', codes:['SEYANA','MOM','USOYARE','CARB'], count:0 },
+      { name:'惠那', short:'惠', color:'#c0b8a8', codes:['LURK','TROLL','DOGGO','COZY'], count:0 },
+      { name:'隐藏', short:'隐', color:'#d4b840', codes:['WAN!','6CAN','SAGE','3776','CHILL','DRIVE','ASAKA','AFRO','MONO','AQUA'], count:0 }
     ];
     for (const [code, count] of entries) {
       for (const g of groups) { if (g.codes.includes(code)) { g.count += count; break; } }
@@ -1301,18 +1301,19 @@ async function loadStats() {
       for (const g of activeGroups) {
         const pct = (g.count / total) * 100;
         const seg = document.createElement('div');
-        seg.style.cssText = `width:${pct}%;background:${g.color};min-width:0;`;
+        seg.style.cssText = `width:${pct}%;background:${g.color};display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.3);`;
+        seg.textContent = pct >= 3 ? g.short : '';
         seg.title = `${g.name}: ${g.count}人 (${pct.toFixed(1)}%)`;
         barRow.appendChild(seg);
       }
-      // Labels row below
+      // Labels row below — percentages only
       const lblRow = document.createElement('div');
       lblRow.style.cssText = `display:flex;width:${W}px;max-width:100%;margin:4px auto 0;`;
       for (const g of activeGroups) {
         const pct = (g.count / total) * 100;
         const lbl = document.createElement('div');
         lbl.style.cssText = `width:${pct}%;text-align:center;font-size:11px;color:var(--muted);min-width:0;overflow:hidden;white-space:nowrap;`;
-        lbl.textContent = pct >= 5 ? `${g.name} ${pct.toFixed(1)}%` : `${pct.toFixed(1)}%`;
+        lbl.textContent = `${pct.toFixed(1)}%`;
         lbl.title = `${g.name}: ${g.count}人 (${pct.toFixed(1)}%)`;
         lblRow.appendChild(lbl);
       }
