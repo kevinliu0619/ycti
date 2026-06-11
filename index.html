@@ -313,7 +313,7 @@ body::before {
   height: auto;
   display: block;
   margin: 0;
-  background: #010108;
+  background: #080812;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
@@ -344,7 +344,7 @@ body::before {
       <div class="subtitle">Yuru Camp Type Indicator</div>
       <div class="subtitle-cn">摇曳露营人格测试</div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
-      <div class="video-wrapper"><video class="home-video" src="home.mp4" poster="" preload="auto" width="960" height="720" autoplay loop muted playsinline webkit-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" x5-video-orientation="portraint" disableRemotePlayback disablePictureInPicture></video></div>
+      <div class="video-wrapper"><video id="homeVideo" class="home-video" src="home.mp4" preload="auto" width="960" height="720" autoplay loop muted playsinline webkit-playsinline x5-video-player-type="h5-page" x5-video-player-fullscreen="false" disableRemotePlayback disablePictureInPicture></video></div>
       <div class="bottom-bar">@悠哉日常大囧 · v0.9.8</div>
     </div>
   </div>
@@ -400,6 +400,29 @@ body::before {
 <canvas id="shareCanvas" width="480" height="720"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3/dist/d3-hierarchy.min.js"></script>
 <script>
+// ============================================================
+// WeChat / QQ video autoplay fix
+// ============================================================
+(function() {
+  var v = document.getElementById('homeVideo');
+  if (!v) return;
+  // Try normal autoplay first
+  var playPromise = v.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function() {
+      // Autoplay blocked (WeChat / QQ), wait for bridge or user interaction
+      function doPlay() { v.play().catch(function(){}); }
+      // WeChat bridge
+      if (typeof WeixinJSBridge !== 'undefined') {
+        try { WeixinJSBridge.invoke('getNetworkType', {}, doPlay); } catch(e) {}
+      }
+      document.addEventListener('WeixinJSBridgeReady', doPlay, {once:true});
+      // Fallback: play on first touch
+      document.addEventListener('touchstart', doPlay, {once:true});
+      document.addEventListener('click', doPlay, {once:true});
+    });
+  }
+})();
 // ============================================================
 // GitHub API 统计后端
 // 读写均走 api.github.com，无缓存延迟
