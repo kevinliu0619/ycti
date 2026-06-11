@@ -78,8 +78,18 @@ body::before {
 .start-screen .subtitle { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 6px; }
 .start-screen .subtitle-cn { font-size: 13px; color: var(--warm); letter-spacing: 2px; margin-bottom: 0; }
 
+/* Middle: desc + button centered between titles and video */
+.middle-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+}
+
 .start-screen .desc {
-  font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto 8px; line-height: 1.8;
+  font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto 16px; line-height: 1.8;
   background: var(--card); padding: 10px 16px; border-radius: 14px; border: 1px solid var(--border);
 }
 .btn {
@@ -343,13 +353,13 @@ body::before {
       <h1>YCTI</h1>
       <div class="subtitle">Yuru Camp Type Indicator</div>
       <div class="subtitle-cn">摇曳露营人格测试</div>
-      <div style="flex:1;min-height:8px;"></div>
-      <div class="desc">
+      <div class="middle-group">
+        <div class="desc">
         本栖湖畔的篝火，富士山下的晨曦。<br>
         找到属于你的摇曳露营人格。
       </div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
-      <div style="flex:2;min-height:8px;"></div>
+      </div>
       <div class="video-wrapper"><video class="home-video" src="home.mp4" autoplay loop muted playsinline disableRemotePlayback disablePictureInPicture></video></div>
       <div class="bottom-bar">@悠哉日常大囧 · v0.9.8</div>
     </div>
