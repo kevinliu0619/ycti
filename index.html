@@ -22,7 +22,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-  background: linear-gradient(180deg, #0d0d1f 0%, #141428 40%, #1a1a35 100%);
+  background: linear-gradient(180deg, #0d0d1f 0%, #141428 25%, #0a0a18 45%, #010108 60%, #010108 100%);
   background-attachment: fixed;
   color: var(--text);
   min-height: 100vh;
@@ -54,6 +54,14 @@ body::before {
     radial-gradient(1.5px 1.5px at 78% 40%, rgba(255,255,255,.35), transparent);
   pointer-events: none; z-index: 0;
 }
+/* Fade stars + background to black at video area */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, transparent 0%, transparent 30%, #010108 55%, #010108 100%);
+  pointer-events: none; z-index: 0;
+}
 #app {
   width: 100%;
   max-width: 480px;
@@ -68,18 +76,18 @@ body::before {
 }
 
 /* Start Screen */
-.start-screen { text-align: center; padding: 48px 16px 32px; }
-.start-screen .logo { font-size: 56px; margin-bottom: 8px; filter: drop-shadow(0 0 12px rgba(232,168,80,.2)); }
+.start-screen { text-align: center; padding: 20px 16px 20px; }
+.start-screen .logo { font-size: 48px; margin-bottom: 2px; filter: drop-shadow(0 0 12px rgba(232,168,80,.2)); }
 .start-screen h1 {
-  font-size: 32px; font-weight: 800; color: var(--warm);
-  letter-spacing: 6px; margin-bottom: 4px;
+  font-size: 30px; font-weight: 800; color: var(--warm);
+  letter-spacing: 6px; margin-bottom: 2px;
   text-shadow: 0 0 20px rgba(232,168,80,.25);
 }
-.start-screen .subtitle { font-size: 12px; color: var(--muted); letter-spacing: 2px; margin-bottom: 32px; }
+.start-screen .subtitle { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 10px; }
 
 .start-screen .desc {
-  font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto 36px; line-height: 1.8;
-  background: var(--card); padding: 16px 20px; border-radius: 14px; border: 1px solid var(--border);
+  font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto 14px; line-height: 1.8;
+  background: var(--card); padding: 10px 16px; border-radius: 14px; border: 1px solid var(--border);
 }
 .btn {
   display: inline-block;
@@ -272,7 +280,7 @@ body::before {
   font-size: 11px;
   color: rgba(255,255,255,.18);
   text-align: center;
-  margin-top: 16px;
+  margin-top: 10px;
   letter-spacing: 1px;
 }
 .version-tag {
@@ -310,8 +318,7 @@ body::before {
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
-  padding: 16px 0;
-  background: radial-gradient(ellipse at center, #010108 50%, var(--bg-deep) 100%);
+  padding: 6px 0;
 }
 .home-video {
   width: 100%;
