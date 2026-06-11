@@ -263,8 +263,26 @@ body::before {
   border: 1px dashed var(--border);
 }
 .result-partner strong { color: var(--warm); }
-.result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 6px; }
+.result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; align-items: center; margin-bottom: 6px; }
 .result-actions .btn { padding: 11px 28px; font-size: 14px; }
+.btn-icon {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--warm);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.btn-icon:hover {
+  border-color: var(--warm);
+  background: var(--card-hover);
+  box-shadow: 0 2px 12px rgba(232,168,80,.15);
+}
 
 /* Easter Egg */
 .easter-tag {
@@ -365,7 +383,7 @@ body::before {
       <div class="subtitle-cn">摇曳露营人格测试</div>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="video-wrapper"><video id="homeVideo" class="home-video" src="home.mp4" preload="auto" width="960" height="720" autoplay loop muted playsinline webkit-playsinline x5-video-player-type="h5-page" x5-video-player-fullscreen="false" disableRemotePlayback disablePictureInPicture></video></div>
-      <div class="bottom-bar">@悠哉日常大囧 · v0.10.5</div>
+      <div class="bottom-bar">@悠哉日常大囧 · v0.10.6</div>
     </div>
   </div>
 
@@ -392,9 +410,10 @@ body::before {
       <div class="result-partner" id="resultPartner"></div>
       <div class="result-actions">
         <button class="btn btn-primary" onclick="openStats()">📊 查看统计</button>
+        <button class="btn-icon" onclick="shareResult()" title="保存截图">📷</button>
         <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
       </div>
-      <div class="bottom-bar">@悠哉日常大囧 · v0.10.5</div>
+      <div class="bottom-bar">@悠哉日常大囧 · v0.10.6</div>
     </div>
   </div>
 </div>
@@ -1073,7 +1092,7 @@ function restartQuiz() {
 }
 
 // ============================================================
-// SHARE (Canvas)
+// SHARE (Canvas) — matches result page layout: hero image + content
 // ============================================================
 function shareResult() {
   const d = window._resultData;
@@ -1082,166 +1101,141 @@ function shareResult() {
   const canvas = document.getElementById('shareCanvas');
   const ctx = canvas.getContext('2d');
   const W = 480, H = 720;
+  canvas.width = W;
+  canvas.height = H;
   
-  // Theme colors
-  const themeColors = {
-    rin: ['#1a2a3d','#141428','#1a1a35'],
-    nadeshiko: ['#2d1a24','#141428','#1a1a35'],
-    chiaki: ['#251d33','#141428','#1a1a35'],
-    aoi: ['#1f2418','#141428','#1a1a35'],
-    ena: ['#1a1a28','#141428','#1a1a35'],
-    easter: ['#2a2218','#141428','#1a1a35']
-  };
-  const tc = themeColors[d.theme] || themeColors.rin;
-  
-  // Background gradient
+  // Background gradient (matching body)
   const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, tc[0]);
-  bg.addColorStop(0.4, tc[1]);
-  bg.addColorStop(1, tc[2]);
+  bg.addColorStop(0, '#0d0d1f');
+  bg.addColorStop(0.25, '#141428');
+  bg.addColorStop(0.45, '#0a0a18');
+  bg.addColorStop(0.6, '#010108');
+  bg.addColorStop(1, '#010108');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
   
-  // Stars
-  const stars = [
-    [48,40],[120,30],[200,55],[310,25],[420,38],
-    [80,100],[180,70],[350,65],[440,90],
-    [55,160],[280,140],[400,150]
-  ];
-  ctx.fillStyle = 'rgba(255,255,255,.4)';
-  stars.forEach(([x,y]) => {
-    ctx.beginPath();
-    ctx.arc(x, y, 1, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  // Brighter stars
-  ctx.fillStyle = 'rgba(255,255,255,.6)';
-  [[120,30],[310,25],[180,70]].forEach(([x,y]) => {
-    ctx.beginPath();
-    ctx.arc(x, y, 1.5, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  
-  // Top accent bar
-  const accentGrad = ctx.createLinearGradient(0, 0, W, 0);
-  accentGrad.addColorStop(0, '#e8a850');
-  accentGrad.addColorStop(1, '#f4a261');
-  ctx.fillStyle = accentGrad;
-  ctx.fillRect(0, 0, W, 4);
-  
-  // Campfire
-  ctx.font = '44px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('🔥', 240, 72);
-  
-  // YCTI badge
-  ctx.font = 'bold 12px sans-serif';
-  ctx.fillStyle = '#e8a850';
-  ctx.fillText('YCTI · 露营人格', 240, 110);
-  
-  // Easter tag
-  if (d.easter) {
-    ctx.font = '11px sans-serif';
-    ctx.fillStyle = 'rgba(232,168,80,.7)';
-    ctx.fillText('🔒 隐藏人格解锁', 240, 132);
-  }
-  
-  // Code - big and bold
-  ctx.font = 'bold 60px sans-serif';
-  ctx.fillStyle = '#e8a850';
-  ctx.fillText(d.code, 240, 195);
-  
-  // Tag
-  ctx.font = '22px sans-serif';
-  ctx.fillStyle = '#e8e0d8';
-  ctx.fillText(d.tag, 240, 232);
-  
-  // Quote with decoration
-  ctx.font = 'italic 14px sans-serif';
-  ctx.fillStyle = '#9a8c7a';
-  ctx.fillText('"', 100, 268);
-  ctx.fillText(d.quote.replace(/^"|"$/g, ''), 240, 268);
-  ctx.fillText('"', 380, 268);
-  
-  // Divider with gradient
-  const divGrad = ctx.createLinearGradient(60, 0, 420, 0);
-  divGrad.addColorStop(0, 'rgba(232,168,80,0)');
-  divGrad.addColorStop(0.5, 'rgba(232,168,80,.5)');
-  divGrad.addColorStop(1, 'rgba(232,168,80,0)');
-  ctx.strokeStyle = divGrad;
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(60, 295);
-  ctx.lineTo(420, 295);
-  ctx.stroke();
-  
-  // Description - wrap text in a card-like area
-  ctx.fillStyle = 'rgba(30,30,56,.8)';
-  roundRect(ctx, 30, 310, 420, 0, 12);
-  ctx.font = '13px "PingFang SC", "Noto Sans SC", sans-serif';
-  ctx.fillStyle = '#e8e0d8';
-  ctx.textAlign = 'left';
-  const words = d.desc.split('');
-  const lines = [];
-  let line = '';
-  const maxWidth = 380;
-  for (let i = 0; i < words.length; i++) {
-    const testLine = line + words[i];
-    if (ctx.measureText(testLine).width > maxWidth && line.length > 0) {
-      lines.push(line);
-      line = words[i];
-    } else {
-      line = testLine;
+  // Load hero image asynchronously, then draw content
+  const heroImg = new Image();
+  heroImg.onload = function() {
+    const heroH = Math.round(W * 9 / 16); // ~270px
+    ctx.drawImage(heroImg, 0, 0, W, heroH);
+    
+    // Fade overlay at bottom of hero into background
+    const fade = ctx.createLinearGradient(0, heroH - 40, 0, heroH);
+    fade.addColorStop(0, 'transparent');
+    fade.addColorStop(1, '#141428');
+    ctx.fillStyle = fade;
+    ctx.fillRect(0, heroH - 40, W, 40);
+    
+    let y = heroH + 18;
+    ctx.textAlign = 'center';
+    
+    // Easter tag
+    if (d.easter) {
+      ctx.font = '11px sans-serif';
+      ctx.fillStyle = 'rgba(212,184,64,.8)';
+      ctx.fillText('🔒 隐藏人格解锁', W/2, y);
+      y += 24;
     }
-  }
-  if (line) lines.push(line);
-  
-  const descHeight = lines.length * 24 + 40;
-  ctx.fillStyle = 'rgba(30,30,56,.8)';
-  roundRect(ctx, 30, 310, 420, descHeight, 12);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(51,51,80,.5)';
-  ctx.lineWidth = 1;
-  roundRect(ctx, 30, 310, 420, descHeight, 12);
-  ctx.stroke();
-  
-  ctx.fillStyle = '#e8e0d8';
-  let y = 340;
-  lines.forEach(l => {
-    ctx.fillText(l, 50, y);
-    y += 24;
-  });
-  
-  y = 310 + descHeight + 24;
-  
-  // Partner section
-  ctx.textAlign = 'center';
-  ctx.font = 'bold 14px sans-serif';
-  ctx.fillStyle = '#e8a850';
-  ctx.fillText('最佳拍档', 240, y);
-  y += 28;
-  ctx.font = 'bold 26px sans-serif';
-  ctx.fillText(d.partnerCode + '  ' + d.partnerTag, 240, y);
-  y += 28;
-  ctx.font = '12px sans-serif';
-  ctx.fillStyle = '#9a8c7a';
-  ctx.fillText(d.partnerText, 240, y);
-  
-  // Bottom
-  ctx.font = '10px sans-serif';
-  ctx.fillStyle = 'rgba(255,255,255,.15)';
-  ctx.fillText('YCTI · Yuru Camp Type Indicator', 240, 680);
-  ctx.fillText('测试结果仅供娱乐 · 图一乐', 240, 696);
-  ctx.fillText('@悠哉日常大囧', 240, 710);
-  ctx.fillText('v0.10.5', 240, 715);
-  
-  // Download
-  const link = document.createElement('a');
-  link.download = 'YCTI_' + d.code + '.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-  
-  showToast('图片已保存！');
+    
+    // Badge
+    ctx.font = '11px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.fillText('YCTI · 摇曳露营人格', W/2, y);
+    y += 28;
+    
+    // Code (big)
+    ctx.font = 'bold 52px sans-serif';
+    ctx.fillStyle = '#e8a850';
+    ctx.fillText(d.code, W/2, y);
+    y += 44;
+    
+    // Tag
+    ctx.font = '18px sans-serif';
+    ctx.fillStyle = '#e8e0d8';
+    ctx.fillText(d.tag, W/2, y);
+    y += 28;
+    
+    // Quote
+    ctx.font = 'italic 14px sans-serif';
+    ctx.fillStyle = '#9a8c7a';
+    ctx.fillText(d.quote, W/2, y);
+    y += 28;
+    
+    // Divider
+    const divGrad = ctx.createLinearGradient(40, 0, W-40, 0);
+    divGrad.addColorStop(0, 'rgba(232,168,80,0)');
+    divGrad.addColorStop(0.5, 'rgba(232,168,80,.5)');
+    divGrad.addColorStop(1, 'rgba(232,168,80,0)');
+    ctx.strokeStyle = divGrad;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(60, y);
+    ctx.lineTo(W-60, y);
+    ctx.stroke();
+    y += 20;
+    
+    // Description card
+    ctx.textAlign = 'left';
+    ctx.font = '13px "PingFang SC", "Noto Sans SC", sans-serif';
+    const words = d.desc.split('');
+    const lines = [];
+    let line = '';
+    const maxW = W - 80;
+    for (let i = 0; i < words.length; i++) {
+      const test = line + words[i];
+      if (ctx.measureText(test).width > maxW && line.length > 0) {
+        lines.push(line);
+        line = words[i];
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+    
+    const descH = lines.length * 24 + 40;
+    ctx.fillStyle = 'rgba(30,30,56,.8)';
+    roundRect(ctx, 30, y, W-60, descH, 12);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(51,51,80,.5)';
+    ctx.lineWidth = 1;
+    roundRect(ctx, 30, y, W-60, descH, 12);
+    ctx.stroke();
+    
+    ctx.fillStyle = '#e8e0d8';
+    lines.forEach(function(l, i) { ctx.fillText(l, 50, y + 28 + i * 24); });
+    y += descH + 20;
+    
+    // Partner section
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillStyle = '#e8a850';
+    ctx.fillText('🤝 最佳拍档', W/2, y);
+    y += 26;
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText(d.partnerCode + '  ' + d.partnerTag, W/2, y);
+    y += 26;
+    ctx.font = '12px sans-serif';
+    ctx.fillStyle = '#9a8c7a';
+    ctx.fillText(d.partnerText, W/2, y);
+    y += 46;
+    
+    // Bottom credits
+    ctx.font = '10px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,.15)';
+    ctx.fillText('YCTI · Yuru Camp Type Indicator', W/2, y);
+    ctx.fillText('测试结果仅供娱乐 · 图一乐', W/2, y + 16);
+    ctx.fillText('@悠哉日常大囧', W/2, y + 30);
+    ctx.fillText('v0.10.6', W/2, y + 35);
+    
+    // Download
+    const link = document.createElement('a');
+    link.download = 'YCTI_' + d.code + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('图片已保存！');
+  };
+  heroImg.src = HERO_DEFAULT;
 }
 
 function roundRect(ctx, x, y, w, h, r) {
