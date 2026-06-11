@@ -76,17 +76,7 @@ body::before {
   text-shadow: 0 0 20px rgba(232,168,80,.25);
 }
 .start-screen .subtitle { font-size: 12px; color: var(--muted); letter-spacing: 2px; margin-bottom: 32px; }
-.start-screen .campfire {
-  font-size: 72px; margin: 20px 0 28px;
-  display: inline-block;
-  animation: campfirePulse 2.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 30px rgba(244,162,97,.5));
-}
-@keyframes campfirePulse {
-  0%,100% { transform: scale(1); opacity: 1; }
-  30% { transform: scale(1.08); opacity: .9; }
-  60% { transform: scale(.96); opacity: .85; }
-}
+
 .start-screen .desc {
   font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto 36px; line-height: 1.8;
   background: var(--card); padding: 16px 20px; border-radius: 14px; border: 1px solid var(--border);
@@ -316,12 +306,19 @@ body::before {
 #shareCanvas { display: none; }
 
 /* Homepage animation */
+.video-wrapper {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px 0;
+  background: radial-gradient(ellipse at center, #010108 50%, var(--bg-deep) 100%);
+}
 .home-video {
   width: 100%;
   max-width: 480px;
-  border-radius: 16px;
-  margin: 16px auto;
   display: block;
+  margin: 0 auto;
+  background: #010108;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
@@ -338,12 +335,11 @@ body::before {
       <div class="logo">🏕️</div>
       <h1>YCTI</h1>
       <div class="subtitle">Yuru Camp Type Indicator</div>
-      <div class="campfire">🔥</div>
+      <div class="video-wrapper"><video class="home-video" src="home.mp4" autoplay loop muted playsinline disableRemotePlayback disablePictureInPicture></video></div>
       <div class="desc">
         本栖湖畔的篝火，富士山下的晨曦。<br>
         找到属于你的摇曳露营人格。
       </div>
-      <video class="home-video" src="home.mp4" autoplay loop muted playsinline disableRemotePlayback disablePictureInPicture></video>
       <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="author-credit">@悠哉日常大囧</div>
       <div class="version-tag">v0.9.8</div>
