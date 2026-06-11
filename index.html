@@ -68,7 +68,7 @@ body::before {
 }
 
 /* Start Screen */
-.start-screen { text-align: center; padding: 20px 0 0; display: flex; flex-direction: column; min-height: 100dvh; }
+.start-screen { text-align: center; padding: 24px 0 0; }
 .start-screen .logo { font-size: 42px; margin-bottom: 2px; filter: drop-shadow(0 0 12px rgba(232,168,80,.2)); }
 .start-screen h1 {
   font-size: 28px; font-weight: 800; color: var(--warm);
@@ -76,22 +76,8 @@ body::before {
   text-shadow: 0 0 20px rgba(232,168,80,.25);
 }
 .start-screen .subtitle { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 6px; }
-.start-screen .subtitle-cn { font-size: 13px; color: var(--warm); letter-spacing: 2px; margin-bottom: 0; }
+.start-screen .subtitle-cn { font-size: 13px; color: var(--warm); letter-spacing: 2px; margin-bottom: 32px; }
 
-/* Middle: desc + button centered between titles and video */
-.middle-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 16px;
-}
-
-.start-screen .desc {
-  font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto 16px; line-height: 1.8;
-  background: var(--card); padding: 10px 16px; border-radius: 14px; border: 1px solid var(--border);
-}
 .btn {
   display: inline-block;
   padding: 14px 48px;
@@ -319,7 +305,7 @@ body::before {
 /* Homepage animation */
 .video-wrapper {
   width: 100%;
-  margin: 0;
+  margin: 28px 0 0;
   padding: 0;
 }
 .home-video {
@@ -338,7 +324,7 @@ body::before {
   font-size: 11px;
   color: rgba(255,255,255,.15);
   text-align: center;
-  padding: 6px 0 4px;
+  padding: 16px 0 4px;
   letter-spacing: 1px;
 }
 </style>
@@ -353,9 +339,7 @@ body::before {
       <h1>YCTI</h1>
       <div class="subtitle">Yuru Camp Type Indicator</div>
       <div class="subtitle-cn">摇曳露营人格测试</div>
-      <div class="middle-group">
-        <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
-      </div>
+      <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
       <div class="video-wrapper"><video class="home-video" src="home.mp4" autoplay loop muted playsinline disableRemotePlayback disablePictureInPicture></video></div>
       <div class="bottom-bar">@悠哉日常大囧 · v0.9.8</div>
     </div>
