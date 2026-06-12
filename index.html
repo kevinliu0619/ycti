@@ -20,12 +20,13 @@
   --shadow: rgba(0,0,0,.3);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { overflow: hidden; height: 100%; }
 body {
   font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   background: linear-gradient(180deg, #0d0d1f 0%, #141428 25%, #0a0a18 45%, #010108 60%, #010108 100%);
-  background-attachment: fixed;
   color: var(--text);
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
