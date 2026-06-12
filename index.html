@@ -262,8 +262,8 @@ body::before {
   border: 1px dashed var(--border);
 }
 .result-partner strong { color: var(--warm); }
-.result-actions { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: nowrap; margin-bottom: 6px; }
-.result-actions .btn { padding: 11px 28px; font-size: 14px; }
+.result-actions { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: nowrap; margin: 0 12px 6px; }
+.result-actions .btn { padding: 11px 0; font-size: 14px; flex: 1; }
 .result-actions .btn-icon {
   width: 42px; height: 42px;
   border-radius: 50%;
@@ -473,8 +473,8 @@ body::before {
       <div class="result-desc" id="resultDesc"></div>
       <div class="result-partner" id="resultPartner"></div>
       <div class="result-actions">
-        <button class="btn-icon" onclick="openStats()" title="查看统计">📊</button>
-        <button class="btn btn-secondary" onclick="restartQuiz()">重新测试</button>
+        <button class="btn btn-secondary" onclick="openStats()">查看统计</button>
+        <button class="btn btn-primary" onclick="restartQuiz()">重新测试</button>
         <button class="btn-icon" onclick="openShareModal()" title="分享">📤</button>
       </div>
       <div class="bottom-bar">@悠哉日常大囧 · v0.11.3</div>
