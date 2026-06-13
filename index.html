@@ -1565,7 +1565,6 @@ async function loadStats() {
         const seg = document.createElement('div');
         seg.style.cssText = `width:${pct}%;background:${g.color};display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.3);`;
         seg.textContent = pct >= 3 ? g.short : '';
-        seg.title = `${g.name}: ${g.count}份 (${pct.toFixed(1)}%)`;
         barRow.appendChild(seg);
       }
       // Labels row below — percentages only
@@ -1576,7 +1575,6 @@ async function loadStats() {
         const lbl = document.createElement('div');
         lbl.style.cssText = `width:${pct}%;text-align:center;font-size:11px;color:var(--muted);min-width:0;overflow:hidden;white-space:nowrap;`;
         lbl.textContent = `${pct.toFixed(1)}%`;
-        lbl.title = `${g.name}: ${g.count}份 (${pct.toFixed(1)}%)`;
         lblRow.appendChild(lbl);
       }
       barWrap.innerHTML = '';
@@ -1604,6 +1602,7 @@ async function loadStats() {
     items.sort((a, b) => b.area - a.area);
 
     // Assign opacity: within each theme, rank by count desc
+    // Easter/hidden personalities always full opacity (bright gold)
     const sortedByTheme = [...items].sort((a,b) => {
       if (a.hex !== b.hex) return a.hex.localeCompare(b.hex);
       return b.count - a.count;
@@ -1612,7 +1611,7 @@ async function loadStats() {
     let rank = 0;
     for (const it of sortedByTheme) {
       if (it.hex !== prevHex) { rank = 0; prevHex = it.hex; }
-      it.alpha = OPACITIES[Math.min(rank, 4)];
+      it.alpha = (it.hex === '#d4b840') ? 1.0 : OPACITIES[Math.min(rank, 4)];
       rank++;
     }
 
