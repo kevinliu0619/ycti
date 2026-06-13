@@ -1,1714 +1,1714 @@
-     1|<!DOCTYPE html>
-     2|<html lang="zh-CN">
-     3|<head>
-     4|<meta charset="UTF-8">
-     5|<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-     6|<title>YCTI · 摇曳露营人格测试</title>
-     7|<style>
-     8|:root {
-     9|  --bg-deep: #0d0d1f;
-    10|  --bg: #141428;
-    11|  --card: #1e1e38;
-    12|  --card-hover: #28284a;
-    13|  --warm: #e8a850;
-    14|  --warm-glow: #f0c070;
-    15|  --fire: #f4a261;
-    16|  --text: #e8e0d8;
-    17|  --muted: #9a8c7a;
-    18|  --accent: #7aa87d;
-    19|  --border: #333350;
-    20|  --shadow: rgba(0,0,0,.3);
-    21|}
-    22|* { margin: 0; padding: 0; box-sizing: border-box; }
-    23|body {
-    24|  font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-    25|  background: linear-gradient(180deg, #0d0d1f 0%, #141428 25%, #0a0a18 45%, #010108 60%, #010108 100%);
-    26|  color: var(--text);
-    27|  min-height: 100dvh;
-    28|  display: flex;
-    29|  flex-direction: column;
-    30|  align-items: center;
-    31|  justify-content: center;
-    32|  padding: 16px;
-    33|  line-height: 1.6;
-    34|  position: relative;
-    35|  overflow: hidden;
-    36|}
-    37|/* Stars */
-    38|body::before {
-    39|  content: '';
-    40|  position: fixed;
-    41|  top: 0; left: 0; right: 0; bottom: 0;
-    42|  background-image:
-    43|    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.6), transparent),
-    44|    radial-gradient(1px 1px at 25% 8%, rgba(255,255,255,.4), transparent),
-    45|    radial-gradient(1.5px 1.5px at 40% 20%, rgba(255,255,255,.5), transparent),
-    46|    radial-gradient(1px 1px at 55% 12%, rgba(255,255,255,.3), transparent),
-    47|    radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,.5), transparent),
-    48|    radial-gradient(1.5px 1.5px at 85% 10%, rgba(255,255,255,.4), transparent),
-    49|    radial-gradient(1px 1px at 15% 30%, rgba(255,255,255,.3), transparent),
-    50|    radial-gradient(1px 1px at 60% 28%, rgba(255,255,255,.35), transparent),
-    51|    radial-gradient(1px 1px at 90% 25%, rgba(255,255,255,.3), transparent),
-    52|    radial-gradient(1px 1px at 35% 38%, rgba(255,255,255,.25), transparent),
-    53|    radial-gradient(1.5px 1.5px at 78% 40%, rgba(255,255,255,.35), transparent);
-    54|  pointer-events: none; z-index: 0;
-    55|}
-    56|#app {
-    57|  width: 100%;
-    58|  max-width: 480px;
-    59|  position: relative;
-    60|  z-index: 1;
-    61|}
-    62|.screen { display: none; animation: fadeSlide .4s ease; }
-    63|.screen.active { display: block; }
-    64|@keyframes fadeSlide {
-    65|  from { opacity: 0; transform: translateY(12px); }
-    66|  to { opacity: 1; transform: translateY(0); }
-    67|}
-    68|
-    69|/* Start Screen */
-    70|.start-screen { text-align: center; padding: 8px 0 0; }
-    71|.start-screen .camp-icon { font-size: 40px; margin-bottom: 4px; }
-    72|.start-screen h1 {
-    73|  font-size: 28px; font-weight: 800; color: var(--warm);
-    74|  letter-spacing: 6px; margin-bottom: 2px;
-    75|  text-shadow: 0 0 20px rgba(232,168,80,.25);
-    76|}
-    77|.start-screen .subtitle { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 6px; }
-    78|.start-screen .subtitle-cn { font-size: 13px; color: var(--warm); letter-spacing: 2px; margin-bottom: 60px; }
-    79|
-    80|.btn {
-    81|  display: inline-block;
-    82|  padding: 14px 48px;
-    83|  border-radius: 32px;
-    84|  border: none;
-    85|  font-size: 16px;
-    86|  font-weight: 600;
-    87|  cursor: pointer;
-    88|  transition: all .25s;
-    89|  font-family: inherit;
-    90|  position: relative;
-    91|  overflow: hidden;
-    92|}
-    93|.btn-primary {
-    94|  background: linear-gradient(135deg, var(--warm), #d49540);
-    95|  color: #1a1a2e;
-    96|  box-shadow: 0 4px 20px rgba(232,168,80,.25);
-    97|}
-    98|.btn-primary:hover {
-    99|  background: linear-gradient(135deg, var(--warm-glow), var(--warm));
-   100|  transform: translateY(-2px);
-   101|  box-shadow: 0 6px 28px rgba(232,168,80,.35);
-   102|}
-   103|.btn-primary:active { transform: translateY(0) scale(.98); }
-   104|.btn-secondary {
-   105|  background: var(--card);
-   106|  color: var(--text);
-   107|  border: 1px solid var(--border);
-   108|}
-   109|.btn-secondary:hover { background: var(--card-hover); border-color: #555; }
-   110|
-   111|.btn-outline {
-   112|  background: transparent;
-   113|  color: var(--warm);
-   114|  border: 1px solid var(--warm);
-   115|  opacity: 0.8;
-   116|}
-   117|.btn-outline:hover { background: rgba(232,168,80,0.1); border-color: var(--warm-glow); opacity: 1; }
-   118|
-   119|/* Quiz Screen */
-   120|.quiz-screen { padding: 16px 0; }
-   121|.progress-bar {
-   122|  height: 4px;
-   123|  background: var(--border);
-   124|  border-radius: 2px;
-   125|  margin-bottom: 32px;
-   126|  overflow: hidden;
-   127|}
-   128|.progress-fill {
-   129|  height: 100%;
-   130|  background: linear-gradient(90deg, var(--warm), var(--fire));
-   131|  border-radius: 2px;
-   132|  transition: width .4s ease;
-   133|  box-shadow: 0 0 8px rgba(232,168,80,.3);
-   134|}
-   135|.question-counter {
-   136|  font-size: 11px;
-   137|  color: var(--muted);
-   138|  margin-bottom: 20px;
-   139|  letter-spacing: 2px;
-   140|  text-transform: uppercase;
-   141|}
-   142|.question-text {
-   143|  font-size: 18px;
-   144|  font-weight: 600;
-   145|  margin-bottom: 28px;
-   146|  line-height: 1.7;
-   147|  color: var(--text);
-   148|  min-height: 60px;
-   149|}
-   150|.options { display: flex; flex-direction: column; gap: 10px; }
-   151|.option {
-   152|  width: 100%;
-   153|  padding: 16px 20px;
-   154|  background: var(--card);
-   155|  border: 1px solid var(--border);
-   156|  border-radius: 14px;
-   157|  text-align: left;
-   158|  color: var(--text);
-   159|  font-size: 15px;
-   160|  cursor: pointer;
-   161|  transition: all .2s ease;
-   162|  font-family: inherit;
-   163|  line-height: 1.5;
-   164|  position: relative;
-   165|}
-   166|.option:hover {
-   167|  border-color: var(--warm);
-   168|  background: var(--card-hover);
-   169|  transform: translateX(4px);
-   170|  box-shadow: 0 2px 12px rgba(232,168,80,.1);
-   171|}
-   172|.option:active { transform: scale(.98) translateX(4px); }
-   173|.option.selected { border-color: var(--warm); background: rgba(232,168,80,.12); }
-   174|
-   175|/* Result Screen */
-   176|.result-screen { text-align: center; padding: 0 0 24px; }
-   177|
-   178|/* Hero Image — full-bleed edge-to-edge, flush with viewport top */
-   179|.result-hero {
-   180|  width: 100vw;
-   181|  margin-top: -16px;
-   182|  margin-left: calc(-50vw + 50%);
-   183|  margin-right: calc(-50vw + 50%);
-   184|  aspect-ratio: 16 / 9;
-   185|  background: var(--card);
-   186|  border-radius: 0;
-   187|  overflow: hidden;
-   188|  position: relative;
-   189|}
-   190|.result-hero img {
-   191|  width: 100%; height: 100%;
-   192|  object-fit: cover;
-   193|  display: block;
-   194|}
-   195|.result-hero::after {
-   196|  content: '';
-   197|  position: absolute;
-   198|  bottom: 0; left: 0; right: 0;
-   199|  height: 40px;
-   200|  background: linear-gradient(transparent, var(--bg));
-   201|  pointer-events: none;
-   202|}
-   203|
-   204|/* Result theme colors — text only, no background */
-   205|.result-screen.theme-rin .result-code { color: #7eb8da; text-shadow: 0 0 30px rgba(126,184,218,.3); }
-   206|.result-screen.theme-rin .result-badge { color: #7eb8da; }
-   207|.result-screen.theme-nadeshiko .result-code { color: #e8a0b0; text-shadow: 0 0 30px rgba(232,160,176,.3); }
-   208|.result-screen.theme-nadeshiko .result-badge { color: #e8a0b0; }
-   209|.result-screen.theme-chiaki .result-code { color: #b89ad4; text-shadow: 0 0 30px rgba(184,154,212,.3); }
-   210|.result-screen.theme-chiaki .result-badge { color: #b89ad4; }
-   211|.result-screen.theme-aoi .result-code { color: #a8b878; text-shadow: 0 0 30px rgba(168,184,120,.3); }
-   212|.result-screen.theme-aoi .result-badge { color: #a8b878; }
-   213|.result-screen.theme-ena .result-code { color: #c0b8a8; text-shadow: 0 0 30px rgba(192,184,168,.3); }
-   214|.result-screen.theme-ena .result-badge { color: #c0b8a8; }
-   215|.result-screen.theme-easter .result-code { color: #d4b840; text-shadow: 0 0 30px rgba(212,184,64,.4); }
-   216|.result-screen.theme-easter .result-badge { color: #d4b840; }
-   217|
-   218|.result-badge {
-   219|  font-size: 11px; letter-spacing: 3px;
-   220|  margin: 14px 0 6px; text-transform: uppercase;
-   221|}
-   222|.result-code {
-   223|  font-size: 52px; font-weight: 800; color: var(--warm);
-   224|  letter-spacing: 6px; margin-bottom: 4px;
-   225|  text-shadow: 0 0 30px rgba(232,168,80,.3);
-   226|  animation: codeReveal .6s ease;
-   227|}
-   228|@keyframes codeReveal {
-   229|  from { opacity: 0; transform: scale(.8); letter-spacing: 20px; }
-   230|  to { opacity: 1; transform: scale(1); letter-spacing: 6px; }
-   231|}
-   232|.result-role { font-size: 18px; color: var(--text); margin-bottom: 14px; }
-   233|.result-quote {
-   234|  font-size: 14px;
-   235|  color: var(--muted);
-   236|  font-style: italic;
-   237|  margin-bottom: 16px;
-   238|  line-height: 1.7;
-   239|  padding: 0 12px;
-   240|  position: relative;
-   241|}
-   242|.result-desc {
-   243|  font-size: 13px;
-   244|  color: var(--text);
-   245|  text-align: left;
-   246|  line-height: 1.8;
-   247|  padding: 16px;
-   248|  background: var(--card);
-   249|  border-radius: 14px;
-   250|  margin: 0 12px 14px;
-   251|  border: 1px solid var(--border);
-   252|  box-shadow: 0 4px 16px var(--shadow);
-   253|}
-   254|.result-partner {
-   255|  font-size: 13px;
-   256|  color: var(--muted);
-   257|  margin: 0 12px 20px;
-   258|  line-height: 1.7;
-   259|  background: var(--card);
-   260|  padding: 12px 16px;
-   261|  border-radius: 12px;
-   262|  border: 1px dashed var(--border);
-   263|}
-   264|.result-partner strong { color: var(--warm); }
-   265|.result-actions { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: nowrap; margin: 0 12px 6px; }
-   266|.result-actions .btn { padding: 11px 0; font-size: 14px; flex: 1; }
-   267|.result-actions .btn-icon {
-   268|  width: 42px; height: 42px;
-   269|  border-radius: 50%;
-   270|  padding: 0;
-   271|  display: inline-flex; align-items: center; justify-content: center;
-   272|  font-size: 20px;
-   273|  line-height: 1;
-   274|  border: 1px solid var(--border);
-   275|  background: var(--card);
-   276|  color: var(--text);
-   277|  cursor: pointer;
-   278|  transition: all .2s;
-   279|  flex-shrink: 0;
-   280|}
-   281|.result-actions .btn-icon:hover { background: var(--card-hover); }
-   282|.result-actions .btn-icon:active { transform: scale(.95); }
-   283|
-   284|/* Easter Egg */
-   285|.easter-tag {
-   286|  display: inline-block;
-   287|  padding: 5px 14px;
-   288|  background: rgba(232,168,80,.15);
-   289|  color: var(--warm);
-   290|  border-radius: 12px;
-   291|  font-size: 11px;
-   292|  letter-spacing: 2px;
-   293|  margin-bottom: 12px;
-   294|  border: 1px solid rgba(232,168,80,.3);
-   295|  animation: easterGlow 2s ease-in-out infinite;
-   296|}
-   297|@keyframes easterGlow {
-   298|  0%,100% { box-shadow: 0 0 8px rgba(232,168,80,.1); }
-   299|  50% { box-shadow: 0 0 18px rgba(232,168,80,.25); }
-   300|}
-   301|
-   302|/* Author Credit */
-   303|.author-credit {
-   304|  font-size: 11px;
-   305|  color: rgba(255,255,255,.18);
-   306|  text-align: center;
-   307|  margin-top: 10px;
-   308|  letter-spacing: 1px;
-   309|}
-   310|.version-tag {
-   311|  font-size: 9px;
-   312|  color: rgba(255,255,255,.10);
-   313|  text-align: center;
-   314|  margin-top: 2px;
-   315|}
-   316|
-   317|/* Toast */
-   318|.toast {
-   319|  position: fixed;
-   320|  bottom: 32px;
-   321|  left: 50%;
-   322|  transform: translateX(-50%);
-   323|  background: var(--card);
-   324|  color: var(--text);
-   325|  padding: 10px 24px;
-   326|  border-radius: 20px;
-   327|  font-size: 13px;
-   328|  border: 1px solid var(--border);
-   329|  opacity: 0;
-   330|  transition: opacity .3s;
-   331|  pointer-events: none;
-   332|  z-index: 100;
-   333|  box-shadow: 0 4px 16px var(--shadow);
-   334|}
-   335|.toast.show { opacity: 1; }
-   336|
-   337|/* Canvas hidden */
-   338|#shareCanvas { display: none; }
-   339|
-   340|/* ===== Share Modal ===== */
-   341|.share-overlay {
-   342|  display: none;
-   343|  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-   344|  background: rgba(0,0,0,.75);
-   345|  z-index: 200;
-   346|  justify-content: center; align-items: center;
-   347|  padding: 20px;
-   348|}
-   349|.share-overlay.show { display: flex; }
-   350|.share-modal {
-   351|  background: var(--card);
-   352|  border: 1px solid var(--border);
-   353|  border-radius: 16px;
-   354|  padding: 28px 24px 24px;
-   355|  max-width: 360px; width: 100%;
-   356|  text-align: center;
-   357|  position: relative;
-   358|  box-shadow: 0 8px 40px rgba(0,0,0,.5);
-   359|}
-   360|.share-close {
-   361|  position: absolute; top: 12px; right: 16px;
-   362|  background: none; border: none;
-   363|  color: var(--muted); font-size: 22px;
-   364|  cursor: pointer; line-height: 1;
-   365|}
-   366|.share-modal .share-title {
-   367|  font-size: 13px; color: var(--warm);
-   368|  letter-spacing: 2px; margin-bottom: 16px;
-   369|}
-   370|.share-modal .share-code {
-   371|  font-size: 36px; font-weight: 800;
-   372|  letter-spacing: 6px;
-   373|  margin-bottom: 4px;
-   374|}
-   375|.share-modal .share-tag {
-   376|  font-size: 16px; color: var(--text);
-   377|  margin-bottom: 8px;
-   378|}
-   379|.share-modal .share-quote {
-   380|  font-size: 12px; color: var(--muted);
-   381|  font-style: italic;
-   382|  margin-bottom: 20px;
-   383|  line-height: 1.6;
-   384|  padding: 0 12px;
-   385|}
-   386|.share-qr-wrap {
-   387|  display: inline-block;
-   388|  background: #fff;
-   389|  padding: 12px;
-   390|  border-radius: 12px;
-   391|  margin-bottom: 16px;
-   392|}
-   393|.share-qr-wrap img {
-   394|  display: block;
-   395|  width: 150px; height: 150px;
-   396|}
-   397|.share-modal .share-hint {
-   398|  font-size: 13px; color: var(--text);
-   399|  margin-bottom: 8px;
-   400|}
-   401|.share-modal .share-footer {
-   402|  font-size: 11px;
-   403|  color: rgba(255,255,255,.25);
-   404|  line-height: 1.5;
-   405|}
-   406|
-   407|/* Homepage animation */
-   408|.video-wrapper {
-   409|  width: 100%;
-   410|  margin: 36px 0 0;
-   411|  padding: 0;
-   412|}
-   413|.home-video {
-   414|  width: 100%;
-   415|  height: auto;
-   416|  display: block;
-   417|  margin: 0;
-   418|  background: #010108;
-   419|  pointer-events: none;
-   420|  user-select: none;
-   421|  -webkit-user-select: none;
-   422|  -webkit-touch-callout: none;
-   423|  position: relative;
-   424|  z-index: 1;
-   425|  object-fit: contain;
-   426|}
-   427|
-   428|/* Bottom bar (author + version) */
-   429|.bottom-bar {
-   430|  font-size: 11px;
-   431|  color: rgba(255,255,255,.15);
-   432|  text-align: center;
-   433|  padding: 16px 0 4px;
-   434|  letter-spacing: 1px;
-   435|}
-   436|</style>
-   437|</head>
-   438|<body>
-   439|
-   440|<div id="app">
-   441|  <!-- Start Screen -->
-   442|  <div class="screen active" id="startScreen">
-   443|    <div class="start-screen">
-   444|      <div class="camp-icon">🏕️</div>
-   445|      <h1>YCTI</h1>
-   446|      <div class="subtitle">Yuru Camp Type Indicator</div>
-   447|      <div class="subtitle-cn">摇曳露营人格测试</div>
-   448|      <button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
-   449|      <div class="video-wrapper"><video id="homeVideo" class="home-video" src="home.mp4" poster="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCALQA8ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5bf5nNMAwGFPHX3pxGRQAxFxx60Nw9OY4FNbrmgAAwTS96apy1OC8mgAHINNYYFKeBTeTnNACAdKeR8gpFHA+tPONooARU+Qk9aNny80pByoHShucrQAjcRg0ZwuPalYfuwPQ0xvu598UAIKcDTRSgUAKRz+FIQMUDqKeRnj2oAaxGf0pMfzpzL396NuMUAC8k0owXzTQfkb60hGD9RQA9SBIp9TT5OZSfWoSDuWpOqE0ALsHWjApATijBoAa4HSo8dqfID1qPB60APXOPakQfNTlyPpjNKAARj0oAUnPSo26YHrTyeBimUAOU9acOpqPJyKdngUAO7UdqQH5KXPy0ADc9PSowuGFAbr6UshywIoAVOSPalkOBimg9AOtPcZ/KgBobKgUrsRimMpXGacDluaAFUYHuaQHYfalQ5JNIwzxQBIAGGaZtBOPaliIAxSkgc0AIAFbj0p4ODn2IqMDoT61IrDaB7EUAROTuUdQooYBSuzuKcQeo7imZ+YY7UAOL888kcUincCTQpBLGgDjHtQBKxAiXNNL52gUnLxgDtSjCLQAKuQ3rnNObG3PoOaRDjr6Um7rnvQBEVyQR3p2zL49BTk4HPrTu2e9AELLlC3vQRgA05TldvalxhcUAMxubJp+4AZH0ppBUg00DII70APOfw60FuAaZk0rAcetADnwdu38aVwuymjpTj1WtITUU1a9wGrjPFPUjHFIepphyFNZgPLc00vxTxjYKYRlsUAIu4MP0oPzEbe3NTJgYz24phK+Y+zv0oAUdl74oHLMPSmkbSpzz0pXG0Ag9aAHIc4496Vz8vTqaanDfhTS2RjBxQA+Pbjg44p2RztFN2jjJ/CkfO4AdKAE7n1xSgcDP5Uj8SAAUj7hIATQAoIdgvbvTpCAxX0pAmVLDgimlfn564oAXAYDFBz09aMYIx0IpUOApPY0AMUc08/LyOtA5ySKCfbNACjrkUjnJx3p4O1c96Y3I3HrQAhxs46g05m44pi8Dr1NOJAY+1ACfxY9s1J0D47io26E09Bl8e2aAHxAcZ+l... [truncated]
-   450|      <div class="bottom-bar">@悠哉日常大囧 · v0.13.0</div>
-   451|    </div>
-   452|  </div>
-   453|
-   454|  <!-- Quiz Screen -->
-   455|  <div class="screen" id="quizScreen">
-   456|    <div class="quiz-screen">
-   457|      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-   458|      <div class="question-counter" id="qCounter"></div>
-   459|      <div class="question-text" id="qText"></div>
-   460|      <div class="options" id="options"></div>
-   461|    </div>
-   462|  </div>
-   463|
-   464|  <!-- Result Screen -->
-   465|  <div class="screen" id="resultScreen">
-   466|    <div class="result-screen">
-   467|      <div class="result-hero" id="resultHero"><img src="" alt=""></div>
-   468|      <div id="easterTag"></div>
-   469|      <div class="result-badge" id="resultBadge"></div>
-   470|      <div class="result-code" id="resultCode"></div>
-   471|      <div class="result-role" id="resultRole"></div>
-   472|      <div class="result-quote" id="resultQuote"></div>
-   473|      <div class="result-desc" id="resultDesc"></div>
-   474|      <div class="result-partner" id="resultPartner"></div>
-   475|      <div class="result-actions">
-   476|        <button class="btn btn-secondary" onclick="openStats()">查看统计</button>
-   477|        <button class="btn btn-primary" onclick="restartQuiz()">重新测试</button>
-   478|        <button class="btn-icon" onclick="openShareModal()" title="分享">📤</button>
-   479|      </div>
-   480|      <div class="bottom-bar">@悠哉日常大囧 · v0.13.0</div>
-   481|    </div>
-   482|  </div>
-   483|</div>
-   484|
-   485|<!-- Stats Screen (fullscreen) -->
-   486|<div id="statsScreen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:var(--bg);flex-direction:column;padding:10px;overflow:hidden;touch-action:none;-webkit-overflow-scrolling:none;overscroll-behavior:none;">
-   487|  <div style="display:flex;align-items:center;justify-content:center;padding:4px 0 12px;max-width:800px;margin:0 auto;width:100%;position:relative;">
-   488|    <button onclick="closeStats()" style="position:absolute;left:0;background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:4px 8px;">← 返回</button>
-   489|    <span style="font-size:20px;font-weight:700;color:var(--warm);">露营人格统计</span>
-   490|  </div>
-   491|  <div id="statsInfo" style="text-align:center;font-size:15px;color:var(--warm-glow);margin:4px 0 8px;font-weight:600;"></div>
-   492|  <div id="statsList" style="display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;max-height:64px;overflow-y:auto;padding:4px 0;max-width:800px;margin:0 auto;width:100%;"></div>
-   493|  <div id="statsStackedBar" style="margin:8px auto 0;"></div>
-   494|  <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0;">
-   495|    <canvas id="statsCanvas" style="max-width:100%;max-height:100%;border-radius:12px;cursor:pointer;"></canvas>
-   496|    <div id="treemapTooltip" style="display:none;position:fixed;z-index:200;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text);pointer-events:none;box-shadow:0 4px 16px var(--shadow);max-width:200px;text-align:center;"></div>
-   497|  </div>
-   498|  <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 4px;">数据实时更新 · 每次测试都会计入</div>
-   499|</div>
-   500|
-   501|<div class="toast" id="toast"></div>
-   502|<canvas id="shareCanvas" width="480" height="853"></canvas>
-   503|
-   504|<!-- Share Modal -->
-   505|<div class="share-overlay" id="shareOverlay" onclick="if(event.target===this)closeShareModal()">
-   506|  <div class="share-modal">
-   507|    <button class="share-close" onclick="closeShareModal()">✕</button>
-   508|    <div class="share-title">YCTI·摇曳露营人格测试</div>
-   509|    <div class="share-code" id="shareCode"></div>
-   510|    <div class="share-tag" id="shareTag"></div>
-   511|    <div class="share-quote" id="shareQuote"></div>
-   512|    <div class="share-qr-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQMAAACXljzdAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA9UlEQVRYheWXvQ2EMAyFjShSZoSMwmjcaBklI1CmQJj4JwGdoL2TbDfI+dLEen42AK+xokQBmLDlQfPDHsny4BLlQtg5DxZJageNUMJkavnmk0T0QkjxmMEn+X/P/YigRIm1+dtSHpzPPLkFe/xjmCBSA/5Q12OdSRuxGiQ5VX4yKR4g4aUDNwQWJNK7/n5mjKzd0rQGFdjJwRuhmshEb6Ntl6F2mCMjopi3OPnmiqzaAVwdaoL56gVjJHMFdEsjj8eueHMkoe7kOP41+bZHUnV3mfCjOrBKZHeRafalA/NEeyH28T6mmTWCEqwDrcF9h/VAXuMEkeqSgqcZgHQAAAAASUVORK5CYII=" alt="QR" width="150" height="150"></div>
-   513|    <div class="share-hint">扫码来测测你的人格吧！</div>
-   514|    <div class="share-footer">YCTI.FUN</div>
-   515|  </div>
-   516|</div>
-   517|<script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3/dist/d3-hierarchy.min.js"></script>
-   518|<script>
-   519|// ============================================================
-   520|// WeChat / QQ video autoplay fix
-   521|// ============================================================
-   522|(function() {
-   523|  try {
-   524|    var v = document.getElementById('homeVideo');
-   525|    if (!v) return;
-   526|    // poster set via HTML attribute, no JS needed
-   527|    var playPromise = v.play();
-   528|    if (playPromise !== undefined) {
-   529|      playPromise.catch(function() {
-   530|        function doPlay() { try { v.play().catch(function(){}); } catch(e) {} }
-   531|        if (typeof WeixinJSBridge !== 'undefined') {
-   532|          try { WeixinJSBridge.invoke('getNetworkType', {}, doPlay); } catch(e) {}
-   533|        }
-   534|        document.addEventListener('WeixinJSBridgeReady', doPlay, {once:true});
-   535|        document.addEventListener('touchstart', doPlay, {once:true});
-   536|        document.addEventListener('click', doPlay, {once:true});
-   537|      });
-   538|    }
-   539|  } catch(e) {}
-   540|})();
-   541|// ============================================================
-   542|// GitHub API 统计后端
-   543|// 读写均走 api.github.com，无缓存延迟
-   544|// ============================================================
-   545|const GH_REPO = 'kevinliu0619/ycti';
-   546|const GH_TOKEN='***' + '_O6Aas5Fz21Fjfw3j15TvzaLv1SRI1uuoejnorMqWE7jEYRLKCOE98X7rJ7c';
-   547|const GH_STATS_FILE = 'stats.json';
-   548|
-   549|function ghAuth() {
-   550|  return 'Basic ' + btoa('kevinliu0619:' + GH_TOKEN);
-   551|}
-   552|
-   553|async function ghStatsRead() {
-   554|  // 直读 GitHub API，不走 CDN，无缓存延迟
-   555|  const resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
-   556|    headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
-   557|  });
-   558|  if (!resp.ok) return { total: 0, results: {} };
-   559|  const d = await resp.json();
-   560|  return JSON.parse(atob(d.content));
-   561|}
-   562|
-   563|async function ghStatsSubmit(personality) {
-   564|  try {
-   565|    // Step 1: GET 当前文件 + SHA
-   566|    const getResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
-   567|      headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
-   568|    });
-   569|    let stats = { total: 0, results: {} }, sha = null;
-   570|    if (getResp.ok) {
-   571|      const d = await getResp.json();
-   572|      sha = d.sha;
-   573|      stats = JSON.parse(atob(d.content));
-   574|    }
-   575|    // Step 2: 更新数据
-   576|    stats.total = (stats.total || 0) + 1;
-   577|    stats.results[personality] = (stats.results[personality] || 0) + 1;
-   578|    // Step 3: PUT 写回
-   579|    const content = btoa(unescape(encodeURIComponent(JSON.stringify(stats))));
-   580|    const body = { message: 'record: ' + personality, content, branch: 'main' };
-   581|    if (sha) body.sha = sha;
-   582|    const putResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
-   583|      method: 'PUT',
-   584|      headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'YCTI' },
-   585|      body: JSON.stringify(body)
-   586|    });
-   587|    if (!putResp.ok && putResp.status === 409) {
-   588|      // SHA 冲突：重试一次
-   589|      const r2 = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
-   590|        headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
-   591|      });
-   592|      if (r2.ok) {
-   593|        const d2 = await r2.json();
-   594|        let s2 = JSON.parse(atob(d2.content));
-   595|        s2.total = (s2.total || 0) + 1;
-   596|        s2.results[personality] = (s2.results[personality] || 0) + 1;
-   597|        const c2 = btoa(unescape(encodeURIComponent(JSON.stringify(s2))));
-   598|        await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
-   599|          method: 'PUT',
-   600|          headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'YCTI' },
-   601|          body: JSON.stringify({ message: 'record: ' + personality, content: c2, sha: d2.sha, branch: 'main' })
-   602|        });
-   603|      }
-   604|    }
-   605|  } catch(e) { console.warn('stats submit error:', e); }
-   606|}
-   607|
-   608|// ============================================================
-   609|// DATA: 30 Personalities
-   610|// ============================================================
-   611|const THEME_COLORS = { rin:'#7eb8da', nadeshiko:'#e8a0b0', chiaki:'#b89ad4', aoi:'#a8b878', ena:'#c0b8a8', easter:'#d4b840' };
-   612|const POSTER = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCAIcA8ADASIAAhEBAxEB/8QAGwAAAwEBAQEBAAAAAAAAAAAAAAECAwQFBgf/xABHEAABAwMDAgQEBAQFAgQFAwUBAAIRAyExBBJBUWEFEyJxMoGRoRRCUrEGYsHRIzNy4fAVgiRTkvEWNENEojVUY3ODk7Li/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQF/8QAJREBAQEBAAICAgMAAwEBAAAAAAERAhIhAzEEQRMiUQUUMmFx/9oADAMBAAIRAxEAPwD85NylESnymgQEJHKCUFAco5SGVVkAkUEpBABPhATmQgABHdECEZv0Rk9kAfhCJgIOEokIEnKIRFpQCCLJKuUCOUJlCAHKJEylwUEXQMGHApm7pUxcKgPSgICLJJoEYUqnBIiEAEDKLfZNAKSmUIAJpQi6B8I4SwETZA8pRBS/dMzygAm5IA/JM4QKbJmUFogEJYKBhLCAnkoGIISi6BZEygLA2VDr2U4CYlAjM+yRyIsmYSNsoHJlIYuge6aBkw0IkmEgLGeETwEDAmfqg49ksINkCiU4ugWCJsgUemURaUwEIFkolMjolFj0QHzQSkmUAbwmYjCXCJwrLgOUwbJTJREiygd0iSmMJC5QABkIyekJzCUkkk8oGDgI5KXaEzcBABMmyALpEWmUACAnPySBTIugXKEGNyC2XWQEyb4QTeE7QQUuUBYoz80chEQECi6fsmBbKUIGAkcwnwkcQgMiyZKnEJyTKA5T6xylwmMoG2FDhcq23KkC5JwgBwggTHRMYQQgXZIZTEp5KBG2E5sUOFrJRZAAiLplsqYKsXygmOiV1ZABvhKBOUEkfRPhO2Alm/CB2gJGIkJZgcKo9N0ClHIlEcoGUDOZRCDhBsgRsmXQBCXVVHVBMoFk9sIJgkIGQBCknhEmLoNggAU8wpTGEBwjhICyATKAiEZEJnKXRAFJV1KALSgSAiIShBUco4UynKBiIwjAiEpVTlBMdUwYCCZQRYIA3KfZLlNAkuipJASUApTZCCxiVJOUSNoSd0QMH0pzZTgpoFKJRkpx2QKTKHSSmhAgUwkBCoXKBRBQRZM5ShAh3QZRyhAQgp8RykcIAK4t3UBUgQMSlEpkolA+FOcomyB9UBEJiUotKoCwKAGDKnkKiOiQzKAP0RMIJBlMjlApRCBmOExknogRACCYuOUcIAlANwp5sqsiyAmeEuyoJAcoJB4KcwiETZAwZEINsoFvmEfFPZAzeE49EKRm6oECEEjEoyE5ykYKBHCRVWRCBApiFOExZAEoVEWSQIpZVR0SygfKaQynmOyAOB3Q/PsgzI5TBiQUEz1ygEGxRF0iIQOJyqCiVWcIE43RJ4REXRICA5RPKM3QUAEzdMFI2KAEYKaQMptyECIwkrIspQIgygXCaBYYQG4CEifuggdUul0FDKeVMptQGAQif9kDBQOOyBSmhLgIHhG1K6cQECOLo5TCDhAkha6aIQAIjuU5QLI5nhAjhCOCUGwCBkzCMoPCQsYQEJh32SwUEBA83lESJS4TBgFBJJNkXTiyRQMC8FFr3RlIC6BJpJoCcoOElSBBP8qOqBEIApKu6XdAkkwmUCQlymO6BKpwkghA+UE2CXKBhASgpwkgEFCBdARZPMIsU/ZAQiEExCXM9EDtCSJlBlATHCDdBEpCyBowiZKJt3QHCEslA+JBZEKIBKqbIQIzHdTkq+e6UESgQKYSKaBE9OqMphAQHCYsi8koyboDsiRdI5EpR... [truncated]
-   613|const HERO_DEFAULT = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAQ4B4ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwB7uMcVHnmmkjFJnmvrT5uw/NJzTc0BqQWH5ozTc0ZoEOzRmm5ozQA7NGabRQA7NGabRQA6im5ozQIdRTc0ZoAfmkzTelLmgBc0ZpuaAaAH5ozTM0ZoAfmjNMzS5oAM0ZpM0ZoAXNGaTNGaBjs0ZpmaM0DH5ozTM0ZoGOzRmm5ozUjHZo3U3P1oz9aBC5ozTM0ZpjHZozTM0maAJM0hNMyaM0DQ7NGabmkoAWikzRmgAoozSZoGGaM0maTNSMdmkpKDQAuaTNFJmkMCaTJoNJmgYmaCaTNBNABmkzRmkoAdSZpM0maChaM03NFACk0maKSgoCaM0hpKACkzRRSAM0ZpKSgBc0hozSUFBS5pDSZoELSUGkzQOwtIaWkNAWEzRkUhpKQ0KTxSUEUnNAWCkoooGFJQaKADvRxRR0NACdRR24o4JoAGaQCZ4pKdxmkxQUHWkJ9KWmmgBaSiigQUUUUDCiijNAwopM0UAFFFJQAGkoooAKKSigBaM0lFACUUUhqShKKKKBCUopKKQhTSUUUAFIaWkNWAUopKBQAUUUUDG0UppKADtSUvakoAKTvS0negBaQ0UUAIaQ0pptAxRQaQ0GgBM0ZNL2p4jYrkUAR0UHikzUjDNJRRQAUhpc0lACiikozQIB1oxSUUAFJxS0mOKAENJS0lIApDRmgUAFFFFACUlKaSgAooopABpKU0lMYUUUmRQAtFJmkzQA6kooqRBSE4optADjSUUmaBi0UUlABSfxUtJ/FQAtNPWnU09aBiUUUUwCiiigBKKKKQgooooASkNLRQA2iiigAooopDEooooAZRSkYpKYAaSlpKAE7UUtJSGNpRQKO9AAaSlNJSKCg0UGgBtJS0lIBKDRQaAEooooAQ0UGigAooooAQ0lKaSgAooooAKKKKAEoooqQA0lKaSgAooooAKKKKAG0UUUAFFFFADTRQaKQBRRRQB69RmmmgGvTPHHGjNNzS5oAduo3UzNGaBD91Lmo80ZoAkzRmo80ZoAkzRmo80ZoESZozTMijIoAfmjNMyKMigCTNJmm5NBJoAfmkzTM+tFAD80ZplFAD80ZplFAD6KjzRmgCSio80ZoAdRTc0ZoKHUU3NGaAHZPpRk+lNzR... [truncated]
-   614|const PERSONALITIES = {
-   615|  LONE:  { code:'LONE',  role:'凛',  tag:'独狼凛',  quote:'一个人最自在。篝火+书+咖啡=完美世界。', desc:'你在爷爷的影响下爱上了露营，但比起一群人热热闹闹，你更享受一个人的节奏。搭好帐篷，烧起篝火，泡杯咖啡，翻开书——这就是你的理想假期。朋友约你你也会去，但内心最深处，你知道最好的露营地是只有自己知道的那个。', partner:'NOM', partnerText:'她会闯进你的营地，然后你发现自己居然没赶她走。', theme:'rin',easter:false },
-   616|  TSUN:  { code:'TSUN',  role:'凛',  tag:'傲娇凛',  quote:'我才不是为了你们才来的。',  desc:'然后默默帮所有人劈好了柴，查好了天气，还偷偷通知了老师来救场。你嘴上说着"麻烦""不要"，但每次朋友有需要，你总是第一个到。你只是不擅长把关心说出口，但行动从不撒谎。', partner:'SUNNY', partnerText:'她总能一眼看穿你的"不要"其实是"好吧"。', theme:'rin',easter:false },
-   617|  PAGE:  { code:'PAGE',  role:'凛',  tag:'文艺凛',  quote:'露营的终极奥义，是换个风景好的地方看书。', desc:'你选择露营地的标准不是设施好不好，而是——那里安静吗？能看见富士山吗？光线适合看书吗？你会在篝火旁读到深夜，然后第二天清晨被鸟鸣叫醒。世界很吵，但你有自己的节奏。', partner:'LONE', partnerText:'你们会安静地坐在一起，各自看书，偶尔抬头对视一眼，又继续低头。', theme:'rin',easter:false },
-   618|  OWL:   { code:'OWL',   role:'凛',  tag:'夜猫子凛',  quote:'深夜才是主场。凌晨三点的富士山，只属于醒着的人。', desc:'你习惯在别人都睡着之后，一个人坐在篝火旁。有时候看星星，有时候就是发呆。你不是失眠——你只是觉得夜晚比白天更诚实。凌晨的风吹过来的时候，你觉得全世界都是你的。', partner:'LURK', partnerText:'她也在线。你们在不同的地方，看同一片星空。', theme:'rin',easter:false },
-   619|  SPA:   { code:'SPA',   role:'凛',  tag:'温泉凛',  quote:'露营地选在温泉旁边不是偶然，是信仰。', desc:'对你来说，露营的终极享受不是帐篷也不是篝火——是泡完温泉后那一瞬间。你愿意为了一个有温泉的营地多骑几十公里。泡在热水里看着远山的时候，你觉得人生没有过不去的坎。', partner:'SEYANA', partnerText:'她泡温泉的时候一句话不说，你们都很享受这种沉默。', theme:'rin',easter:false },
-   620|  NOM:   { code:'NOM',   role:'抚子', tag:'饿鬼抚子',  quote:'露营的终极奥义就是吃！50个饺子只是开胃菜！', desc:'你看到美食的眼神会让朋友害怕。你的露营计划核心不是"去哪"，而是"吃什么"。你可以在吃完2kg汉堡肉+超大份炒面+拉面之后，说一句"又饿了"——并且是认真的。但你也从不吝啬分享，你做的饭永远够所有人吃。', partner:'CHEF', partnerText:'或者更准确地说，你们就是同一个人。做饭和吃饭，都是你。', theme:'nadeshiko',easter:false },
-   621|  SUNNY: { code:'SUNNY', role:'抚子', tag:'小太阳抚子', quote:'好耶！一起去！大家一起去！', desc:'你像一只金毛——看到谁都热情，去哪都开心，遇到什么事都先笑。你的快乐不需要理由，而且传染性极强。三分钟前还陌生的人，聊完就觉得认识很久了。你不是没有烦恼，你只是觉得没必要让烦恼占太多时间。', partner:'LONE', partnerText:'你是唯一能让她露出笑容的那个人。', theme:'nadeshiko',easter:false },
-   622|  'BOO!':{ code:'BOO!', role:'抚子', tag:'胆小鬼抚子', quote:'别讲了别讲了别讲了——', desc:'怕黑、怕鬼、怕怪谈。听到帐篷外有奇怪的声音会缩进睡袋最深处。但奇怪的是——为了给朋友拍夜景照，你可以一个人走半小时的黑暗山路。恐惧不会让你停下，你只是需要先尖叫一下。', partner:'MOM', partnerText:'她会一边说"真拿你没办法"一边陪你走夜路。', theme:'nadeshiko',easter:false },
-   623|  CHEF:  { code:'CHEF',  role:'抚子', tag:'实验料理王抚子',  quote:'试试这个——巧克力放进咖喱里？还有这个熏制奶酪……', desc:'你对料理没有边界感。锡纸包整颗蔬菜烤？甜酒曲奇？咖喱里放巧克力？你什么都敢试。有时候成功，有时候翻车，但翻车了你也会笑着吃完。你的厨房（或者说篝火旁）永远是最热闹的地方。', partner:'NOM', partnerText:'她负责吃，你负责做，完美循环。', theme:'nadeshiko',easter:false },
-   624|  CHOO:  { code:'CHOO',  role:'抚子', tag:'铁道宅抚子',  quote:'坐齿轨列车比露营还兴奋！露营只是顺便啦。', desc:'你本来只是去露营，结果在途中迷上了Abt式齿轨列车、蒸汽机车、无人车站。你开始研究铁道时刻表，买印着铁道发明家头像的T恤。朋友说"我们不是来露营的吗"，你说"对啊，但你看这个列车——"', partner:'DRIVE', partnerText:'她开车，你坐电车，在不同的轨道上奔赴同一个方向。', theme:'nadeshiko',easter:false },
-   625|  CHAOS: { code:'CHAOS', role:'千明', tag:'整活王千明',  quote:'把自己打包成快递寄到露营地？我觉得可行！', desc:'你就是野活部叫"整活部"的原因。你的脑洞没有边界，你的行动力也没有。你策划的露营计划永远包含至少一个离谱的环节，但最后总能莫名其妙地成功。朋友说你是"麻烦制造机"，你说"不，我是惊喜制造机"。', partner:'DASH', partnerText:'整活需要执行，你们就是彼此的加速器。', theme:'chiaki',easter:false },
-   626|  WEEP:  { code:'WEEP',  role:'千明', tag:'爱哭鬼千明',  quote:'呜呜呜这个露营场太棒了我好感动——', desc:'你是嗓门最大的人，也是泪腺最浅的人。篝火旁聊着聊着突然哭了，看日出哭了，看到朋友偷偷给你准备的生日惊喜哭得更凶。你从不掩饰自己的情绪，哭完笑完，继续整活。', partner:'MOM', partnerText:'她会默默递纸巾，然后假装没看见你哭。', theme:'chiaki',easter:false },
-   627|  BROKE: { code:'BROKE', role:'千明', tag:'穷鬼千明',  quote:'700日元！买了个爹！', desc:'你的露营装备几乎全是二手店淘的。你买过700日元的木碗（后来变成了仙人掌盆），用劣化吊床替代露营椅，自制的熏制器用纸箱做的。你不觉得穷是问题——你觉得穷是创意的催化剂。', partner:'CARB', partnerText:'两人一起逛二手店，互相怂恿"这个可以买"。', theme:'chiaki',easter:false },
-   628|  DASH:  { code:'DASH',  role:'千明', tag:'热血笨蛋千明',  quote:'迷路也是体验！反正会被救的——大概吧！', desc:'你是那种想到什么就冲的人。先出发再查路线，先买了再说怎么用。你经常搞砸，但从不后悔。因为最棒的故事往往来自最离谱的意外。而且你有一个（或者好几个）无论如何都会来救你的朋友。', partner:'DRIVE', partnerText:'她会开车来救你。虽然嘴上骂你，但油门下得很稳。', theme:'chiaki',easter:false },
-   629|  SEYANA:{ code:'SEYANA',role:'葵',  tag:'佛系葵',  quote:'せやな～', desc:'天塌下来？主打一个随缘。你是那个在所有人焦虑的时候说"まあ、なんとかなる"（总会有办法的）的人。你说话带着关西腔的慵懒，行动带着一种从容的节奏。不是不在乎，而是你知道——急也没用。', partner:'CHAOS', partnerText:'她是龙卷风，你是风眼。没有你，她早就把自己吹飞了。', theme:'aoi',easter:false },
-   630|  MOM:   { code:'MOM',   role:'葵',  tag:'老妈子葵',  quote:'先把饭做好，热水烧好，然后你们再闹。', desc:'你是野活组真正的幕后支柱。千明负责整活，你负责善后；抚子负责吃，你负责做。你记得每个人的口味，知道谁需要加衣服，在所有人疯完闹完之后，你已经默默把一切收拾好了。你从不说"我来照顾你们"，但每个人都知道你会的。', partner:'WEEP', partnerText:'她哭的时候，只有你知道什么时候该递纸巾，什么时候该假装没看见。', theme:'aoi',easter:false },
-   631|  USOYARE: { code:'USOYARE', role:'葵',  tag:'骗人精葵',  quote:'我跟你们说，上次我骑自行车……', desc:'你的浓眉一挑，死鱼眼一翻，一段真假难辨的故事即将出口。你编故事的时候面不改色，细节丰富到让人怀疑"难道是真的？"——但谢天谢地，你从不拿重要的事开玩笑。你的「嘘やれ」是野活组的保留节目。', partner:'SHIP', partnerText:'你们俩凑在一起，没人能分清哪句是真的。', theme:'aoi',easter:false },
-   632|  CARB:  { code:'CARB',  role:'葵',  tag:'碳水狂魔葵',  quote:'骑车40公里？不，是为了去那个便利店看看有没有新出的面包。', desc:'你的骑行路线规划不是按距离，是按沿途便利店的数量。你能骑出41km/h的速度——但每次停下来都是因为"这家店看起来不错"。你骑车是为了吃，吃是为了骑车，这是一个完美的循环。', partner:'NOM', partnerText:'你们一起骑车，一起吃饭，一起感叹"人生啊"。', theme:'aoi',easter:false },
-   633|  LURK:  { code:'LURK',  role:'惠那', tag:'云露营惠那',  quote:'人在被炉，心在营地。点赞从不缺席，出门下次一定。', desc:'你是野活组的编外成员——从未正式加入，但每次露营的群聊你都全程在线。你远程给凛提供建议，撮合野活组和凛认识，偶尔还通风报信。你的参与感不靠到场，靠信息量。你知道的永远比在场的人多。', partner:'OWL', partnerText:'你们在不同的地方，看着同一片星空，互相发消息。', theme:'ena',easter:false },
-   634|  SHIP:  { code:'SHIP', role:'惠那', tag:'搞事精惠那',  quote:'りんりん～抚子说她马上到哦～', desc:'其实你根本没告诉抚子。你最大的乐趣不是自己搞事，是看别人因为你的安排而相遇。你促成了凛和野活组的第一次接触，方式是"卖队友"。你笑眯眯地站在幕后，看着一切如你所料地发生。', partner:'CHAOS', partnerText:'你们俩的整活组合，能让整个营地鸡飞狗跳。', theme:'ena',easter:false },
-   635|  DOGGO: { code:'DOGGO', role:'惠那', tag:'爱犬惠那',  quote:'竹轮在哪我在哪。露营可以不去，狗不能不撸。', desc:'你给竹轮买了35000日元的专属露营装备——包括一顶10000日元的狗帐篷。你计划18岁考驾照，不是为了自己，是为了带竹轮去更远的地方。别人问你为什么不加入野活部，你说"还没打算从归宅部毕业"——其实就是想多陪竹轮。', partner:'WAN!', partnerText:'你们不需要语言。你懂它，它懂你。', theme:'ena',easter:false },
-   636|  COZY:  { code:'COZY',  role:'惠那', tag:'被炉星人惠那',  quote:'被炉是宇宙的中心。冬天+被炉+零食+手机=幸福。', desc:'你的作息极其不规律，早起是你最大的敌人。你可以在被炉里度过整个冬天，靠手机远程参与一切社交活动。你知道这样不太好——但被炉真的很暖和，手机真的很好玩，外面的世界可以再等等。', partner:'SEYANA', partnerText:'你们一起躺在被炉里，一句话不说，但都觉得"这样就挺好"。', theme:'ena',easter:false },
-   637|  // Easter eggs
-   638|  'WAN!': { code:'WAN!', role:'竹轮', tag:'竹轮本犬', quote:'汪！', desc:'你不需要成为人群的焦点——你只需要一个人。你的世界不大：就是那个人 + 一个温暖的窝 + 永远摸不完的头。你的幸福公式很简单：被需要 = 幸福。人类露营关你什么事？你在你的小窝里等着就行——反正那个人会带你去。', partner:'DOGGO', partnerText:'她是你的全世界，你是她的全部。', theme:'easter',easter:true },
-   639|  '6CAN': { code:'6CAN', role:'老师', tag:'酒鬼老师', quote:'六罐姐可不是白叫的。', desc:'白天你是所有人的依靠——靠谱、温和、永远在照顾别人。但下班铃一响，脱下外套，打开第一罐啤酒的那一刻，另一个你醒了。你不需要被理解，你只需要再来一罐。戒酒期间你迷上了黄油曲奇——但戒酒结束后又开了一瓶。', partner:'USOYARE', partnerText:'喝醉后听她讲故事，你分不清是自己醉了还是故事太离谱。', theme:'easter',easter:true },
-   640|  SAGE:  { code:'SAGE',  role:'爷爷', tag:'露营仙人', quote:'你年轻时帐篷还是帆布的。', desc:'你走过很多路，修过很多车，认识很多人——但从不刻意。你从不教别人该怎么活，你只是活给他们看。有人问你去哪，你说"随便走走"——然后一走就是一年。你的装备不新，但每一样都有故事。你把帐篷、煤油灯、露营指南书传给下一个人，就像把一种生活方式悄悄种进他们的生命。', partner:'LONE', partnerText:'你们坐在一起，各自看书，偶尔抬头对视一眼。你从没说出来——但她是你见过最像你的人。', theme:'easter',easter:true },
-   641|  '3776': { code:'3776', role:'中毒者', tag:'富士山中毒者', quote:'3776米。这不是数字，是信仰。', desc:'你对富士山的爱超越了理性。你能从任何角度认出富士山，你能说出每个观景点的最佳时间。你看到富士山的时候，会停下一切，安静地看很久。它不只是山——它是你心里的坐标系。不管走多远，只要能看到它，你就知道自己没走丢。', partner:'PAGE', partnerText:'和她一起安静地看富士山，不用说话，就是最好的陪伴。', theme:'easter',easter:true },
-   642|  CHILL: { code:'CHILL', role:'绫乃', tag:'慵懒骑士绫乃', quote:'绫乃的体力是三人中最差的——但没关系，反正骑完摩托瘫在地上也很舒服。', desc:'答应朋友的事你可能拖了很久——但最后你还是骑着摩托、跨了几个县界到了。你体力不好？没事，躺在地上看星星也很舒服。你对朋友的心意从不打折——路上花了多久不重要，重要的是你来了。', partner:'TSUN', partnerText:'你们在路上并排骑行。她开得快，你开得慢，但最后都会在露营地碰头。她知道你一定会到，所以你迟到她也从不催。', theme:'easter',easter:true },
-   643|  DRIVE: { code:'DRIVE', role:'樱姐', tag:'飙车党樱姐', quote:'いいよ。', desc:'你不说"我爱你"，你说"いいよ"。两个字，背后是深夜三小时的山路。朋友凌晨迷路了，你没说"你疯了"，你说"发我定位"。你开车穿过黑夜，不是因为你想露营——是因为有人在那个营地里等你。你表面冷淡，但方向盘从不犹豫。', partner:'DASH', partnerText:'你嘴上骂她冒失，但每次都是你开车去救她。她知道你会来，所以她才敢乱跑。', theme:'easter',easter:true },
-   644|  ASAKA: { code:'ASAKA', role:'亚咲花', tag:'露营之声亚咲花', quote:'露营地放的歌，十首里有五首是你的。', desc:'你不一定在现场，但你的声音在。你唱过的歌变成了别人的露营BGM，变成了他们出发时的闹铃，变成了篝火旁的大合唱。你创造的不是音乐——是记忆的背景音。每一次有人按下播放键，你就陪他们又出发了一次。', partner:'AFRO', partnerText:'你们是彼此的因果。一支笔创造一个世界，一首歌给它温度。不需要见面——歌响起的时候，你们就在一起。', theme:'easter',easter:true },
-   645|  AFRO:  { code:'AFRO',  role:'Afro老师', tag:'部活创世神', quote:'爆炸头是本体，露营是信仰。想不出故事的时候就出去取材。', desc:'你喜欢把去过的地方画进作品里，把认识的人变成角色，把路边吃过的咖喱面画成名场面。你的创作不是凭空想象——是你把生活嚼碎了，重新拼成一幅画。你画的露营地后来变成了别人出发的理由。', partner:'ASAKA', partnerText:'你的世界给了她歌唱的理由，她的歌声让你的世界有了温度。一支笔，一首歌——同一个世界，两种表达。', theme:'easter',easter:true },
-   646|  MONO:  { code:'MONO',  role:'摄影部', tag:'摄影部部员', quote:'用镜头记录的日常，和用帐篷记录的星空，是同一种浪漫。', desc:'别人忽略的瞬间——黄昏的光线角度、路边野猫的哈欠——在你眼里全是宝藏。按下快门不是技术活，是本能。你带着相机走走停停，不知道会拍到什么——但你知道，一定会拍到什么。露营的时候，你比谁都安静，但你的眼里装满了别人没注意到的风景。', partner:'AFRO', partnerText:'你们都是「用画面讲故事」的人。一个画，一个拍——同一个世界，两种表达。', theme:'easter',easter:true },
-   647|  AQUA:  { code:'AQUA',  role:'水水人', tag:'沼津水水人', quote:'山里的咖喱面确实不错。但你来沼津尝尝海边的橘子——那是另一种甜。', desc:'当全世界的露营爱好者都涌向山梨和富士山的时候，你站在駿河湾边微微一笑。你知道好风景不只在山里——海岸线、海上的鸟居、海风里的咸味，同样是出发的理由。你去过本栖湖，也去过海边。你心里的地图，山和海各占一半。', partner:'3776', partnerText:'你们是静冈的一体两面：你爱海，她爱山。3776米加駿河湾，刚好拼成一个完整的静冈。', theme:'easter',easter:true },
-   648|};
-   649|
-   650|// ============================================================
-   651|// DATA: 50 Questions — 20 randomly selected each test
-   652|// ============================================================
-   653|const QUESTIONS = [
-   654|  { text:'你在本栖湖畔搭好帐篷，篝火燃起，天黑了。这时候你……', camp:'rin', options:[
-   655|    {text:'掏出书，在火光下安静地读——这才是此行的目的',scores:{'OWL': 1}},
-   656|    {text:'用炉子烧了热水泡杯咖喱面，端着碗看湖面的富士山倒影',scores:{'NOM': 1, 'CHEF': 1, '3776': 1}},
-   657|    {text:'发了条消息到群里：「本栖湖～今晚在这里」',scores:{'LURK': 1, 'ASAKA': 1, 'COZY': 1}},
-   658|    {text:'安静地坐在湖边，看着湖面倒映的星空——好了，现在可以安心发呆了',scores:{'MONO': 1}}
-   659|  ]},
-   660|  { text:'冬天一个人在山中露营。下雪了，帐篷外一片白，温度降到零下……', camp:'rin', options:[
-   661|    {text:'检查了一遍装备，把暖宝宝贴好，继续看书——这点雪算什么',scores:{'SPA': 2, 'LONE': 1, 'OWL': 1}},
-   662|    {text:'在心里列了一张清单：下次要买更好的睡袋、更好的防潮垫、更好的……',scores:{'BROKE': 2, 'USOYARE': 1}},
-   663|    {text:'拍了段视频发给朋友：「你看，在下雪诶，超美的～」手机还剩2%电',scores:{'LURK': 1, 'DOGGO': 1, 'ASAKA': 1, 'BOO!': 1}}
-   664|  ]},
-   665|  { text:'你骑着摩托车在山路上转弯，富士山突然出现在眼前，大得不像话。你……', camp:'rin', options:[
-   666|    {text:'停下车，安静地看了五分钟。然后继续上路——但嘴角一直没下来',scores:{'3776': 1, 'SPA': 1, 'CHILL': 1}},
-   667|    {text:'「富士山！！！」大叫一声，掏出手机连发了十五条消息，虽然每条内容都差不多',scores:{'3776': 1, 'DASH': 1}},
-   668|    {text:'「3776米……」喃喃自语，然后拿出便当，对着富士山吃了起来',scores:{'3776': 1, 'NOM': 1, 'PAGE': 1}}
-   669|  ]},
-   670|  { text:'一个人露营的清晨。天还没亮你自然醒了。拉开帐篷……', camp:'rin', options:[
-   671|    {text:'泡一杯手冲咖啡，对着富士山慢慢喝。没人说话，也不需要',scores:{'3776': 1, 'SPA': 1}},
-   672|    {text:'掏出手机狂发消息给所有人：「富士山！！你们看！！！」',scores:{'AFRO': 1, 'COZY': 1}},
-   673|    {text:'愣了三秒，然后开始计算这座山海拔多少、从哪个角度拍最好',scores:{'CHOO': 2, 'PAGE': 1}},
-   674|    {text:'走到湖边，发现湖面和天空是同一个颜色。坐在那里看了整整一个小时。后来你经常想起这个黄昏',scores:{'MONO': 1, '3776': 1}}
-   675|  ]},
-   676|  { text:'露营时手机信号不好，一整晚没收到任何消息……', camp:'rin', options:[
-   677|    {text:'本来也没打算看手机。没有信号 = 真正的露营',scores:{'OWL': 1, 'SPA': 1, 'SHIP': 1}},
-   678|    {text:'突然觉得好孤独。录了一段语音想发给朋友，等有信号再发',scores:{'BOO!': 2, 'ASAKA': 1, 'WEEP': 2}},
-   679|    {text:'信号断了之后，某个人发疯一样给你发了三十几条LINE消息——你明早才能看到',scores:{'SHIP': 2, 'CHAOS': 1, 'COZY': 1}},
-   680|    {text:'太好了。没有信号的时候，反而能注意到更多细节——篝火的火焰在黑暗中画出各种形状，一看就是半小时',scores:{'MONO': 1}}
-   681|  ]},
-   682|  { text:'你在山路上看到骑摩托车旅行的陌生人停下来休息。你……', camp:'rin', options:[
-   683|    {text:'如果对方需要帮助，会停下来帮忙——但不会主动搭话',scores:{'OWL': 1, 'DRIVE': 1}},
-   684|    {text:'「这个型号的车好酷！你骑了多远？从哪来的？路上有什么好玩的？」',scores:{'CHOO': 1, 'CHAOS': 1}},
-   685|    {text:'看着对方的摩托车背影，心里想「也许有一天我也能这样」',scores:{'USOYARE': 1, 'DASH': 1, 'DRIVE': 1}},
-   686|    {text:'看着对方和摩托车的背影出了神——不是偷看，是觉得这个画面值得被记住',scores:{'MONO': 1, 'DRIVE': 1}}
-   687|  ]},
-   688|  { text:'露营时，有人在你旁边大声放音乐……', camp:'rin', options:[
-   689|    {text:'戴上降噪耳机，继续看书。各有各的玩法，不干涉',scores:{'OWL': 1, 'PAGE': 1, 'SEYANA': 1}},
-   690|    {text:'「这首歌不错！什么乐队？」——然后变成了一起听歌，还加了LINE好友',scores:{'CHAOS': 1, 'ASAKA': 1, 'SHIP': 1}},
-   691|    {text:'走过去委婉地说：「不好意思，能不能小声一点？我想听篝火的声音。」',scores:{'TSUN': 2, 'MOM': 1}}
-   692|  ]},
-   693|  { text:'露营最后一晚，篝火快灭了。你……', camp:'rin', options:[
-   694|    {text:'看着最后一点火星慢慢熄灭，觉得这一刻和旅途本身一样重要',scores:{'OWL': 1, 'LONE': 1, 'SPA': 1}},
-   695|    {text:'「不要灭啊——」往里面扔了最后几根柴，然后对着火焰发了好一会儿呆',scores:{'BOO!': 2, 'ASAKA': 1}},
-   696|    {text:'已经睡着了。篝火？什么篝火？',scores:{'COZY': 1, 'SEYANA': 1, 'CHILL': 1}}
-   697|  ]},
-   698|  { text:'深夜，一个陌生女孩瑟瑟发抖地出现在你的营地——她骑车来看富士山，结果迷路到现在。你……', camp:'nadeshiko', options:[
-   699|    {text:'虽然有点慌但还是让她坐下了，还分了热可可给她',scores:{'TSUN': 2, 'DOGGO': 1, 'LONE': 1, 'WAN!': 1}},
-   700|    {text:'「骑自行车来的？！你疯了吧！」然后赶紧让她进帐篷暖和',scores:{'MOM': 1, 'WEEP': 1, 'CHAOS': 1}},
-   701|    {text:'打了个电话给她姐姐，确认安全后默默把篝火添旺了些',scores:{'PAGE': 1, 'OWL': 1, 'DRIVE': 1}}
-   702|  ]},
-   703|  { text:'社团讨论第一次正式露营的装备清单。你……', camp:'nadeshiko', options:[
-   704|    {text:'「我带帐篷和炉子就够了，多了装不下」',scores:{'DOGGO': 1, 'CARB': 1}},
-   705|    {text:'「熏制奶酪！烤棉花糖！还有这个新出的限定口味薯片！」——清单上全是吃的',scores:{'CHEF': 2, 'SUNNY': 1}},
-   706|    {text:'「把自己打包寄到露营地比较省运费吧？」——然后真的开始算快递费用',scores:{'CHAOS': 1, 'BROKE': 2, 'DASH': 1, 'SHIP': 1}}
-   707|  ]},
-   708|  { text:'隔壁营地的人煮了一锅超级香的料理，香味飘过来了……', camp:'nadeshiko', options:[
-   709|    {text:'闻着香味继续吃自己的泡面——别人的是别人的',scores:{'TSUN': 1, 'SPA': 1, 'OWL': 1}},
-   710|    {text:'端着自己的碗走过去：「你们在吃什么呀？闻起来好香！」——然后被分了一碗',scores:{'NOM': 1, 'DASH': 1, 'CHEF': 1}},
-   711|    {text:'心里盘算着要不要假装没带够吃的，然后被某个热情的人发现并投喂',scores:{'USOYARE': 2, 'COZY': 1, 'NOM': 1}}
-   712|  ]},
-   713|  { text:'你的朋友在营地煮了一大锅咖喱，结果盐放多了，咸得不行……', camp:'nadeshiko', options:[
-   714|    {text:'默默加了点水，什么都没说。反正能喝',scores:{'TSUN': 2, 'SPA': 1, 'OWL': 1}},
-   715|    {text:'「没事没事，配米饭吃刚刚好！再来一碗！」——然后真的又添了一碗',scores:{'NOM': 1, 'CHEF': 1, 'WEEP': 1}},
-   716|    {text:'「啊……我好像忘了买饮料。算了，咸了就多喝水吧」——其实根本没帮上忙',scores:{'SEYANA': 1, 'WEEP': 1, 'USOYARE': 1}}
-   717|  ]},
-   718|  { text:'你在便利店看到一款新出的「露营限定」口味零食……', camp:'nadeshiko', options:[
-   719|    {text:'拿起来看了看配料表，放下了。下次露营再说',scores:{'CARB': 1}},
-   720|    {text:'「露营限定？买了买了买了！！」——然后买了三包，当场拆了一包',scores:{'NOM': 1, 'DASH': 1}},
-   721|    {text:'发消息到社团群里：「这个有人吃过吗？好吃吗？在线等」——然后在便利店等了十分钟',scores:{'LURK': 1, 'SHIP': 1, 'WEEP': 1}}
-   722|  ]},
-   723|  { text:'你第一次一个人去露营。到了营地，搭好帐篷，天已经全黑了。篝火烧起来之后，你……', camp:'nadeshiko', options:[
-   724|    {text:'掏出手机给朋友发消息：「我一个人到了！这里好安静……有点害怕但又好开心！」',scores:{'SUNNY': 1, 'BOO!': 2, 'LURK': 1, 'WEEP': 1}},
-   725|    {text:'把带来的食材全部摆出来——一个人也要吃三菜一汤，这是原则问题',scores:{'NOM': 1, 'CHEF': 2}},
-   726|    {text:'坐在篝火旁，突然理解了为什么有人喜欢一个人露营。给那个「独行侠前辈」发了条LINE：「我好像懂了。」',scores:{'PAGE': 1, 'TSUN': 1, 'OWL': 1}}
-   727|  ]},
-   728|  { text:'露营当晚，有人开始讲山里的怪谈。帐篷外有风声，远处有动物叫……', camp:'nadeshiko', options:[
-   729|    {text:'「别讲了别讲了别讲了——」整个人缩进睡袋，只露出眼睛',scores:{'BOO!': 2, 'WEEP': 1, 'NOM': 1}},
-   730|    {text:'「嗯～」其实已经快睡着了，根本没在听',scores:{'SEYANA': 2, 'COZY': 1}},
-   731|    {text:'面无表情听着，等讲到最恐怖的地方，突然冷冷地补了一句更吓人的',scores:{'TSUN': 2, 'SHIP': 1, 'BOO!': 1}}
-   732|  ]},
-   733|  { text:'出远门旅行时，你的包里一定会有……', camp:'nadeshiko', options:[
-   734|    {text:'一本书。目的地可以变，书不能不带',scores:{'SPA': 1, 'OWL': 1, 'LONE': 1}},
-   735|    {text:'零食。而且是那种到了目的地会变得更好吃的零食',scores:{'NOM': 1, 'CHEF': 1}},
-   736|    {text:'一本铁道时刻表。你甚至在出发前就把换乘方案做好了',scores:{'CHOO': 2, 'PAGE': 1}}
-   737|  ]},
-   738|  { text:'社团经费捉襟见肘。有人从二手店买回来一个「超便宜的碗」，发现……', camp:'chiaki', options:[
-   739|    {text:'「一千日元买了个破碗？下次经费申请必须过我这关」',scores:{'MOM': 1, '6CAN': 1}},
-   740|    {text:'「七百日元！你被人骗了吧？！」笑得最大声，但也帮忙想办法',scores:{'CHAOS': 2, 'BROKE': 1, 'CHEF': 1}},
-   741|    {text:'「算了算了，反正可以拿回家给我妈装仙人掌」——反正不是你的钱',scores:{'SEYANA': 1, 'USOYARE': 1, 'WEEP': 1}}
-   742|  ]},
-   743|  { text:'大家围坐在篝火旁，有人提议每个人讲一个自己最糗的露营经历……', camp:'chiaki', options:[
-   744|    {text:'「第一次露营忘了带打火机，用放大镜生的火」——讲完发现大家看你的眼神不太对',scores:{'PAGE': 1, 'LONE': 1, 'SHIP': 1}},
-   745|    {text:'「我上次把帐篷搭在斜坡上，半夜滚到了帐篷底部，像睡在滑梯上」——边说边笑到岔气',scores:{'CHAOS': 1, 'BROKE': 1, 'DASH': 1}},
-   746|    {text:'「我……我没什么糗事。真的。」——但脸已经红到篝火都黯然失色',scores:{'USOYARE': 1, 'BOO!': 2, 'DOGGO': 1}}
-   747|  ]},
-   748|  { text:'社团群里有人发了一张新的露营装备图，价格不菲……', camp:'chiaki', options:[
-   749|    {text:'默默存图，打开二手网站搜索同款',scores:{'BROKE': 2, 'CARB': 1, 'LURK': 1}},
-   750|    {text:'「这个好棒！谁买了借我用用！」——然后被群嘲「你自己买啊」',scores:{'CHAOS': 2, 'WEEP': 1}},
-   751|    {text:'「我上次在店里看到过，实际重量比标称重了200克，建议买老款」——发完没人回了',scores:{'CHOO': 2, 'PAGE': 1, '6CAN': 1}}
-   752|  ]},
-   753|  { text:'新年第一天。你许了一个关于露营的愿望……', camp:'chiaki', options:[
-   754|    {text:'「今年也要一个人去更多没去过的地方」',scores:{'LONE': 1, 'OWL': 1, 'CARB': 1}},
-   755|    {text:'「希望今年能带家人/朋友来一次露营」——虽然他们不一定想来',scores:{'SUNNY': 1, 'WEEP': 1, 'MOM': 1, 'DOGGO': 1}},
-   756|    {text:'「希望今年能攒够钱把想买的装备都买了……」——去年的愿望也是这个',scores:{'BROKE': 2, '6CAN': 1}}
-   757|  ]},
-   758|  { text:'露营时，你发现有人偷偷把你的篝火柴抱走了（他以为是公共柴堆）……', camp:'chiaki', options:[
-   759|    {text:'默默去捡了新的柴。反正山里到处都是',scores:{'OWL': 1, 'SHIP': 1, 'COZY': 1}},
-   760|    {text:'「喂喂喂那是我的柴！你拿之前至少问一句吧！」——但最后又分了他一半',scores:{'TSUN': 2, 'CHAOS': 1, 'MOM': 1}},
-   761|    {text:'追上去：「你拿柴要干嘛？要不要顺便一起烤红薯？」——结果变成了一场小型野餐',scores:{'SUNNY': 1, 'CHEF': 1, 'NOM': 1, 'SHIP': 1}}
-   762|  ]},
-   763|  { text:'学校文化祭，社团的展位该怎么布置？', camp:'chiaki', options:[
-   764|    {text:'用卡纸搭了个迷你帐篷展示区，旁边放了真实露营装备给人摸',scores:{'CARB': 1, 'CHEF': 1}},
-   765|    {text:'搞了个「野活部咖啡厅」——卖手冲咖啡和烤棉花糖，生意好到排长队',scores:{'CHEF': 2, 'NOM': 1}},
-   766|    {text:'「我们把被炉搬来吧！」——最后展位变成了一堆人挤在被炉里聊露营趣事',scores:{'COZY': 1, 'AFRO': 1, 'BROKE': 1}}
-   767|  ]},
-   768|  { text:'你发现一条绝美的林间小路，地图上没有标注……', camp:'chiaki', options:[
-   769|    {text:'骑过去看看——大不了掉头。未知本身就是风景',scores:{'DASH': 2, 'LONE': 1, 'DRIVE': 1}},
-   770|    {text:'「这条路太棒了！回头一定要带大家来！」已经在心里列好了邀请名单',scores:{'SUNNY': 1, 'NOM': 1, 'DOGGO': 1}},
-   771|    {text:'先用手机记下路口坐标，查了一遍安全信息，再决定走不走',scores:{'LURK': 2, 'CHOO': 1, 'PAGE': 1}}
-   772|  ]},
-   773|  { text:'社团需要决定下一个露营地点。大家在讨论……', camp:'aoi', options:[
-   774|    {text:'「我推荐这个营地，海拔1500米，有温泉，晚上能看到银河。」——资料已经整理好了',scores:{'LURK': 2, 'PAGE': 1, '3776': 1}},
-   775|    {text:'「去哪都行！只要有好吃的！上次那个营地的烤红薯真的太绝了！」',scores:{'NOM': 1, 'CHEF': 1}},
-   776|    {text:'「随便。你们定吧，反正我跟着去就行。」——其实心里已经想好了三个备选方案',scores:{'SEYANA': 1, 'USOYARE': 2}},
-   777|    {text:'「山里去了很多次了，要不要试试海边？海边露营看日出不用爬山」',scores:{'AQUA': 1}}
-   778|  ]},
-   779|  { text:'你的朋友说「想尝试一个人露营但有点害怕」。你怎么回应？', camp:'aoi', options:[
-   780|    {text:'「一开始害怕很正常。先从离家近的营地开始，带上喜欢的书和吃的，慢慢就习惯了」',scores:{'MOM': 2, 'PAGE': 1}},
-   781|    {text:'「我陪你第一次去！第二次你就不怕了——大概吧！」',scores:{'DASH': 1, 'SUNNY': 1, 'CHAOS': 1}},
-   782|    {text:'发了一堆链接：必买装备清单、推荐的营地、天气预报、附近温泉……比旅行社还详细',scores:{'LURK': 2, 'DOGGO': 1, 'COZY': 1}}
-   783|  ]},
-   784|  { text:'夏天露营，蚊虫非常多。你的防蚊策略是……', camp:'aoi', options:[
-   785|    {text:'全身喷满防蚊喷雾，带了蚊香，帐篷有防蚊网——三重防护，万无一失',scores:{'MOM': 2, 'LONE': 1, 'CARB': 1}},
-   786|    {text:'「蚊子也是大自然的一部分嘛～」——十分钟后，「蚊子太多了救命啊啊啊」',scores:{'BOO!': 2, 'WEEP': 1, 'CHAOS': 1}},
-   787|    {text:'「穿长袖长裤就行了吧？」——结果只有脸被咬了，看起来像过敏',scores:{'SEYANA': 1, 'USOYARE': 1, '6CAN': 1}},
-   788|    {text:'「海边就没那么多蚊子——海风吹着，蚊虫站不住脚」',scores:{'AQUA': 1}}
-   789|  ]},
-   790|  { text:'你正骑着自行车爬一个看不到尽头的上坡。导航显示还有3公里，但你的腿已经快没知觉了……', camp:'aoi', options:[
-   791|    {text:'「嗯～算了，下来推吧。」——推着车走也是一种骑行',scores:{'SEYANA': 2, 'COZY': 1}},
-   792|    {text:'咬牙继续踩——因为山顶有家面包店，据说他们家的蜜瓜包是附近最好吃的',scores:{'CARB': 2, 'NOM': 1, 'DASH': 1}},
-   793|    {text:'「这算什么！上次我从滨松骑到山梨都没死！」——然后开始跟路人吹自己骑过的最远距离',scores:{'USOYARE': 2, 'CHAOS': 1}}
-   794|  ]},
-   795|  { text:'露营时，有人在你面前一本正经地讲了一个「亲身经历」——但你总觉得哪里不对……', camp:'aoi', options:[
-   796|    {text:'「真的假的？！」——然后全信了，还追问细节',scores:{'WEEP': 2, 'SUNNY': 1, 'BOO!': 1}},
-   797|    {text:'「嘛～」——其实你一个字都不信，但懒得拆穿',scores:{'SEYANA': 2, 'SHIP': 1}},
-   798|    {text:'听完之后，面不改色地补了一句更离谱的，现在轮到他怀疑你了',scores:{'USOYARE': 2, 'TSUN': 1, 'CHAOS': 1}}
-   799|  ]},
-   800|  { text:'你在餐厅打工攒钱买露营装备。有顾客来买东西，你发现他买的都是露营相关的东西……', camp:'aoi', options:[
-   801|    {text:'默默算了一下总价，心想「这位也是露营人啊」',scores:{'PAGE': 1, 'MOM': 1, 'CARB': 1, 'BROKE': 1}},
-   802|    {text:'「这个炉子超好用的！上次我用它烧水泡了杯咖喱面，绝了！」',scores:{'SUNNY': 1, 'NOM': 1, '6CAN': 1, 'AFRO': 1}},
-   803|    {text:'结完账对着顾客的背影说了一句「一路顺风」，虽然不知道对方要去哪',scores:{'MOM': 2, 'USOYARE': 1, 'SEYANA': 1}},
-   804|    {text:'「您也是露营爱好者啊？山里还是海边？我两个都喜欢，但最近觉得海边也不错——」',scores:{'AQUA': 1}}
-   805|  ]},
-   806|  { text:'大家决定去泡温泉。脱了衣服发现旁边池子里居然是熟人……', camp:'aoi', options:[
-   807|    {text:'装作若无其事继续泡。内心：「为什么她们也在」——但也没走',scores:{'SPA': 2, 'LONE': 1, 'TSUN': 1}},
-   808|    {text:'「哇好巧好巧好巧！」——直接跨池子过来了',scores:{'SUNNY': 1, 'CHAOS': 1, 'NOM': 1, 'CHEF': 1}},
-   809|    {text:'泡在温泉里闭着眼，一句话没说，脸不知道是被蒸气烫的还是别的什么原因',scores:{'USOYARE': 1, 'ASAKA': 1, 'CHILL': 1}}
-   810|  ]},
-   811|  { text:'你的LINE状态栏写着「正在露营中」。有人评论「好想一起去」，你……', camp:'ena', options:[
-   812|    {text:'已读不回。默默计划着下次独自出发的路线',scores:{'OWL': 2, 'LONE': 1, 'PAGE': 1}},
-   813|    {text:'「来呀来呀！下次一起去！」——但你已经在群里发完定位了',scores:{'SUNNY': 1, 'COZY': 1, 'LURK': 1, 'SHIP': 2}},
-   814|    {text:'「りんりん～下次一起去怎么样？」——其实你根本没打算去，但不妨碍你撮合别人去',scores:{'SHIP': 2, 'WAN!': 1, 'CHILL': 1}}
-   815|  ]},
-   816|  { text:'社团的LINE群里，有人深夜三点发了一条「好想去看星星」……', camp:'ena', options:[
-   817|    {text:'第二天早上看到，回了一句「看到了。下次去。晚安。」',scores:{'LONE': 1, 'TSUN': 1, 'PAGE': 1, 'SHIP': 1}},
-   818|    {text:'「走啊！！现在就去！！」——然后发现只有自己在激动，其他人全在睡',scores:{'CHAOS': 1, 'SHIP': 1, 'CHILL': 1}},
-   819|    {text:'你也是凌晨三点没睡的人。你回了一句「走吧」，然后真的拿着车钥匙出门了',scores:{'DRIVE': 1, 'DASH': 1, 'USOYARE': 1}}
-   820|  ]},
-   821|  { text:'一个雨天，你本来计划去露营但取消了。在家你怎么过？', camp:'ena', options:[
-   822|    {text:'搭了个室内帐篷，泡了杯咖啡，打开露营视频当背景音——假装自己在山里',scores:{'SPA': 2, 'LONE': 1, 'COZY': 1}},
-   823|    {text:'把所有装备翻出来擦了一遍，重新整理了背包，列了下一次露营的采购清单',scores:{'CARB': 2, 'MOM': 1, 'CHOO': 1}},
-   824|    {text:'窝在被炉里刷了一整天露营博主的视频，然后给每个人发了「下次一起去这里！！」',scores:{'COZY': 1, 'LURK': 1}}
-   825|  ]},
-   826|  { text:'有人提议大家一起去看元旦日出。凌晨四点集合，有人迟到了……', camp:'ena', options:[
-   827|    {text:'四点钟准时到了，给每个人发了一条「人呢」的LINE，然后就安静等着',scores:{'LONE': 1, 'PAGE': 1, 'MOM': 1, 'CHOO': 1}},
-   828|    {text:'「对不起对不起对不起！！！」从远处跑过来，围巾都跑散了一半',scores:{'DASH': 1, 'BROKE': 1, 'WEEP': 1, 'BOO!': 1}},
-   829|    {text:'你根本没来。你躺在被炉里刷着群聊，看他们一边等人一边骂你',scores:{'COZY': 1, 'LURK': 1, 'CHILL': 1, 'DRIVE': 1}}
-   830|  ]},
-   831|  { text:'你在地铁/公交上看到有人背着大包露营装备……', camp:'ena', options:[
-   832|    {text:'默默观察对方的装备品牌和型号，心里评估了一下搭配',scores:{'LURK': 2, 'CHOO': 1, 'CARB': 1}},
-   833|    {text:'「您好！请问您是要去露营吗？去哪？用什么帐篷？推荐吗？」——对方可能想换车厢',scores:{'SUNNY': 1, 'CHAOS': 1, 'AFRO': 1, 'BROKE': 1}},
-   834|    {text:'看了一眼，然后继续看手机。但嘴角微微上扬——「同好」',scores:{'TSUN': 2, 'LONE': 1}}
-   835|  ]},
-   836|  { text:'你在房间墙上贴了一张地图，上面标记了……', camp:'ena', options:[
-   837|    {text:'所有去过的地方，用不同颜色的图钉区分季节。下面还有一本手写笔记',scores:{'PAGE': 1, 'OWL': 1, 'CHOO': 2, 'AFRO': 1}},
-   838|    {text:'所有想去的地方，已经插了快三十个图钉。每次看到都觉得自己还有好多地方没去',scores:{'DASH': 1, 'SUNNY': 1, '3776': 1, 'BROKE': 1}},
-   839|    {text:'其实没有地图。你在手机备忘录里存了一个列表，但自己也经常忘了看',scores:{'SEYANA': 2, 'LURK': 1, 'COZY': 1}}
-   840|  ]},
-   841|  { text:'凌晨一点，你朋友从露营地打来电话，声音有点慌：「我好像……找不到回帐篷的路了。」你……', camp:'ena', options:[
-   842|    {text:'「发我定位，我马上到。」——虽然你离她有两个小时车程，但你已经拿起了车钥匙',scores:{'DRIVE': 2, 'DASH': 1, 'MOM': 1}},
-   843|    {text:'打开地图，远程指导她：「你先往东走，看到那个大石头了吗？对，就是那个，然后左转……」',scores:{'LURK': 2, 'MOM': 1, 'CHOO': 1}},
-   844|    {text:'「你往天上看，看到北斗七星了吗？朝着那个方向走。」——你其实也不知道管不管用',scores:{'SAGE': 2, 'SHIP': 1, 'USOYARE': 1}}
-   845|  ]},
-   846|  { text:'露营结束，大家聚在居酒屋。有人提议干杯……', camp:'easter', options:[
-   847|    {text:'「先来六罐啤酒，一人一罐。」——然后一个人喝了四罐，开始讲年轻时露营的故事',scores:{'6CAN': 2, 'SAGE': 1, 'CHAOS': 1}},
-   848|    {text:'「我不喝酒，给我乌龙茶。」——但旁边的人都在说「你上次也这么说」',scores:{'USOYARE': 1, 'SHIP': 1}},
-   849|    {text:'发了一条动态到SNS：「又一次露营，又一次干杯」',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}}
-   850|  ]},
-   851|  { text:'你最喜欢的一件露营装备，它的故事是……', camp:'easter', options:[
-   852|    {text:'是爷爷用过的老式煤油灯，有几十年的历史，上面的划痕都是故事',scores:{'SAGE': 2, 'LONE': 1, 'WAN!': 1}},
-   853|    {text:'是自己打工攒了两个月买的睡袋——拿到手那晚抱着睡了一觉',scores:{'SUNNY': 1, 'BROKE': 2, 'NOM': 1, 'DOGGO': 1}},
-   854|    {text:'其实是别人送的。每次用它的时候都会想起那个人',scores:{'DOGGO': 2, 'COZY': 1, 'SEYANA': 1, 'CHOO': 1}}
-   855|  ]},
-   856|  { text:'你正准备出门露营，你的狗（或者你想象中的狗）看到你拿出装备……', camp:'easter', options:[
-   857|    {text:'直接跳进你的背包里，用眼神告诉你：「不带我，你也别想走。」',scores:{'WAN!': 1, 'SUNNY': 1, 'DASH': 1}},
-   858|    {text:'淡定地趴在窝里，一副「你走吧，反正你回来还得撸我」的表情',scores:{'DOGGO': 2, 'TSUN': 1, 'SEYANA': 1}},
-   859|    {text:'叼着它最喜欢的玩具过来，放在你的装备旁边，然后抬头看你',scores:{'WEEP': 1, 'MOM': 1}}
-   860|  ]},
-   861|  { text:'圣诞节。社团决定办圣诞露营，每个人要带一份礼物来交换……', camp:'mixed', options:[
-   862|    {text:'非常认真地挑了一个实用露营装备，包装得工工整整',scores:{'DOGGO': 2, 'LONE': 1, 'MOM': 1}},
-   863|    {text:'「我带了袜子和暖宝宝！」——把家里多余的东西拿来凑数，但包装纸是全场最闪的',scores:{'SUNNY': 1, 'COZY': 1, 'BROKE': 1, 'CARB': 1}},
-   864|    {text:'带了一本露营指南书，扉页上写着「爷爷年轻时用的就是这本」——全场最复古',scores:{'SAGE': 2, 'PAGE': 1, 'DASH': 1}}
-   865|  ]},
-   866|  { text:'毕业季。大家讨论毕业后各自的打算……', camp:'mixed', options:[
-   867|    {text:'「继续露营。一个人也好，一群人也罢，帐篷在哪我在哪」',scores:{'DASH': 2, 'LONE': 1, 'TSUN': 1}},
-   868|    {text:'「去哪不重要，重要的是露营的时候还能不能吃到好吃的……」',scores:{'NOM': 1, 'WEEP': 1, 'SUNNY': 1}},
-   869|    {text:'「嗯～反正你们的群聊我不会退，到时候你们去哪我就跟去哪」',scores:{'SEYANA': 1, 'MOM': 1, 'COZY': 1}}
-   870|  ]},
-   871|  { text:'旅途中看到一个绝佳的风景。你停下来，发现这个位置……', camp:'mixed', options:[
-   872|    {text:'安静地看了很久，把它记在心里，不拍照不发动态',scores:{'OWL': 1, 'PAGE': 1, 'LONE': 1}},
-   873|    {text:'从五个角度看了十五分钟，选了最好看的角度，发了一条SNS动态',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}},
-   874|    {text:'掏出笔记本，只画了一张速写，对自己说「剩下的等回去再慢慢想」',scores:{'CARB': 1, 'PAGE': 1, 'CHOO': 1}},
-   875|    {text:'「这个角度……如果等日落再看，光线会更好。」——然后真的坐下来等了二十分钟',scores:{'MONO': 1}}
-   876|  ]},
-   877|  { text:'樱花季，你来到一个樱花树下的露营地点。樱花正满开……', camp:'mixed', options:[
-   878|    {text:'把帐篷搭在花瓣飘不到的地方（要清理很麻烦），然后安静地看书赏花',scores:{'LONE': 1, 'PAGE': 1, 'SPA': 1, 'WAN!': 1}},
-   879|    {text:'「樱花+露营！这是什么神仙组合！！」——激动得原地转了三圈，然后开始做樱花主题的露营便当',scores:{'CHEF': 2, 'SUNNY': 1, 'AFRO': 1}},
-   880|    {text:'把帐篷搭在樱花树下，然后躺在帐篷里透过天窗看花瓣飘落——被花瓣埋了半截帐篷也不在意',scores:{'COZY': 2, 'CHILL': 1, 'SEYANA': 1}}
-   881|  ]},
-   882|  { text:'秋天露营，营地周围全是红叶。你……', camp:'mixed', options:[
-   883|    {text:'泡了杯茶，坐在折叠椅上，看着红叶发呆——这就是秋天的正确打开方式',scores:{'SPA': 2, 'OWL': 1, 'PAGE': 1, 'CHILL': 1}},
-   884|    {text:'捡了一大把红叶，说要带回去做书签，结果一路掉了一大半',scores:{'DASH': 1, 'BOO!': 1, 'SUNNY': 1}},
-   885|    {text:'捡了一大把红叶夹进笔记本里，说「等压干了就知道好不好看了」——可能要等半年',scores:{'CARB': 1, 'CHOO': 1, 'ASAKA': 1}}
-   886|  ]},
-   887|  { text:'你在露营时看到一只野生小动物（松鼠/狐狸/鹿）靠近营地……', camp:'mixed', options:[
-   888|    {text:'一动不动，屏住呼吸，用眼睛记录这一刻——不想打扰它',scores:{'OWL': 2, 'PAGE': 1, 'LONE': 1}},
-   889|    {text:'「好可爱好可爱好可爱！！！」——小声尖叫，然后激动得手舞足蹈，结果把动物吓跑了',scores:{'SUNNY': 1, 'BOO!': 1, 'ASAKA': 1, 'USOYARE': 1}},
-   890|    {text:'「别过来别过来，我什么都没带给你吃……」——但其实偷偷掰了一小块饼干放在远处',scores:{'DOGGO': 2, 'TSUN': 1, 'WAN!': 1}}
-   891|  ]},
-   892|  { text:'露营时突然下起大雨，你的帐篷开始漏水……', camp:'mixed', options:[
-   893|    {text:'冷静地拿出防水胶带，找到漏水点，三分钟修好。然后继续看书',scores:{'CARB': 1, 'MOM': 1, '3776': 1, 'SHIP': 1}},
-   894|    {text:'「啊啊啊我的睡袋要湿了！！」——手忙脚乱地把所有东西往中间堆，结果自己没地方坐了',scores:{'BOO!': 2, 'WEEP': 1, 'CHAOS': 1}},
-   895|    {text:'「反正都湿了，不如去泡个温泉吧」——然后真的收拾东西去了最近的温泉',scores:{'SPA': 2, 'SEYANA': 1, 'CHILL': 1, 'DRIVE': 1}}
-   896|  ]},
-   897|  { text:'你攒了很久的钱，终于可以买一件高级露营装备。你选……', camp:'mixed', options:[
-   898|    {text:'一个能抗零下20度的睡袋。实用第一，好看第二',scores:{'CARB': 2, 'LONE': 1, 'SPA': 1}},
-   899|    {text:'一个超轻的钛合金炉子。煮什么都快，而且背着不累',scores:{'CHEF': 2, 'CHOO': 1, 'DASH': 1}},
-   900|    {text:'一个复古设计的煤油灯。虽然重，但每次点亮都觉得自己在拍电影',scores:{'SAGE': 2, 'PAGE': 1, 'AFRO': 1}}
-   901|  ]},
-   902|  { text:'周五晚上，你收到一条消息：「明天去露营吧！」——但什么都没准备……', camp:'mixed', options:[
-   903|    {text:'「好。」——十分钟后已经收拾好背包，装备常年备着，随时可以出发',scores:{'DASH': 2, 'LONE': 1, 'CARB': 1}},
-   904|    {text:'「啊啊啊我没吃的！谁有多的零食？我出钱买！」——然后真的开始挨个私聊',scores:{'NOM': 1, 'BROKE': 1, 'WEEP': 1}},
-   905|    {text:'「明天？那我今晚不睡了，先把装备单列出来……」——凌晨三点还在查天气预报',scores:{'MOM': 2, 'CHOO': 1, 'LURK': 1}}
-   906|  ]},
-   907|  { text:'如果可以选择一种超能力带去露营，你选……', camp:'mixed', options:[
-   908|    {text:'瞬间点燃篝火。方便、实用、不废话',scores:{'SPA': 1, 'CARB': 1, '6CAN': 1, 'AFRO': 1}},
-   909|    {text:'和动物说话。想知道营地附近那只松鼠每天都在聊什么',scores:{'DOGGO': 2, 'WAN!': 1, 'SUNNY': 1}},
-   910|    {text:'让食物永远吃不完。野营最大的焦虑就是粮食不够',scores:{'NOM': 1, 'CHEF': 1, 'BROKE': 1}}
-   911|  ]},
-   912|  { text:'如果让你选一个地方发呆一整天，你会选……', camp:'mixed', options:[
-   913|    {text:'山顶。云在脚下，世界在远处，安静得能听见自己的心跳',scores:{'3776': 1}},
-   914|    {text:'海边。潮汐的声音有一种山无法替代的节奏——涨潮、退潮、再涨潮',scores:{'AQUA': 1}},
-   915|    {text:'森林深处。阳光透过树叶洒下来，地上有松果和蘑菇，像走进另一个世界',scores:{'PAGE': 1}},
-   916|    {text:'哪里都行——只要有一把舒服的椅子',scores:{'SEYANA': 1}}
-   917|  ]},
-   918|  { text:'你看到一片让人心动的风景，你的第一反应是……', camp:'easter', options:[
-   919|    {text:'掏出手机，快记下来，发了再说——好的风景转瞬即逝',scores:{'DASH': 1}},
-   920|    {text:'先看，再想，最后记录。如果值得，多等几分钟也无妨——光线会变，角度可以更好',scores:{'MONO': 1}},
-   921|    {text:'不记录。有些风景用眼睛看就够了，任何记录反而会打断那个瞬间',scores:{'LONE': 1}},
-   922|    {text:'记了，但总觉得记不住眼睛看到的感觉。算了，下次再来看',scores:{'WEEP': 1}}
-   923|  ]},
-   924|  { text:'露营时，你最享受哪种「等待」？', camp:'easter', options:[
-   925|    {text:'等篝火烧到最旺——那十分钟的火焰，值得之前半小时的添柴',scores:{'SPA': 1, 'OWL': 1}},
-   926|    {text:'等日出。半夜起来摸黑走到观景点，看着天边一点点亮起来——每次都觉得值',scores:{'3776': 1}},
-   927|    {text:'等一锅水烧开。泡面也好咖啡也好，等待让结果变得更好',scores:{'NOM': 1}},
-   928|    {text:'等天完全黑下来。从黄昏到黑夜，天空的颜色一层层变——那种渐变，赶时间的人永远看不到',scores:{'MONO': 1, 'SAGE': 1}}
-   929|  ]},
-   930|  { text:'你的露营目的地偏好……', camp:'easter', options:[
-   931|    {text:'山。越高越好，越安静越好，越接近天空越好',scores:{'LONE': 1}},
-   932|    {text:'海。山是孤独的，海是开阔的——你更喜欢那种没有边界的辽阔感',scores:{'AQUA': 1}},
-   933|    {text:'湖。不偏不倚，有山有水的倒影，比海安静比山温柔',scores:{'COZY': 1}},
-   934|    {text:'无所谓。重要的是去，不是去哪',scores:{'DASH': 1}}
-   935|  ]},
-   936|  { text:'翻开手机相册，你发现露营时拍得最多的是……', camp:'mixed', options:[
-   937|    {text:'风景。山、湖、日出、星空——它们不会跑，所以可以慢慢拍',scores:{'3776': 1}},
-   938|    {text:'人。朋友在篝火旁的笑脸、一起做饭的背影——风景没有他们重要',scores:{'SUNNY': 1}},
-   939|    {text:'食物。每一顿饭都值得被记录，拍完才准吃',scores:{'NOM': 1}},
-   940|    {text:'细节。柴火堆上的纹理、帐篷拉链上的露珠、被踩弯的野草——这些才是真实的露营',scores:{'MONO': 1, 'PAGE': 1}}
-   941|  ]},
-   942|  { text:'你一个人在海边露营。天黑了，你坐在沙滩上看着海……', camp:'mixed', options:[
-   943|    {text:'觉得有点无聊。海太开阔了，没有山的包围感——下次还是去山里吧',scores:{'3776': 1, 'LONE': 1}},
-   944|    {text:'觉得刚刚好。海浪声比山里的风声更催眠，而且地平线比山脊线更好看',scores:{'AQUA': 1, 'CHILL': 1}},
-   945|    {text:'掏出手机给朋友发消息：「山顶也不错诶，下次一起来吧」',scores:{'SUNNY': 1, 'COZY': 1}},
-   946|    {text:'看着远方发呆——山间的雾气像纱一样飘过，星空清晰得像针尖',scores:{'MONO': 1, 'OWL': 1}}
-   947|  ]},
-   948|  { text:'除了露营，你平时还有什么特别着迷的事？', camp:'mixed', options:[
-   949|    {text:'没什么特别的。露营的时候才会想起来自己还有别的爱好',scores:{'TSUN': 1}},
-   950|    {text:'什么都喜欢——路边的小花、咖啡杯里的倒影、街上偶遇的猫、朋友打瞌睡的样子，都值得好好看看',scores:{'MONO': 1}},
-   951|    {text:'陪家人和狗。风景是顺便的，他们才是主题',scores:{'DOGGO': 2}},
-   952|    {text:'篝火旁的歌声。朋友在弹吉他，其他人在合唱——你录了一段，回来反复听',scores:{'AQUA': 1, 'CHOO': 1}}
-   953|  ]},
-   954|  { text:'你偶尔会想：如果没有喜欢上露营，现在的你会喜欢什么？', camp:'easter', options:[
-   955|    {text:'还是会喜欢户外——可能是登山、骑行、钓鱼。反正离不开大自然',scores:{'CARB': 1}},
-   956|    {text:'可能会喜欢摄影。本质上是一样的——一个人去没去过的地方，然后用自己的方式把它留下来',scores:{'MONO': 1}},
-   957|    {text:'可能会住在海边，每天看潮起潮落。山有山的魅力，但海有海的自由',scores:{'AQUA': 1}},
-   958|    {text:'想不出来。露营已经是你生活的一部分，就像呼吸一样，不需要替代品',scores:{'DASH': 1}}
-   959|  ]},
-   960|  { text:'如果有人送你一份「露营相关」的礼物，你最希望是……', camp:'easter', options:[
-   961|    {text:'一本露营指南书。里面夹着爷爷年轻时手写的笔记',scores:{'SAGE': 1}},
-   962|    {text:'一台老式胶片相机。虽然重，但每次过片的声音都让你觉得「这一张，值得认真对待」',scores:{'MONO': 1}},
-   963|    {text:'一张海边的露营地年卡。365天，随时可以去看潮汐',scores:{'AQUA': 1}},
-   964|    {text:'一个能装下所有食材的保冷箱。实用至上，浪漫靠边',scores:{'NOM': 1}}
-   965|  ]},
-   966|  { text:'如果有一天你老了，你会选择住在哪里？', camp:'easter', options:[
-   967|    {text:'山脚下。推开窗就能看到富士山，每天清晨被鸟鸣叫醒',scores:{'3776': 1, 'SAGE': 1}},
-   968|    {text:'海边。每天看一遍潮起潮落，海风会把所有烦恼吹走',scores:{'AQUA': 1, 'CHILL': 1}},
-   969|    {text:'哪里都行，但旁边一定要有好吃的——老了更不能亏待自己的胃',scores:{'NOM': 1}},
-   970|    {text:'一个有暗房的小房子。白天拍照，晚上冲洗，墙上挂满一辈子的快门',scores:{'MONO': 1, 'PAGE': 1}}
-   971|  ]},
-   972|
-   973|];
-   974|
-   975|// ============================================================
-   976|// STATE
-   977|// ============================================================
-   978|let shuffledQuestions = [];
-   979|let currentQ = 0;
-   980|let scores = {};
-   981|let questionOrder = [];
-   982|
-   983|function shuffle(arr) {
-   984|  const a = [...arr];
-   985|  for (let i = a.length - 1; i > 0; i--) {
-   986|    const j = Math.floor(Math.random() * (i + 1));
-   987|    [a[i], a[j]] = [a[j], a[i]];
-   988|  }
-   989|  return a;
-   990|}
-   991|
-   992|// ============================================================
-   993|// SCREENS
-   994|// ============================================================
-   995|function showScreen(id) {
-   996|  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-   997|  document.getElementById(id).classList.add('active');
-   998|  // Only result page allows scrolling; other pages locked
-   999|  if (id === 'resultScreen') {
-  1000|    document.body.style.overflowY = 'auto';
-  1001|    document.body.style.overflowX = 'hidden';
-  1002|    document.body.style.justifyContent = 'flex-start';
-  1003|  } else {
-  1004|    document.body.style.overflow = 'hidden';
-  1005|    document.body.style.justifyContent = 'center';
-  1006|  }
-  1007|}
-  1008|
-  1009|function selectQuestions(questions, count) {
-  1010|  // 阵营均衡抽题：五大阵营各至少 2 题，彩蛋至少 1 题
-  1011|  const byCamp = {};
-  1012|  for (let i = 0; i < questions.length; i++) {
-  1013|    const c = questions[i].camp;
-  1014|    if (!byCamp[c]) byCamp[c] = [];
-  1015|    byCamp[c].push(i);
-  1016|  }
-  1017|  const mainCamps = ['rin', 'nadeshiko', 'chiaki', 'aoi', 'ena'];
-  1018|  const guaranteed = [];
-  1019|  for (const camp of mainCamps) {
-  1020|    const pool = byCamp[camp] || [];
-  1021|    shuffleArray(pool);
-  1022|    guaranteed.push(...pool.slice(0, 2));
-  1023|  }
-  1024|  if (byCamp['easter']) {
-  1025|    shuffleArray(byCamp['easter']);
-  1026|    guaranteed.push(byCamp['easter'][0]);
-  1027|  }
-  1028|  const used = new Set(guaranteed);
-  1029|  const remaining = [];
-  1030|  for (let i = 0; i < questions.length; i++) {
-  1031|    if (!used.has(i)) remaining.push(i);
-  1032|  }
-  1033|  shuffleArray(remaining);
-  1034|  const selected = [...guaranteed, ...remaining.slice(0, count - guaranteed.length)];
-  1035|  shuffleArray(selected);
-  1036|  return selected.map(i => questions[i]);
-  1037|}
-  1038|
-  1039|function shuffleArray(arr) {
-  1040|  for (let i = arr.length - 1; i > 0; i--) {
-  1041|    const j = Math.floor(Math.random() * (i + 1));
-  1042|    [arr[i], arr[j]] = [arr[j], arr[i]];
-  1043|  }
-  1044|}
-  1045|
-  1046|function startQuiz() {
-  1047|  scores = {};
-  1048|  currentQ = 0;
-  1049|  // 阵营均衡抽题：从 50 题中选 20 题
-  1050|  shuffledQuestions = selectQuestions(QUESTIONS, 20);
-  1051|  questionOrder = shuffledQuestions.map((_, i) => i);
-  1052|  showScreen('quizScreen');
-  1053|  renderQuestion();
-  1054|}
-  1055|
-  1056|function renderQuestion() {
-  1057|  const q = shuffledQuestions[currentQ];
-  1058|  const total = shuffledQuestions.length;
-  1059|  document.getElementById('progressFill').style.width = ((currentQ / total) * 100) + '%';
-  1060|  document.getElementById('qCounter').textContent = `第 ${currentQ + 1} / ${total} 题`;
-  1061|  document.getElementById('qText').textContent = q.text;
-  1062|  const optsEl = document.getElementById('options');
-  1063|  optsEl.innerHTML = '';
-  1064|  // Shuffle options for variety
-  1065|  const labels = ['A','B','C','D'];
-  1066|  const shuffled = q.options.map((opt, i) => ({...opt, origIdx: i}));
-  1067|  for (let i = shuffled.length - 1; i > 0; i--) {
-  1068|    const j = Math.floor(Math.random() * (i + 1));
-  1069|    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  1070|  }
-  1071|  shuffled.forEach((opt, i) => {
-  1072|    const btn = document.createElement('button');
-  1073|    btn.className = 'option';
-  1074|    btn.textContent = labels[i] + '. ' + opt.text;
-  1075|    btn.addEventListener('click', () => selectOption(opt.origIdx));
-  1076|    optsEl.appendChild(btn);
-  1077|  });
-  1078|}
-  1079|
-  1080|function selectOption(idx) {
-  1081|  const q = shuffledQuestions[currentQ];
-  1082|  const opt = q.options[idx];
-  1083|  
-  1084|  // Visual feedback: highlight selected
-  1085|  const allOpts = document.querySelectorAll('.option');
-  1086|  allOpts.forEach(o => o.style.pointerEvents = 'none');
-  1087|  // Find the button that corresponds to this option
-  1088|  const buttons = document.querySelectorAll('#options .option');
-  1089|  for (const btn of buttons) {
-  1090|    if (btn.textContent.includes(opt.text.substring(0, 10))) {
-  1091|      btn.classList.add('selected');
-  1092|      break;
-  1093|    }
-  1094|  }
-  1095|  
-  1096|  // Add scores
-  1097|  for (const [key, val] of Object.entries(opt.scores)) {
-  1098|    scores[key] = (scores[key] || 0) + val;
-  1099|  }
-  1100|  
-  1101|  setTimeout(() => {
-  1102|    currentQ++;
-  1103|    if (currentQ >= shuffledQuestions.length) {
-  1104|      showResult();
-  1105|    } else {
-  1106|      renderQuestion();
-  1107|      document.getElementById('progressFill').style.width = ((currentQ / shuffledQuestions.length) * 100) + '%';
-  1108|      document.getElementById('qCounter').textContent = `第 ${currentQ + 1} / ${shuffledQuestions.length} 题`;
-  1109|    }
-  1110|  }, 200);
-  1111|}
-  1112|
-  1113|// ============================================================
-  1114|// MATCHING ALGORITHM
-  1115|// ============================================================
-  1116|function computeResult() {
-  1117|  // Get all 22 main personalities sorted by score
-  1118|  const mainKeys = Object.keys(PERSONALITIES).filter(k => !PERSONALITIES[k].easter);
-  1119|  mainKeys.sort((a, b) => (scores[b] || 0) - (scores[a] || 0));
-  1120|  
-  1121|  // Get top 2, randomly pick one
-  1122|  const top2 = mainKeys.slice(0, 2);
-  1123|  const pick = top2[Math.floor(Math.random() * Math.min(2, top2.length))];
-  1124|  
-  1125|  // Check easter eggs: score >= 3 AND probabilistic chance
-  1126|  // Easter triggers with probability = easterScore / (mainMax * 7)
-  1127|  const mainMax = scores[top2[0]] || 0;
-  1128|  const easterKeys = Object.keys(PERSONALITIES).filter(k => PERSONALITIES[k].easter);
-  1129|  const qualified = easterKeys.filter(k => (scores[k] || 0) >= 3);
-  1130|  
-  1131|  if (qualified.length > 0 && mainMax > 0) {
-  1132|    // Sort by score descending
-  1133|    qualified.sort((a, b) => (scores[b] || 0) - (scores[a] || 0));
-  1134|    // Check each qualified easter with probability
-  1135|    for (const ek of qualified) {
-  1136|      const prob = (scores[ek] || 0) / (mainMax * 7);
-  1137|      if (Math.random() < prob) {
-  1138|        return { key: ek, easter: true };
-  1139|      }
-  1140|    }
-  1141|  }
-  1142|  
-  1143|  return { key: pick, easter: false };
-  1144|}
-  1145|
-  1146|function showResult() {
-  1147|  const result = computeResult();
-  1148|  const p = PERSONALITIES[result.key];
-  1149|  const partner = PERSONALITIES[p.partner];
-  1150|  
-  1151|  showScreen('resultScreen');
-  1152|  
-  1153|  // Apply theme color
-  1154|  const rs = document.getElementById('resultScreen').querySelector('.result-screen');
-  1155|  rs.className = 'result-screen theme-' + (p.theme || 'rin');
-  1156|  
-  1157|  // Hero image — use default for now, personality-specific images later
-  1158|  var heroImg = document.querySelector('#resultHero img');
-  1159|  heroImg.src = HERO_DEFAULT;
-  1160|
-  1161|  document.getElementById('easterTag').innerHTML = result.easter ? '<span class="easter-tag">🔒 隐藏人格解锁</span>' : '';
-  1162|  document.getElementById('resultBadge').textContent = 'YCTI · 摇曳露营人格';
-  1163|  document.getElementById('resultCode').textContent = p.code;
-  1164|  document.getElementById('resultRole').textContent = p.tag;
-  1165|  document.getElementById('resultQuote').textContent = p.quote;
-  1166|  document.getElementById('resultDesc').textContent = p.desc;
-  1167|  var ptColor = THEME_COLORS[partner.theme] || '#7eb8da';
-  1168|  document.getElementById('resultPartner').innerHTML = 
-  1169|    '🤝 最佳拍档：<strong style="color:' + ptColor + '">' + partner.code + '</strong> <span style="color:var(--text)">' + partner.tag + '</span> — ' + p.partnerText;
-  1170|  
-  1171|  // Store for sharing
-  1172|  window._resultData = { code: p.code, tag: p.tag, quote: p.quote, desc: p.desc, 
-  1173|    partnerCode: partner.code, partnerTag: partner.tag, partnerText: p.partnerText, easter: result.easter, theme: p.theme, partnerTheme: partner.theme };
-  1174|
-  1175|  // Submit to GitHub stats
-  1176|  ghStatsSubmit(result.key);
-  1177|}
-  1178|
-  1179|function restartQuiz() {
-  1180|  showScreen('startScreen');
-  1181|}
-  1182|
-  1183|// ============================================================
-  1184|// SHARE (Canvas) — mirrors #resultScreen layout exactly
-  1185|// ============================================================
-  1186|function shareResult() {
-  1187|  const d = window._resultData;
-  1188|  if (!d) return;
-  1189|
-  1190|  const canvas = document.getElementById('shareCanvas');
-  1191|  const ctx = canvas.getContext('2d');
-  1192|  const W = 480, H = 853;
-  1193|
-  1194|  // Theme-derived colors
-  1195|  const codeColor = THEME_COLORS[d.theme] || '#e8a850';
-  1196|  const ptColor = THEME_COLORS[d.partnerTheme] || '#7eb8da';
-  1197|
-  1198|  // ===================================================================
-  1199|  // 1. BACKGROUND — mirror body CSS gradient
-  1200|  // ===================================================================
-  1201|  const bg = ctx.createLinearGradient(0, 0, 0, H);
-  1202|  bg.addColorStop(0,     '#0d0d1f');
-  1203|  bg.addColorStop(0.25,  '#141428');
-  1204|  bg.addColorStop(0.45,  '#0a0a18');
-  1205|  bg.addColorStop(0.60,  '#010108');
-  1206|  bg.addColorStop(1,     '#010108');
-  1207|  ctx.fillStyle = bg;
-  1208|  ctx.fillRect(0, 0, W, H);
-  1209|
-  1210|  // Stars — a few subtle dots to match body::before
-  1211|  ctx.fillStyle = 'rgba(255,255,255,.35)';
-  1212|  var stars = [[48,36],[120,22],[216,30],[312,18],[408,26],[168,62],[288,54],[96,80],[384,72],[240,66]];
-  1213|  for (var si = 0; si < stars.length; si++) {
-  1214|    ctx.beginPath();
-  1215|    ctx.arc(stars[si][0], stars[si][1], 0.8, 0, Math.PI * 2);
-  1216|    ctx.fill();
-  1217|  }
-  1218|
-  1219|  // ===================================================================
-  1220|  // 2. HERO IMAGE — 270 px (16:9 aspect on 480 width)
-  1221|  // ===================================================================
-  1222|  var heroImg = document.querySelector('#resultHero img');
-  1223|  if (heroImg && heroImg.complete && heroImg.naturalWidth > 0) {
-  1224|    var iw = heroImg.naturalWidth, ih = heroImg.naturalHeight;
-  1225|    var scale = Math.max(W / iw, 270 / ih);
-  1226|    var sw = W / scale, sh = 270 / scale;
-  1227|    var sx = (iw - sw) / 2, sy = (ih - sh) / 2;
-  1228|    ctx.drawImage(heroImg, sx, sy, sw, sh, 0, 0, W, 270);
-  1229|  } else {
-  1230|    ctx.fillStyle = '#1e1e38';
-  1231|    ctx.fillRect(0, 0, W, 270);
-  1232|  }
-  1233|  var fade = ctx.createLinearGradient(0, 230, 0, 270);
-  1234|  fade.addColorStop(0, 'rgba(20,20,40,0)');
-  1235|  fade.addColorStop(1, '#141428');
-  1236|  ctx.fillStyle = fade;
-  1237|  ctx.fillRect(0, 230, W, 40);
-  1238|
-  1239|  // ===================================================================
-  1240|  // 3. TOP ACCENT BAR — thin gold line
-  1241|  // ===================================================================
-  1242|  const ag = ctx.createLinearGradient(0, 0, W, 0);
-  1243|  ag.addColorStop(0, '#e8a850');
-  1244|  ag.addColorStop(1, '#f4a261');
-  1245|  ctx.fillStyle = ag;
-  1246|  ctx.fillRect(0, 0, W, 3);
-  1247|
-  1248|  // ===================================================================
-  1249|  // 4. HEADER: badge / easter / code / role / quote
-  1250|  // ===================================================================
-  1251|  ctx.textAlign = 'center';
-  1252|  ctx.textBaseline = 'top';
-  1253|
-  1254|  // Badge
-  1255|  ctx.font = 'bold 11px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1256|  ctx.fillStyle = codeColor;
-  1257|  ctx.fillText('YCTI · 摇曳露营人格', 240, 284);
-  1258|
-  1259|  // Easter tag
-  1260|  if (d.easter) {
-  1261|    ctx.font = '11px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1262|    ctx.fillStyle = 'rgba(232,168,80,.7)';
-  1263|    ctx.fillText('🔒 隐藏人格解锁', 240, 302);
-  1264|  }
-  1265|
-  1266|  // Code — 52 px / bold / THEME COLOR
-  1267|  ctx.font = 'bold 52px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1268|  ctx.fillStyle = codeColor;
-  1269|  ctx.fillText(d.code, 240, 308);
-  1270|
-  1271|  // Role / tag — 18 px / normal / #e8e0d8
-  1272|  ctx.font = '18px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1273|  ctx.fillStyle = '#e8e0d8';
-  1274|  ctx.fillText(d.tag, 240, 388);
-  1275|
-  1276|  // Quote — 14 px / italic / #9a8c7a
-  1277|  ctx.font = 'italic 14px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1278|  ctx.fillStyle = '#9a8c7a';
-  1279|  var q = d.quote.replace(/^["\u201c]|["\u201d]$/g, '');
-  1280|  ctx.fillText('\u201c' + q + '\u201d', 240, 432);
-  1281|
-  1282|  // ===================================================================
-  1283|  // 5. DESC CARD
-  1284|  // ===================================================================
-  1285|  ctx.textAlign = 'left';
-  1286|  ctx.textBaseline = 'top';
-  1287|  ctx.font = '13px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1288|
-  1289|  var words = d.desc.split('');
-  1290|  var lines = [];
-  1291|  var line = '';
-  1292|  var maxW = 386;
-  1293|  for (var i = 0; i < words.length; i++) {
-  1294|    var tl = line + words[i];
-  1295|    if (ctx.measureText(tl).width > maxW && line.length > 0) {
-  1296|      lines.push(line);
-  1297|      line = words[i];
-  1298|    } else { line = tl; }
-  1299|  }
-  1300|  if (line) lines.push(line);
-  1301|
-  1302|  var lineH = 23;                       // CSS line-height:1.8 -> 13*1.8≈23.4
-  1303|  var cardPad = 16;
-  1304|  var descCardY = 476;
-  1305|  var descCardW = 420;
-  1306|  var descCardH = lines.length * lineH + cardPad * 2;
-  1307|
-  1308|  ctx.fillStyle = '#1e1e38';
-  1309|  roundRect(ctx, 30, descCardY, descCardW, descCardH, 14);
-  1310|  ctx.fill();
-  1311|  ctx.strokeStyle = '#333350';
-  1312|  ctx.lineWidth = 1;
-  1313|  roundRect(ctx, 30, descCardY, descCardW, descCardH, 14);
-  1314|  ctx.stroke();
-  1315|
-  1316|  ctx.fillStyle = '#e8e0d8';
-  1317|  for (var li = 0; li < lines.length; li++) {
-  1318|    ctx.fillText(lines[li], 46, descCardY + cardPad + li * lineH);
-  1319|  }
-  1320|
-  1321|  var afterDesc = descCardY + descCardH + 14;
-  1322|
-  1323|  // ===================================================================
-  1324|  // 6. PARTNER CARD — multi-line wrapping with per-segment colors
-  1325|  //    Segments: label (gray) + code (colored bold) + tag (white) + rest (gray)
-  1326|  // ===================================================================
-  1327|  var segs = [
-  1328|    { text: '最佳拍档：', color: '#9a8c7a', bold: false },
-  1329|    { text: d.partnerCode, color: ptColor, bold: true },
-  1330|    { text: ' ' + d.partnerTag, color: '#e8e0d8', bold: false },
-  1331|    { text: ' — ' + d.partnerText, color: '#9a8c7a', bold: false }
-  1332|  ];
-  1333|
-  1334|  var fullPartnerText = '';
-  1335|  for (var si = 0; si < segs.length; si++) fullPartnerText += segs[si].text;
-  1336|
-  1337|  ctx.font = '13px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1338|  var pMaxW = 386;
-  1339|
-  1340|  // Wrap full text into lines
-  1341|  var pChars = fullPartnerText.split('');
-  1342|  var pLines = [];
-  1343|  var pLine = '';
-  1344|  for (var i = 0; i < pChars.length; i++) {
-  1345|    var ptl = pLine + pChars[i];
-  1346|    if (ctx.measureText(ptl).width > pMaxW && pLine.length > 0) {
-  1347|      pLines.push(pLine);
-  1348|      pLine = pChars[i];
-  1349|    } else { pLine = ptl; }
-  1350|  }
-  1351|  if (pLine) pLines.push(pLine);
-  1352|
-  1353|  var pCardPad = 12;
-  1354|  var pLineH = 22;
-  1355|  var pCardH = pLines.length * pLineH + pCardPad * 2;
-  1356|
-  1357|  // Partner card background
-  1358|  ctx.fillStyle = '#1e1e38';
-  1359|  roundRect(ctx, 30, afterDesc, descCardW, pCardH, 12);
-  1360|  ctx.fill();
-  1361|  ctx.strokeStyle = '#333350';
-  1362|  ctx.lineWidth = 1;
-  1363|  ctx.setLineDash([4, 4]);
-  1364|  roundRect(ctx, 30, afterDesc, descCardW, pCardH, 12);
-  1365|  ctx.stroke();
-  1366|  ctx.setLineDash([]);
-  1367|
-  1368|  // Draw partner text: for each line, determine which segments appear
-  1369|  ctx.textAlign = 'left';
-  1370|  ctx.textBaseline = 'top';
-  1371|  var cursor = 0;
-  1372|  for (var li = 0; li < pLines.length; li++) {
-  1373|    var lineText = pLines[li];
-  1374|    var lineStartX = Math.max(42, (480 - ctx.measureText(lineText).width) / 2);
-  1375|    var lineY = afterDesc + pCardPad + li * pLineH;
-  1376|    var segX = lineStartX;
-  1377|    var lineEnd = cursor + lineText.length;
-  1378|
-  1379|    var segStart = 0;
-  1380|    for (var si = 0; si < segs.length; si++) {
-  1381|      var segEnd = segStart + segs[si].text.length;
-  1382|      if (segEnd > cursor && segStart < lineEnd) {
-  1383|        var overlapStart = Math.max(segStart, cursor);
-  1384|        var overlapEnd = Math.min(segEnd, lineEnd);
-  1385|        var segText = fullPartnerText.substring(overlapStart, overlapEnd);
-  1386|        if (segText.length > 0) {
-  1387|          ctx.fillStyle = segs[si].color;
-  1388|          ctx.font = (segs[si].bold ? 'bold ' : '') + '13px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1389|          ctx.fillText(segText, segX, lineY);
-  1390|          segX += ctx.measureText(segText).width;
-  1391|        }
-  1392|      }
-  1393|      segStart = segEnd;
-  1394|    }
-  1395|    cursor = lineEnd;
-  1396|  }
-  1397|
-  1398|  // ===================================================================
-  1399|  // 7. BOTTOM BAR
-  1400|  // ===================================================================
-  1401|  ctx.textAlign = 'center';
-  1402|  ctx.font = '11px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  1403|  ctx.fillStyle = 'rgba(255,255,255,.15)';
-  1404|  ctx.fillText('@悠哉日常大囧 · v0.13.0', 240, 830);
-  1405|
-  1406|  // ===================================================================
-  1407|  // DOWNLOAD
-  1408|  // ===================================================================
-  1409|  const link = document.createElement('a');
-  1410|  link.download = 'YCTI_' + d.code + '.png';
-  1411|  link.href = canvas.toDataURL('image/png');
-  1412|  link.click();
-  1413|
-  1414|  showToast('图片已保存！');
-  1415|}
-  1416|
-  1417|function roundRect(ctx, x, y, w, h, r) {
-  1418|  ctx.beginPath();
-  1419|  ctx.moveTo(x + r, y);
-  1420|  ctx.lineTo(x + w - r, y);
-  1421|  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  1422|  ctx.lineTo(x + w, y + h - r);
-  1423|  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  1424|  ctx.lineTo(x + r, y + h);
-  1425|  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  1426|  ctx.lineTo(x, y + r);
-  1427|  ctx.quadraticCurveTo(x, y, x + r, y);
-  1428|  ctx.closePath();
-  1429|}
-  1430|
-  1431|function showToast(msg) {
-  1432|  const t = document.getElementById('toast');
-  1433|  t.textContent = msg;
-  1434|  t.classList.add('show');
-  1435|  setTimeout(() => t.classList.remove('show'), 2000);
-  1436|}
-  1437|
-  1438|// ============================================================
-  1439|// SHARE MODAL (QR code)
-  1440|// ============================================================
-  1441|function openShareModal() {
-  1442|  const d = window._resultData;
-  1443|  if (!d) return;
-  1444|  const codeColor = THEME_COLORS[d.theme] || '#e8a850';
-  1445|  document.getElementById('shareCode').textContent = d.code;
-  1446|  document.getElementById('shareCode').style.color = codeColor;
-  1447|  document.getElementById('shareTag').textContent = d.tag;
-  1448|  document.getElementById('shareQuote').textContent = d.quote;
-  1449|  document.getElementById('shareOverlay').classList.add('show');
-  1450|}
-  1451|function closeShareModal() {
-  1452|  document.getElementById('shareOverlay').classList.remove('show');
-  1453|}
-  1454|
-  1455|// ============================================================
-  1456|// STATS (GitHub API)
-  1457|// ============================================================
-  1458|const STATS_COLORS = {
-  1459|  LONE:'#7eb8da',TSUN:'#7eb8da',PAGE:'#7eb8da',OWL:'#7eb8da',SPA:'#7eb8da',
-  1460|  NOM:'#e8a0b0',SUNNY:'#e8a0b0','BOO!':'#e8a0b0',CHEF:'#e8a0b0',CHOO:'#e8a0b0',
-  1461|  CHAOS:'#b89ad4',WEEP:'#b89ad4',BROKE:'#b89ad4',DASH:'#b89ad4',
-  1462|  SEYANA:'#a8b878',MOM:'#a8b878',USOYARE:'#a8b878',CARB:'#a8b878',
-  1463|  LURK:'#c0b8a8',SHIP:'#c0b8a8',DOGGO:'#c0b8a8',COZY:'#c0b8a8',
-  1464|  'WAN!':'#d4b840','6CAN':'#d4b840',SAGE:'#d4b840','3776':'#d4b840',
-  1465|  CHILL:'#d4b840',DRIVE:'#d4b840',ASAKA:'#d4b840',AFRO:'#d4b840',
-  1466|  MONO:'#d4b840',AQUA:'#d4b840'
-  1467|};
-  1468|const OPACITIES = [1.0, 0.82, 0.66, 0.52, 0.40];
-  1469|
-  1470|function hexToRgba(hex, alpha) {
-  1471|  const r = parseInt(hex.slice(1,3), 16);
-  1472|  const g = parseInt(hex.slice(3,5), 16);
-  1473|  const b = parseInt(hex.slice(5,7), 16);
-  1474|  return `rgba(${r},${g},${b},${alpha})`;
-  1475|}
-  1476|
-  1477|function openStats() {
-  1478|  document.getElementById('resultScreen').classList.remove('active');
-  1479|  // Mobile: lock body with position:fixed to prevent touch-scroll-through
-  1480|  const scrollY = window.scrollY;
-  1481|  document.body.style.position = 'fixed';
-  1482|  document.body.style.top = `-${scrollY}px`;
-  1483|  document.body.style.width = '100%';
-  1484|  document.body.style.overflow = 'hidden';
-  1485|  document.body.style.justifyContent = 'center';
-  1486|  const ss = document.getElementById('statsScreen');
-  1487|  ss.style.display = 'flex';
-  1488|  loadStats();
-  1489|}
-  1490|
-  1491|function closeStats() {
-  1492|  document.getElementById('statsScreen').style.display = 'none';
-  1493|  document.getElementById('resultScreen').classList.add('active');
-  1494|  // Restore body scroll position
-  1495|  const scrollY = parseInt(document.body.style.top || '0', 10);
-  1496|  document.body.style.position = '';
-  1497|  document.body.style.top = '';
-  1498|  document.body.style.width = '';
-  1499|  document.body.style.overflowY = 'auto';
-  1500|  document.body.style.overflowX = 'hidden';
-  1501|  document.body.style.justifyContent = 'flex-start';
-  1502|  window.scrollTo(0, -scrollY);
-  1503|}
-  1504|
-  1505|async function loadStats() {
-  1506|  const canvas = document.getElementById('statsCanvas');
-  1507|  const ctx = canvas.getContext('2d');
-  1508|  // Dynamic canvas size — fill the container, mobile-optimized
-  1509|  const container = canvas.parentElement;
-  1510|  const maxW = container.clientWidth - 16;
-  1511|  const maxH = container.clientHeight - 8;
-  1512|  const W = Math.max(Math.min(maxW, 600), 280);
-  1513|  const H = Math.max(Math.min(maxH, Math.round(W * 1.6)), 360);
-  1514|  const dpr = window.devicePixelRatio || 1;
-  1515|  canvas.width = W * dpr;
-  1516|  canvas.height = H * dpr;
-  1517|  canvas.style.width = W + 'px';
-  1518|  canvas.style.height = H + 'px';
-  1519|  ctx.scale(dpr, dpr);
-  1520|  ctx.clearRect(0, 0, W, H);
-  1521|  ctx.fillStyle = '#9a8c7a';
-  1522|  ctx.font = '14px sans-serif';
-  1523|  ctx.textAlign = 'center';
-  1524|  ctx.fillText('加载中...', W/2, H/2);
-  1525|  try {
-  1526|    const stats = await ghStatsRead();
-  1527|    const counts = stats.results || {};
-  1528|    const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-  1529|    const total = stats.total || 0;
-  1530|    ctx.clearRect(0, 0, W, H);
-  1531|    const info = document.getElementById('statsInfo');
-  1532|    const list = document.getElementById('statsList');
-  1533|    if (total === 0) {
-  1534|      info.textContent = '';
-  1535|      list.innerHTML = '';
-  1536|      ctx.fillText('还没有人做过测试，快来留下第一份答卷吧！', W/2, H/2);
-  1537|      return;
-  1538|    }
-  1539|    // --- Stats info ---
-  1540|    info.textContent = `共 ${total} 份答卷`;
-  1541|    list.innerHTML = '';
-  1542|
-  1543|    // --- Stacked Percentage Bar ---
-  1544|    const groups = [
-  1545|      { name:'凛', short:'凛', color:'#7eb8da', codes:['LONE','TSUN','PAGE','OWL','SPA'], count:0 },
-  1546|      { name:'抚子', short:'抚', color:'#e8a0b0', codes:['NOM','SUNNY','BOO!','CHEF','CHOO'], count:0 },
-  1547|      { name:'千明', short:'千', color:'#b89ad4', codes:['CHAOS','WEEP','BROKE','DASH'], count:0 },
-  1548|      { name:'葵', short:'葵', color:'#a8b878', codes:['SEYANA','MOM','USOYARE','CARB'], count:0 },
-  1549|      { name:'惠那', short:'惠', color:'#c0b8a8', codes:['LURK','SHIP','DOGGO','COZY'], count:0 },
-  1550|      { name:'隐藏', short:'隐', color:'#d4b840', codes:['WAN!','6CAN','SAGE','3776','CHILL','DRIVE','ASAKA','AFRO','MONO','AQUA'], count:0 }
-  1551|    ];
-  1552|    for (const [code, count] of entries) {
-  1553|      for (const g of groups) { if (g.codes.includes(code)) { g.count += count; break; } }
-  1554|    }
-  1555|    const activeGroups = groups.filter(g => g.count > 0);
-  1556|    activeGroups.sort((a, b) => b.count - a.count); // descending by %
-  1557|
-  1558|    const barWrap = document.getElementById('statsStackedBar');
-  1559|    if (activeGroups.length > 0) {
-  1560|      // Bar row — same width & border-radius as treemap canvas
-  1561|      const barRow = document.createElement('div');
-  1562|      barRow.style.cssText = `display:flex;height:24px;border-radius:12px;overflow:hidden;width:${W}px;max-width:100%;margin:0 auto;`;
-  1563|      for (const g of activeGroups) {
-  1564|        const pct = (g.count / total) * 100;
-  1565|        const seg = document.createElement('div');
-  1566|        seg.style.cssText = `width:${pct}%;background:${g.color};display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.3);`;
-  1567|        seg.textContent = pct >= 3 ? g.short : '';
-  1568|        barRow.appendChild(seg);
-  1569|      }
-  1570|      // Labels row below — percentages only
-  1571|      const lblRow = document.createElement('div');
-  1572|      lblRow.style.cssText = `display:flex;width:${W}px;max-width:100%;margin:4px auto 0;`;
-  1573|      for (const g of activeGroups) {
-  1574|        const pct = (g.count / total) * 100;
-  1575|        const lbl = document.createElement('div');
-  1576|        lbl.style.cssText = `width:${pct}%;text-align:center;font-size:11px;color:var(--muted);min-width:0;overflow:hidden;white-space:nowrap;`;
-  1577|        lbl.textContent = `${pct.toFixed(1)}%`;
-  1578|        lblRow.appendChild(lbl);
-  1579|      }
-  1580|      barWrap.innerHTML = '';
-  1581|      barWrap.appendChild(barRow);
-  1582|      barWrap.appendChild(lblRow);
-  1583|    } else {
-  1584|      barWrap.innerHTML = '';
-  1585|    }
-  1586|
-  1587|    // --- Squarified Treemap ---
-  1588|    const PAD = 3;
-  1589|    window._treemapBlocks = []; // store for click detection
-  1590|    const items = entries.map(([code, count], idx) => {
-  1591|      const p = PERSONALITIES[code];
-  1592|      return {
-  1593|        code, count,
-  1594|        pct: ((count / total) * 100).toFixed(1),
-  1595|        area: (count / total) * (W * H),
-  1596|        hex: STATS_COLORS[code] || '#888',
-  1597|        tag: p ? (p.easter ? '隐藏人格' : p.tag) : code,
-  1598|        idx
-  1599|      };
-  1600|    });
-  1601|    // Sort by area descending
-  1602|    items.sort((a, b) => b.area - a.area);
-  1603|
-  1604|    // Assign opacity: within each theme, rank by count desc
-  1605|    // Easter/hidden personalities always full opacity (bright gold)
-  1606|    const sortedByTheme = [...items].sort((a,b) => {
-  1607|      if (a.hex !== b.hex) return a.hex.localeCompare(b.hex);
-  1608|      return b.count - a.count;
-  1609|    });
-  1610|    let prevHex = '';
-  1611|    let rank = 0;
-  1612|    for (const it of sortedByTheme) {
-  1613|      if (it.hex !== prevHex) { rank = 0; prevHex = it.hex; }
-  1614|      it.alpha = (it.hex === '#d4b840') ? 1.0 : OPACITIES[Math.min(rank, 4)];
-  1615|      rank++;
-  1616|    }
-  1617|
-  1618|    squarifyTreemap(ctx, items, PAD, PAD, W - 2*PAD, H - 2*PAD);
-  1619|
-  1620|    // Canvas click → tooltip
-  1621|    canvas.onclick = function(e) {
-  1622|      const rect = canvas.getBoundingClientRect();
-  1623|      const sx = canvas.width / rect.width;
-  1624|      const sy = canvas.height / rect.height;
-  1625|      const mx = (e.clientX - rect.left) * sx / dpr;
-  1626|      const my = (e.clientY - rect.top) * sy / dpr;
-  1627|      const tt = document.getElementById('treemapTooltip');
-  1628|      for (const b of window._treemapBlocks) {
-  1629|        if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) {
-  1630|          tt.innerHTML = `<b style="color:${b.hex};font-size:15px;">${b.code}</b> <span style="font-size:12px;color:var(--muted)">${b.tag}</span><br><span style="color:var(--muted)">${b.count}份 · ${b.pct}%</span>`;
-  1631|          tt.style.display = 'block';
-  1632|          tt.style.left = Math.min(e.clientX + 12, window.innerWidth - 220) + 'px';
-  1633|          tt.style.top = (e.clientY - 40) + 'px';
-  1634|          setTimeout(() => { tt.style.display = 'none'; }, 2000);
-  1635|          return;
-  1636|        }
-  1637|      }
-  1638|      tt.style.display = 'none';
-  1639|    };
-  1640|
-  1641|  } catch(e) {
-  1642|    ctx.clearRect(0, 0, W, H);
-  1643|    ctx.fillStyle = '#9a8c7a';
-  1644|    ctx.fillText('加载失败，请稍后再试', W/2, H/2);
-  1645|    console.error('Stats load error:', e);
-  1646|  }
-  1647|}
-  1648|
-  1649|// ---- Squarified Treemap (D3.js d3-hierarchy) ----
-  1650|function squarifyTreemap(ctx, items, x, y, w, h) {
-  1651|  if (items.length === 0 || w <= 0 || h <= 0) return;
-  1652|  if (items.length === 1) {
-  1653|    drawItem(ctx, items[0], x, y, w, h);
-  1654|    return;
-  1655|  }
-  1656|  // Build hierarchy tree for D3
-  1657|  const root = d3.hierarchy({ children: items })
-  1658|    .sum(d => d.area)
-  1659|    .sort((a, b) => b.value - a.value);
-  1660|  // Compute squarified treemap layout
-  1661|  d3.treemap()
-  1662|    .tile(d3.treemapSquarify)
-  1663|    .size([w, h])
-  1664|    .paddingInner(2)
-  1665|    .paddingOuter(1)
-  1666|    (root);
-  1667|  // Draw each leaf block
-  1668|  for (const leaf of root.leaves()) {
-  1669|    drawItem(ctx, leaf.data, x + leaf.x0, y + leaf.y0, leaf.x1 - leaf.x0, leaf.y1 - leaf.y0);
-  1670|  }
-  1671|}
-  1672|
-  1673|function drawItem(ctx, item, x, y, w, h) {
-  1674|  if (w <= 0 || h <= 0) return;
-  1675|  const R = Math.min(8, w/4, h/4); // rounded corner radius
-  1676|  ctx.fillStyle = hexToRgba(item.hex, item.alpha);
-  1677|  ctx.beginPath();
-  1678|  ctx.roundRect(x, y, w, h, R);
-  1679|  ctx.fill();
-  1680|
-  1681|  // Store block for click detection
-  1682|  window._treemapBlocks.push({ x, y, w, h, code: item.code, count: item.count, pct: item.pct, hex: item.hex, tag: item.tag });
-  1683|
-  1684|  // Text inside block
-  1685|  const minDim = Math.min(w, h);
-  1686|  ctx.fillStyle = '#fff';
-  1687|  ctx.textAlign = 'center';
-  1688|  ctx.textBaseline = 'middle';
-  1689|
-  1690|  if (minDim >= 50) {
-  1691|    // Big block: show code + count + pct
-  1692|    const fs = Math.max(11, Math.min(Math.floor(minDim / 5), 16));
-  1693|    ctx.font = `bold ${fs}px sans-serif`;
-  1694|    ctx.fillText(item.code, x + w/2, y + h/2 - fs/2);
-  1695|    ctx.font = `${Math.max(9, fs - 2)}px sans-serif`;
-  1696|    ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  1697|    ctx.fillText(`${item.count}份 ${item.pct}%`, x + w/2, y + h/2 + fs/2);
-  1698|  } else if (minDim >= 24) {
-  1699|    // Medium block: show code only
-  1700|    const fs = Math.max(10, Math.floor(minDim / 4));
-  1701|    ctx.font = `bold ${fs}px sans-serif`;
-  1702|    ctx.fillText(item.code, x + w/2, y + h/2);
-  1703|  } else if (minDim >= 14) {
-  1704|    // Tiny block: code at min 8px, clickable for tooltip
-  1705|    const fs = Math.max(8, Math.floor(minDim / 3));
-  1706|    ctx.font = `bold ${fs}px sans-serif`;
-  1707|    ctx.textAlign = 'center';
-  1708|    ctx.fillText(item.code, x + w/2, y + h/2);
-  1709|  }
-  1710|  // Ultra-tiny (<14px): no text, but tooltip still works via click
-  1711|}
-  1712|</script>
-  1713|</body>
-  1714|</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>YCTI · 摇曳露营人格测试</title>
+<style>
+:root {
+--bg-deep: #0d0d1f;
+--bg: #141428;
+--card: #1e1e38;
+--card-hover: #28284a;
+--warm: #e8a850;
+--warm-glow: #f0c070;
+--fire: #f4a261;
+--text: #e8e0d8;
+--muted: #9a8c7a;
+--accent: #7aa87d;
+--border: #333350;
+--shadow: rgba(0,0,0,.3);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+background: linear-gradient(180deg, #0d0d1f 0%, #141428 25%, #0a0a18 45%, #010108 60%, #010108 100%);
+color: var(--text);
+min-height: 100dvh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 16px;
+line-height: 1.6;
+position: relative;
+overflow: hidden;
+}
+/* Stars */
+body::before {
+content: '';
+position: fixed;
+top: 0; left: 0; right: 0; bottom: 0;
+background-image:
+radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.6), transparent),
+radial-gradient(1px 1px at 25% 8%, rgba(255,255,255,.4), transparent),
+radial-gradient(1.5px 1.5px at 40% 20%, rgba(255,255,255,.5), transparent),
+radial-gradient(1px 1px at 55% 12%, rgba(255,255,255,.3), transparent),
+radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,.5), transparent),
+radial-gradient(1.5px 1.5px at 85% 10%, rgba(255,255,255,.4), transparent),
+radial-gradient(1px 1px at 15% 30%, rgba(255,255,255,.3), transparent),
+radial-gradient(1px 1px at 60% 28%, rgba(255,255,255,.35), transparent),
+radial-gradient(1px 1px at 90% 25%, rgba(255,255,255,.3), transparent),
+radial-gradient(1px 1px at 35% 38%, rgba(255,255,255,.25), transparent),
+radial-gradient(1.5px 1.5px at 78% 40%, rgba(255,255,255,.35), transparent);
+pointer-events: none; z-index: 0;
+}
+#app {
+width: 100%;
+max-width: 480px;
+position: relative;
+z-index: 1;
+}
+.screen { display: none; animation: fadeSlide .4s ease; }
+.screen.active { display: block; }
+@keyframes fadeSlide {
+from { opacity: 0; transform: translateY(12px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Start Screen */
+.start-screen { text-align: center; padding: 8px 0 0; }
+.start-screen .camp-icon { font-size: 40px; margin-bottom: 4px; }
+.start-screen h1 {
+font-size: 28px; font-weight: 800; color: var(--warm);
+letter-spacing: 6px; margin-bottom: 2px;
+text-shadow: 0 0 20px rgba(232,168,80,.25);
+}
+.start-screen .subtitle { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 6px; }
+.start-screen .subtitle-cn { font-size: 13px; color: var(--warm); letter-spacing: 2px; margin-bottom: 60px; }
+
+.btn {
+display: inline-block;
+padding: 14px 48px;
+border-radius: 32px;
+border: none;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all .25s;
+font-family: inherit;
+position: relative;
+overflow: hidden;
+}
+.btn-primary {
+background: linear-gradient(135deg, var(--warm), #d49540);
+color: #1a1a2e;
+box-shadow: 0 4px 20px rgba(232,168,80,.25);
+}
+.btn-primary:hover {
+background: linear-gradient(135deg, var(--warm-glow), var(--warm));
+transform: translateY(-2px);
+box-shadow: 0 6px 28px rgba(232,168,80,.35);
+}
+.btn-primary:active { transform: translateY(0) scale(.98); }
+.btn-secondary {
+background: var(--card);
+color: var(--text);
+border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--card-hover); border-color: #555; }
+
+.btn-outline {
+background: transparent;
+color: var(--warm);
+border: 1px solid var(--warm);
+opacity: 0.8;
+}
+.btn-outline:hover { background: rgba(232,168,80,0.1); border-color: var(--warm-glow); opacity: 1; }
+
+/* Quiz Screen */
+.quiz-screen { padding: 16px 0; }
+.progress-bar {
+height: 4px;
+background: var(--border);
+border-radius: 2px;
+margin-bottom: 32px;
+overflow: hidden;
+}
+.progress-fill {
+height: 100%;
+background: linear-gradient(90deg, var(--warm), var(--fire));
+border-radius: 2px;
+transition: width .4s ease;
+box-shadow: 0 0 8px rgba(232,168,80,.3);
+}
+.question-counter {
+font-size: 11px;
+color: var(--muted);
+margin-bottom: 20px;
+letter-spacing: 2px;
+text-transform: uppercase;
+}
+.question-text {
+font-size: 18px;
+font-weight: 600;
+margin-bottom: 28px;
+line-height: 1.7;
+color: var(--text);
+min-height: 60px;
+}
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+width: 100%;
+padding: 16px 20px;
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: 14px;
+text-align: left;
+color: var(--text);
+font-size: 15px;
+cursor: pointer;
+transition: all .2s ease;
+font-family: inherit;
+line-height: 1.5;
+position: relative;
+}
+.option:hover {
+border-color: var(--warm);
+background: var(--card-hover);
+transform: translateX(4px);
+box-shadow: 0 2px 12px rgba(232,168,80,.1);
+}
+.option:active { transform: scale(.98) translateX(4px); }
+.option.selected { border-color: var(--warm); background: rgba(232,168,80,.12); }
+
+/* Result Screen */
+.result-screen { text-align: center; padding: 0 0 24px; }
+
+/* Hero Image — full-bleed edge-to-edge, flush with viewport top */
+.result-hero {
+width: 100vw;
+margin-top: -16px;
+margin-left: calc(-50vw + 50%);
+margin-right: calc(-50vw + 50%);
+aspect-ratio: 16 / 9;
+background: var(--card);
+border-radius: 0;
+overflow: hidden;
+position: relative;
+}
+.result-hero img {
+width: 100%; height: 100%;
+object-fit: cover;
+display: block;
+}
+.result-hero::after {
+content: '';
+position: absolute;
+bottom: 0; left: 0; right: 0;
+height: 40px;
+background: linear-gradient(transparent, var(--bg));
+pointer-events: none;
+}
+
+/* Result theme colors — text only, no background */
+.result-screen.theme-rin .result-code { color: #7eb8da; text-shadow: 0 0 30px rgba(126,184,218,.3); }
+.result-screen.theme-rin .result-badge { color: #7eb8da; }
+.result-screen.theme-nadeshiko .result-code { color: #e8a0b0; text-shadow: 0 0 30px rgba(232,160,176,.3); }
+.result-screen.theme-nadeshiko .result-badge { color: #e8a0b0; }
+.result-screen.theme-chiaki .result-code { color: #b89ad4; text-shadow: 0 0 30px rgba(184,154,212,.3); }
+.result-screen.theme-chiaki .result-badge { color: #b89ad4; }
+.result-screen.theme-aoi .result-code { color: #a8b878; text-shadow: 0 0 30px rgba(168,184,120,.3); }
+.result-screen.theme-aoi .result-badge { color: #a8b878; }
+.result-screen.theme-ena .result-code { color: #c0b8a8; text-shadow: 0 0 30px rgba(192,184,168,.3); }
+.result-screen.theme-ena .result-badge { color: #c0b8a8; }
+.result-screen.theme-easter .result-code { color: #d4b840; text-shadow: 0 0 30px rgba(212,184,64,.4); }
+.result-screen.theme-easter .result-badge { color: #d4b840; }
+
+.result-badge {
+font-size: 11px; letter-spacing: 3px;
+margin: 14px 0 6px; text-transform: uppercase;
+}
+.result-code {
+font-size: 52px; font-weight: 800; color: var(--warm);
+letter-spacing: 6px; margin-bottom: 4px;
+text-shadow: 0 0 30px rgba(232,168,80,.3);
+animation: codeReveal .6s ease;
+}
+@keyframes codeReveal {
+from { opacity: 0; transform: scale(.8); letter-spacing: 20px; }
+to { opacity: 1; transform: scale(1); letter-spacing: 6px; }
+}
+.result-role { font-size: 18px; color: var(--text); margin-bottom: 14px; }
+.result-quote {
+font-size: 14px;
+color: var(--muted);
+font-style: italic;
+margin-bottom: 16px;
+line-height: 1.7;
+padding: 0 12px;
+position: relative;
+}
+.result-desc {
+font-size: 13px;
+color: var(--text);
+text-align: left;
+line-height: 1.8;
+padding: 16px;
+background: var(--card);
+border-radius: 14px;
+margin: 0 12px 14px;
+border: 1px solid var(--border);
+box-shadow: 0 4px 16px var(--shadow);
+}
+.result-partner {
+font-size: 13px;
+color: var(--muted);
+margin: 0 12px 20px;
+line-height: 1.7;
+background: var(--card);
+padding: 12px 16px;
+border-radius: 12px;
+border: 1px dashed var(--border);
+}
+.result-partner strong { color: var(--warm); }
+.result-actions { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: nowrap; margin: 0 12px 6px; }
+.result-actions .btn { padding: 11px 0; font-size: 14px; flex: 1; }
+.result-actions .btn-icon {
+width: 42px; height: 42px;
+border-radius: 50%;
+padding: 0;
+display: inline-flex; align-items: center; justify-content: center;
+font-size: 20px;
+line-height: 1;
+border: 1px solid var(--border);
+background: var(--card);
+color: var(--text);
+cursor: pointer;
+transition: all .2s;
+flex-shrink: 0;
+}
+.result-actions .btn-icon:hover { background: var(--card-hover); }
+.result-actions .btn-icon:active { transform: scale(.95); }
+
+/* Easter Egg */
+.easter-tag {
+display: inline-block;
+padding: 5px 14px;
+background: rgba(232,168,80,.15);
+color: var(--warm);
+border-radius: 12px;
+font-size: 11px;
+letter-spacing: 2px;
+margin-bottom: 12px;
+border: 1px solid rgba(232,168,80,.3);
+animation: easterGlow 2s ease-in-out infinite;
+}
+@keyframes easterGlow {
+0%,100% { box-shadow: 0 0 8px rgba(232,168,80,.1); }
+50% { box-shadow: 0 0 18px rgba(232,168,80,.25); }
+}
+
+/* Author Credit */
+.author-credit {
+font-size: 11px;
+color: rgba(255,255,255,.18);
+text-align: center;
+margin-top: 10px;
+letter-spacing: 1px;
+}
+.version-tag {
+font-size: 9px;
+color: rgba(255,255,255,.10);
+text-align: center;
+margin-top: 2px;
+}
+
+/* Toast */
+.toast {
+position: fixed;
+bottom: 32px;
+left: 50%;
+transform: translateX(-50%);
+background: var(--card);
+color: var(--text);
+padding: 10px 24px;
+border-radius: 20px;
+font-size: 13px;
+border: 1px solid var(--border);
+opacity: 0;
+transition: opacity .3s;
+pointer-events: none;
+z-index: 100;
+box-shadow: 0 4px 16px var(--shadow);
+}
+.toast.show { opacity: 1; }
+
+/* Canvas hidden */
+#shareCanvas { display: none; }
+
+/* ===== Share Modal ===== */
+.share-overlay {
+display: none;
+position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(0,0,0,.75);
+z-index: 200;
+justify-content: center; align-items: center;
+padding: 20px;
+}
+.share-overlay.show { display: flex; }
+.share-modal {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 28px 24px 24px;
+max-width: 360px; width: 100%;
+text-align: center;
+position: relative;
+box-shadow: 0 8px 40px rgba(0,0,0,.5);
+}
+.share-close {
+position: absolute; top: 12px; right: 16px;
+background: none; border: none;
+color: var(--muted); font-size: 22px;
+cursor: pointer; line-height: 1;
+}
+.share-modal .share-title {
+font-size: 13px; color: var(--warm);
+letter-spacing: 2px; margin-bottom: 16px;
+}
+.share-modal .share-code {
+font-size: 36px; font-weight: 800;
+letter-spacing: 6px;
+margin-bottom: 4px;
+}
+.share-modal .share-tag {
+font-size: 16px; color: var(--text);
+margin-bottom: 8px;
+}
+.share-modal .share-quote {
+font-size: 12px; color: var(--muted);
+font-style: italic;
+margin-bottom: 20px;
+line-height: 1.6;
+padding: 0 12px;
+}
+.share-qr-wrap {
+display: inline-block;
+background: #fff;
+padding: 12px;
+border-radius: 12px;
+margin-bottom: 16px;
+}
+.share-qr-wrap img {
+display: block;
+width: 150px; height: 150px;
+}
+.share-modal .share-hint {
+font-size: 13px; color: var(--text);
+margin-bottom: 8px;
+}
+.share-modal .share-footer {
+font-size: 11px;
+color: rgba(255,255,255,.25);
+line-height: 1.5;
+}
+
+/* Homepage animation */
+.video-wrapper {
+width: 100%;
+margin: 36px 0 0;
+padding: 0;
+}
+.home-video {
+width: 100%;
+height: auto;
+display: block;
+margin: 0;
+background: #010108;
+pointer-events: none;
+user-select: none;
+-webkit-user-select: none;
+-webkit-touch-callout: none;
+position: relative;
+z-index: 1;
+object-fit: contain;
+}
+
+/* Bottom bar (author + version) */
+.bottom-bar {
+font-size: 11px;
+color: rgba(255,255,255,.15);
+text-align: center;
+padding: 16px 0 4px;
+letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+<!-- Start Screen -->
+<div class="screen active" id="startScreen">
+<div class="start-screen">
+<div class="camp-icon">🏕️</div>
+<h1>YCTI</h1>
+<div class="subtitle">Yuru Camp Type Indicator</div>
+<div class="subtitle-cn">摇曳露营人格测试</div>
+<button class="btn btn-primary" onclick="startQuiz()">开始测试</button>
+<div class="video-wrapper"><video id="homeVideo" class="home-video" src="home.mp4" poster="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCALQA8ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5bf5nNMAwGFPHX3pxGRQAxFxx60Nw9OY4FNbrmgAAwTS96apy1OC8mgAHINNYYFKeBTeTnNACAdKeR8gpFHA+tPONooARU+Qk9aNny80pByoHShucrQAjcRg0ZwuPalYfuwPQ0xvu598UAIKcDTRSgUAKRz+FIQMUDqKeRnj2oAaxGf0pMfzpzL396NuMUAC8k0owXzTQfkb60hGD9RQA9SBIp9TT5OZSfWoSDuWpOqE0ALsHWjApATijBoAa4HSo8dqfID1qPB60APXOPakQfNTlyPpjNKAARj0oAUnPSo26YHrTyeBimUAOU9acOpqPJyKdngUAO7UdqQH5KXPy0ADc9PSowuGFAbr6UshywIoAVOSPalkOBimg9AOtPcZ/KgBobKgUrsRimMpXGacDluaAFUYHuaQHYfalQ5JNIwzxQBIAGGaZtBOPaliIAxSkgc0AIAFbj0p4ODn2IqMDoT61IrDaB7EUAROTuUdQooYBSuzuKcQeo7imZ+YY7UAOL888kcUincCTQpBLGgDjHtQBKxAiXNNL52gUnLxgDtSjCLQAKuQ3rnNObG3PoOaRDjr6Um7rnvQBEVyQR3p2zL49BTk4HPrTu2e9AELLlC3vQRgA05TldvalxhcUAMxubJp+4AZH0ppBUg00DII70APOfw60FuAaZk0rAcetADnwdu38aVwuymjpTj1WtITUU1a9wGrjPFPUjHFIepphyFNZgPLc00vxTxjYKYRlsUAIu4MP0oPzEbe3NTJgYz24phK+Y+zv0oAUdl74oHLMPSmkbSpzz0pXG0Ag9aAHIc4496Vz8vTqaanDfhTS2RjBxQA+Pbjg44p2RztFN2jjJ/CkfO4AdKAE7n1xSgcDP5Uj8SAAUj7hIATQAoIdgvbvTpCAxX0pAmVLDgimlfn564oAXAYDFBz09aMYIx0IpUOApPY0AMUc08/LyOtA5ySKCfbNACjrkUjnJx3p4O1c96Y3I3HrQAhxs46g05m44pi8Dr1NOJAY+1ACfxY9s1J0D47io26E09Bl8e2aAHxAcZ+l... [truncated]
+<div class="bottom-bar">@悠哉日常大囧 · v0.13.0</div>
+</div>
+</div>
+
+<!-- Quiz Screen -->
+<div class="screen" id="quizScreen">
+<div class="quiz-screen">
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="question-counter" id="qCounter"></div>
+<div class="question-text" id="qText"></div>
+<div class="options" id="options"></div>
+</div>
+</div>
+
+<!-- Result Screen -->
+<div class="screen" id="resultScreen">
+<div class="result-screen">
+<div class="result-hero" id="resultHero"><img src="" alt=""></div>
+<div id="easterTag"></div>
+<div class="result-badge" id="resultBadge"></div>
+<div class="result-code" id="resultCode"></div>
+<div class="result-role" id="resultRole"></div>
+<div class="result-quote" id="resultQuote"></div>
+<div class="result-desc" id="resultDesc"></div>
+<div class="result-partner" id="resultPartner"></div>
+<div class="result-actions">
+<button class="btn btn-secondary" onclick="openStats()">查看统计</button>
+<button class="btn btn-primary" onclick="restartQuiz()">重新测试</button>
+<button class="btn-icon" onclick="openShareModal()" title="分享">📤</button>
+</div>
+<div class="bottom-bar">@悠哉日常大囧 · v0.13.0</div>
+</div>
+</div>
+</div>
+
+<!-- Stats Screen (fullscreen) -->
+<div id="statsScreen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:var(--bg);flex-direction:column;padding:10px;overflow:hidden;touch-action:none;-webkit-overflow-scrolling:none;overscroll-behavior:none;">
+<div style="display:flex;align-items:center;justify-content:center;padding:4px 0 12px;max-width:800px;margin:0 auto;width:100%;position:relative;">
+<button onclick="closeStats()" style="position:absolute;left:0;background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:4px 8px;">← 返回</button>
+<span style="font-size:20px;font-weight:700;color:var(--warm);">露营人格统计</span>
+</div>
+<div id="statsInfo" style="text-align:center;font-size:15px;color:var(--warm-glow);margin:4px 0 8px;font-weight:600;"></div>
+<div id="statsList" style="display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;max-height:64px;overflow-y:auto;padding:4px 0;max-width:800px;margin:0 auto;width:100%;"></div>
+<div id="statsStackedBar" style="margin:8px auto 0;"></div>
+<div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0;">
+<canvas id="statsCanvas" style="max-width:100%;max-height:100%;border-radius:12px;cursor:pointer;"></canvas>
+<div id="treemapTooltip" style="display:none;position:fixed;z-index:200;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text);pointer-events:none;box-shadow:0 4px 16px var(--shadow);max-width:200px;text-align:center;"></div>
+</div>
+<div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 4px;">数据实时更新 · 每次测试都会计入</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<canvas id="shareCanvas" width="480" height="853"></canvas>
+
+<!-- Share Modal -->
+<div class="share-overlay" id="shareOverlay" onclick="if(event.target===this)closeShareModal()">
+<div class="share-modal">
+<button class="share-close" onclick="closeShareModal()">✕</button>
+<div class="share-title">YCTI·摇曳露营人格测试</div>
+<div class="share-code" id="shareCode"></div>
+<div class="share-tag" id="shareTag"></div>
+<div class="share-quote" id="shareQuote"></div>
+<div class="share-qr-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQMAAACXljzdAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA9UlEQVRYheWXvQ2EMAyFjShSZoSMwmjcaBklI1CmQJj4JwGdoL2TbDfI+dLEen42AK+xokQBmLDlQfPDHsny4BLlQtg5DxZJageNUMJkavnmk0T0QkjxmMEn+X/P/YigRIm1+dtSHpzPPLkFe/xjmCBSA/5Q12OdSRuxGiQ5VX4yKR4g4aUDNwQWJNK7/n5mjKzd0rQGFdjJwRuhmshEb6Ntl6F2mCMjopi3OPnmiqzaAVwdaoL56gVjJHMFdEsjj8eueHMkoe7kOP41+bZHUnV3mfCjOrBKZHeRafalA/NEeyH28T6mmTWCEqwDrcF9h/VAXuMEkeqSgqcZgHQAAAAASUVORK5CYII=" alt="QR" width="150" height="150"></div>
+<div class="share-hint">扫码来测测你的人格吧！</div>
+<div class="share-footer">YCTI.FUN</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3/dist/d3-hierarchy.min.js"></script>
+<script>
+// ============================================================
+// WeChat / QQ video autoplay fix
+// ============================================================
+(function() {
+try {
+var v = document.getElementById('homeVideo');
+if (!v) return;
+// poster set via HTML attribute, no JS needed
+var playPromise = v.play();
+if (playPromise !== undefined) {
+playPromise.catch(function() {
+function doPlay() { try { v.play().catch(function(){}); } catch(e) {} }
+if (typeof WeixinJSBridge !== 'undefined') {
+try { WeixinJSBridge.invoke('getNetworkType', {}, doPlay); } catch(e) {}
+}
+document.addEventListener('WeixinJSBridgeReady', doPlay, {once:true});
+document.addEventListener('touchstart', doPlay, {once:true});
+document.addEventListener('click', doPlay, {once:true});
+});
+}
+} catch(e) {}
+})();
+// ============================================================
+// GitHub API 统计后端
+// 读写均走 api.github.com，无缓存延迟
+// ============================================================
+const GH_REPO = 'kevinliu0619/ycti';
+const GH_TOKEN='***' + '_O6Aas5Fz21Fjfw3j15TvzaLv1SRI1uuoejnorMqWE7jEYRLKCOE98X7rJ7c';
+const GH_STATS_FILE = 'stats.json';
+
+function ghAuth() {
+return 'Basic ' + btoa('kevinliu0619:' + GH_TOKEN);
+}
+
+async function ghStatsRead() {
+// 直读 GitHub API，不走 CDN，无缓存延迟
+const resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
+});
+if (!resp.ok) return { total: 0, results: {} };
+const d = await resp.json();
+return JSON.parse(atob(d.content));
+}
+
+async function ghStatsSubmit(personality) {
+try {
+// Step 1: GET 当前文件 + SHA
+const getResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
+});
+let stats = { total: 0, results: {} }, sha = null;
+if (getResp.ok) {
+const d = await getResp.json();
+sha = d.sha;
+stats = JSON.parse(atob(d.content));
+}
+// Step 2: 更新数据
+stats.total = (stats.total || 0) + 1;
+stats.results[personality] = (stats.results[personality] || 0) + 1;
+// Step 3: PUT 写回
+const content = btoa(unescape(encodeURIComponent(JSON.stringify(stats))));
+const body = { message: 'record: ' + personality, content, branch: 'main' };
+if (sha) body.sha = sha;
+const putResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+method: 'PUT',
+headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'YCTI' },
+body: JSON.stringify(body)
+});
+if (!putResp.ok && putResp.status === 409) {
+// SHA 冲突：重试一次
+const r2 = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
+});
+if (r2.ok) {
+const d2 = await r2.json();
+let s2 = JSON.parse(atob(d2.content));
+s2.total = (s2.total || 0) + 1;
+s2.results[personality] = (s2.results[personality] || 0) + 1;
+const c2 = btoa(unescape(encodeURIComponent(JSON.stringify(s2))));
+await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+method: 'PUT',
+headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'YCTI' },
+body: JSON.stringify({ message: 'record: ' + personality, content: c2, sha: d2.sha, branch: 'main' })
+});
+}
+}
+} catch(e) { console.warn('stats submit error:', e); }
+}
+
+// ============================================================
+// DATA: 30 Personalities
+// ============================================================
+const THEME_COLORS = { rin:'#7eb8da', nadeshiko:'#e8a0b0', chiaki:'#b89ad4', aoi:'#a8b878', ena:'#c0b8a8', easter:'#d4b840' };
+const POSTER = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCAIcA8ADASIAAhEBAxEB/8QAGwAAAwEBAQEBAAAAAAAAAAAAAAECAwQFBgf/xABHEAABAwMDAgQEBAQFAgQFAwUBAAIRAyExBBJBUWEFEyJxMoGRoRRCUrEGYsHRIzNy4fAVgiRTkvEWNENEojVUY3ODk7Li/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQF/8QAJREBAQEBAAICAgMAAwEBAAAAAAERAhIhAzEEQRMiUQUUMmFx/9oADAMBAAIRAxEAPwD85NylESnymgQEJHKCUFAco5SGVVkAkUEpBABPhATmQgABHdECEZv0Rk9kAfhCJgIOEokIEnKIRFpQCCLJKuUCOUJlCAHKJEylwUEXQMGHApm7pUxcKgPSgICLJJoEYUqnBIiEAEDKLfZNAKSmUIAJpQi6B8I4SwETZA8pRBS/dMzygAm5IA/JM4QKbJmUFogEJYKBhLCAnkoGIISi6BZEygLA2VDr2U4CYlAjM+yRyIsmYSNsoHJlIYuge6aBkw0IkmEgLGeETwEDAmfqg49ksINkCiU4ugWCJsgUemURaUwEIFkolMjolFj0QHzQSkmUAbwmYjCXCJwrLgOUwbJTJREiygd0iSmMJC5QABkIyekJzCUkkk8oGDgI5KXaEzcBABMmyALpEWmUACAnPySBTIugXKEGNyC2XWQEyb4QTeE7QQUuUBYoz80chEQECi6fsmBbKUIGAkcwnwkcQgMiyZKnEJyTKA5T6xylwmMoG2FDhcq23KkC5JwgBwggTHRMYQQgXZIZTEp5KBG2E5sUOFrJRZAAiLplsqYKsXygmOiV1ZABvhKBOUEkfRPhO2Alm/CB2gJGIkJZgcKo9N0ClHIlEcoGUDOZRCDhBsgRsmXQBCXVVHVBMoFk9sIJgkIGQBCknhEmLoNggAU8wpTGEBwjhICyATKAiEZEJnKXRAFJV1KALSgSAiIShBUco4UynKBiIwjAiEpVTlBMdUwYCCZQRYIA3KfZLlNAkuipJASUApTZCCxiVJOUSNoSd0QMH0pzZTgpoFKJRkpx2QKTKHSSmhAgUwkBCoXKBRBQRZM5ShAh3QZRyhAQgp8RykcIAK4t3UBUgQMSlEpkolA+FOcomyB9UBEJiUotKoCwKAGDKnkKiOiQzKAP0RMIJBlMjlApRCBmOExknogRACCYuOUcIAlANwp5sqsiyAmeEuyoJAcoJB4KcwiETZAwZEINsoFvmEfFPZAzeE49EKRm6oECEEjEoyE5ykYKBHCRVWRCBApiFOExZAEoVEWSQIpZVR0SygfKaQynmOyAOB3Q/PsgzI5TBiQUEz1ygEGxRF0iIQOJyqCiVWcIE43RJ4REXRICA5RPKM3QUAEzdMFI2KAEYKaQMptyECIwkrIspQIgygXCaBYYQG4CEifuggdUul0FDKeVMptQGAQif9kDBQOOyBSmhLgIHhG1K6cQECOLo5TCDhAkha6aIQAIjuU5QLI5nhAjhCOCUGwCBkzCMoPCQsYQEJh32SwUEBA83lESJS4TBgFBJJNkXTiyRQMC8FFr3RlIC6BJpJoCcoOElSBBP8qOqBEIApKu6XdAkkwmUCQlymO6BKpwkghA+UE2CXKBhASgpwkgEFCBdARZPMIsU/ZAQiEExCXM9EDtCSJlBlATHCDdBEpCyBowiZKJt3QHCEslA+JBZEKIBKqbIQIzHdTkq+e6UESgQKYSKaBE9OqMphAQHCYsi8koyboDsiRdI5EpR... [truncated]
+const HERO_DEFAULT = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAQ4B4ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwB7uMcVHnmmkjFJnmvrT5uw/NJzTc0BqQWH5ozTc0ZoEOzRmm5ozQA7NGabRQA7NGabRQA6im5ozQIdRTc0ZoAfmkzTelLmgBc0ZpuaAaAH5ozTM0ZoAfmjNMzS5oAM0ZpM0ZoAXNGaTNGaBjs0ZpmaM0DH5ozTM0ZoGOzRmm5ozUjHZo3U3P1oz9aBC5ozTM0ZpjHZozTM0maAJM0hNMyaM0DQ7NGabmkoAWikzRmgAoozSZoGGaM0maTNSMdmkpKDQAuaTNFJmkMCaTJoNJmgYmaCaTNBNABmkzRmkoAdSZpM0maChaM03NFACk0maKSgoCaM0hpKACkzRRSAM0ZpKSgBc0hozSUFBS5pDSZoELSUGkzQOwtIaWkNAWEzRkUhpKQ0KTxSUEUnNAWCkoooGFJQaKADvRxRR0NACdRR24o4JoAGaQCZ4pKdxmkxQUHWkJ9KWmmgBaSiigQUUUUDCiijNAwopM0UAFFFJQAGkoooAKKSigBaM0lFACUUUhqShKKKKBCUopKKQhTSUUUAFIaWkNWAUopKBQAUUUUDG0UppKADtSUvakoAKTvS0negBaQ0UUAIaQ0pptAxRQaQ0GgBM0ZNL2p4jYrkUAR0UHikzUjDNJRRQAUhpc0lACiikozQIB1oxSUUAFJxS0mOKAENJS0lIApDRmgUAFFFFACUlKaSgAooopABpKU0lMYUUUmRQAtFJmkzQA6kooqRBSE4optADjSUUmaBi0UUlABSfxUtJ/FQAtNPWnU09aBiUUUUwCiiigBKKKKQgooooASkNLRQA2iiigAooopDEooooAZRSkYpKYAaSlpKAE7UUtJSGNpRQKO9AAaSlNJSKCg0UGgBtJS0lIBKDRQaAEooooAQ0UGigAooooAQ0lKaSgAooooAKKKKAEoooqQA0lKaSgAooooAKKKKAG0UUUAFFFFADTRQaKQBRRRQB69RmmmgGvTPHHGjNNzS5oAduo3UzNGaBD91Lmo80ZoAkzRmo80ZoAkzRmo80ZoESZozTMijIoAfmjNMyKMigCTNJmm5NBJoAfmkzTM+tFAD80ZplFAD80ZplFAD6KjzRmgCSio80ZoAdRTc0ZoKHUU3NGaAHZPpRk+lNzR... [truncated]
+const PERSONALITIES = {
+LONE:  { code:'LONE',  role:'凛',  tag:'独狼凛',  quote:'一个人最自在。篝火+书+咖啡=完美世界。', desc:'你在爷爷的影响下爱上了露营，但比起一群人热热闹闹，你更享受一个人的节奏。搭好帐篷，烧起篝火，泡杯咖啡，翻开书——这就是你的理想假期。朋友约你你也会去，但内心最深处，你知道最好的露营地是只有自己知道的那个。', partner:'NOM', partnerText:'她会闯进你的营地，然后你发现自己居然没赶她走。', theme:'rin',easter:false },
+TSUN:  { code:'TSUN',  role:'凛',  tag:'傲娇凛',  quote:'我才不是为了你们才来的。',  desc:'然后默默帮所有人劈好了柴，查好了天气，还偷偷通知了老师来救场。你嘴上说着"麻烦""不要"，但每次朋友有需要，你总是第一个到。你只是不擅长把关心说出口，但行动从不撒谎。', partner:'SUNNY', partnerText:'她总能一眼看穿你的"不要"其实是"好吧"。', theme:'rin',easter:false },
+PAGE:  { code:'PAGE',  role:'凛',  tag:'文艺凛',  quote:'露营的终极奥义，是换个风景好的地方看书。', desc:'你选择露营地的标准不是设施好不好，而是——那里安静吗？能看见富士山吗？光线适合看书吗？你会在篝火旁读到深夜，然后第二天清晨被鸟鸣叫醒。世界很吵，但你有自己的节奏。', partner:'LONE', partnerText:'你们会安静地坐在一起，各自看书，偶尔抬头对视一眼，又继续低头。', theme:'rin',easter:false },
+OWL:   { code:'OWL',   role:'凛',  tag:'夜猫子凛',  quote:'深夜才是主场。凌晨三点的富士山，只属于醒着的人。', desc:'你习惯在别人都睡着之后，一个人坐在篝火旁。有时候看星星，有时候就是发呆。你不是失眠——你只是觉得夜晚比白天更诚实。凌晨的风吹过来的时候，你觉得全世界都是你的。', partner:'LURK', partnerText:'她也在线。你们在不同的地方，看同一片星空。', theme:'rin',easter:false },
+SPA:   { code:'SPA',   role:'凛',  tag:'温泉凛',  quote:'露营地选在温泉旁边不是偶然，是信仰。', desc:'对你来说，露营的终极享受不是帐篷也不是篝火——是泡完温泉后那一瞬间。你愿意为了一个有温泉的营地多骑几十公里。泡在热水里看着远山的时候，你觉得人生没有过不去的坎。', partner:'SEYANA', partnerText:'她泡温泉的时候一句话不说，你们都很享受这种沉默。', theme:'rin',easter:false },
+NOM:   { code:'NOM',   role:'抚子', tag:'饿鬼抚子',  quote:'露营的终极奥义就是吃！50个饺子只是开胃菜！', desc:'你看到美食的眼神会让朋友害怕。你的露营计划核心不是"去哪"，而是"吃什么"。你可以在吃完2kg汉堡肉+超大份炒面+拉面之后，说一句"又饿了"——并且是认真的。但你也从不吝啬分享，你做的饭永远够所有人吃。', partner:'CHEF', partnerText:'或者更准确地说，你们就是同一个人。做饭和吃饭，都是你。', theme:'nadeshiko',easter:false },
+SUNNY: { code:'SUNNY', role:'抚子', tag:'小太阳抚子', quote:'好耶！一起去！大家一起去！', desc:'你像一只金毛——看到谁都热情，去哪都开心，遇到什么事都先笑。你的快乐不需要理由，而且传染性极强。三分钟前还陌生的人，聊完就觉得认识很久了。你不是没有烦恼，你只是觉得没必要让烦恼占太多时间。', partner:'LONE', partnerText:'你是唯一能让她露出笑容的那个人。', theme:'nadeshiko',easter:false },
+'BOO!':{ code:'BOO!', role:'抚子', tag:'胆小鬼抚子', quote:'别讲了别讲了别讲了——', desc:'怕黑、怕鬼、怕怪谈。听到帐篷外有奇怪的声音会缩进睡袋最深处。但奇怪的是——为了给朋友拍夜景照，你可以一个人走半小时的黑暗山路。恐惧不会让你停下，你只是需要先尖叫一下。', partner:'MOM', partnerText:'她会一边说"真拿你没办法"一边陪你走夜路。', theme:'nadeshiko',easter:false },
+CHEF:  { code:'CHEF',  role:'抚子', tag:'实验料理王抚子',  quote:'试试这个——巧克力放进咖喱里？还有这个熏制奶酪……', desc:'你对料理没有边界感。锡纸包整颗蔬菜烤？甜酒曲奇？咖喱里放巧克力？你什么都敢试。有时候成功，有时候翻车，但翻车了你也会笑着吃完。你的厨房（或者说篝火旁）永远是最热闹的地方。', partner:'NOM', partnerText:'她负责吃，你负责做，完美循环。', theme:'nadeshiko',easter:false },
+CHOO:  { code:'CHOO',  role:'抚子', tag:'铁道宅抚子',  quote:'坐齿轨列车比露营还兴奋！露营只是顺便啦。', desc:'你本来只是去露营，结果在途中迷上了Abt式齿轨列车、蒸汽机车、无人车站。你开始研究铁道时刻表，买印着铁道发明家头像的T恤。朋友说"我们不是来露营的吗"，你说"对啊，但你看这个列车——"', partner:'DRIVE', partnerText:'她开车，你坐电车，在不同的轨道上奔赴同一个方向。', theme:'nadeshiko',easter:false },
+CHAOS: { code:'CHAOS', role:'千明', tag:'整活王千明',  quote:'把自己打包成快递寄到露营地？我觉得可行！', desc:'你就是野活部叫"整活部"的原因。你的脑洞没有边界，你的行动力也没有。你策划的露营计划永远包含至少一个离谱的环节，但最后总能莫名其妙地成功。朋友说你是"麻烦制造机"，你说"不，我是惊喜制造机"。', partner:'DASH', partnerText:'整活需要执行，你们就是彼此的加速器。', theme:'chiaki',easter:false },
+WEEP:  { code:'WEEP',  role:'千明', tag:'爱哭鬼千明',  quote:'呜呜呜这个露营场太棒了我好感动——', desc:'你是嗓门最大的人，也是泪腺最浅的人。篝火旁聊着聊着突然哭了，看日出哭了，看到朋友偷偷给你准备的生日惊喜哭得更凶。你从不掩饰自己的情绪，哭完笑完，继续整活。', partner:'MOM', partnerText:'她会默默递纸巾，然后假装没看见你哭。', theme:'chiaki',easter:false },
+BROKE: { code:'BROKE', role:'千明', tag:'穷鬼千明',  quote:'700日元！买了个爹！', desc:'你的露营装备几乎全是二手店淘的。你买过700日元的木碗（后来变成了仙人掌盆），用劣化吊床替代露营椅，自制的熏制器用纸箱做的。你不觉得穷是问题——你觉得穷是创意的催化剂。', partner:'CARB', partnerText:'两人一起逛二手店，互相怂恿"这个可以买"。', theme:'chiaki',easter:false },
+DASH:  { code:'DASH',  role:'千明', tag:'热血笨蛋千明',  quote:'迷路也是体验！反正会被救的——大概吧！', desc:'你是那种想到什么就冲的人。先出发再查路线，先买了再说怎么用。你经常搞砸，但从不后悔。因为最棒的故事往往来自最离谱的意外。而且你有一个（或者好几个）无论如何都会来救你的朋友。', partner:'DRIVE', partnerText:'她会开车来救你。虽然嘴上骂你，但油门下得很稳。', theme:'chiaki',easter:false },
+SEYANA:{ code:'SEYANA',role:'葵',  tag:'佛系葵',  quote:'せやな～', desc:'天塌下来？主打一个随缘。你是那个在所有人焦虑的时候说"まあ、なんとかなる"（总会有办法的）的人。你说话带着关西腔的慵懒，行动带着一种从容的节奏。不是不在乎，而是你知道——急也没用。', partner:'CHAOS', partnerText:'她是龙卷风，你是风眼。没有你，她早就把自己吹飞了。', theme:'aoi',easter:false },
+MOM:   { code:'MOM',   role:'葵',  tag:'老妈子葵',  quote:'先把饭做好，热水烧好，然后你们再闹。', desc:'你是野活组真正的幕后支柱。千明负责整活，你负责善后；抚子负责吃，你负责做。你记得每个人的口味，知道谁需要加衣服，在所有人疯完闹完之后，你已经默默把一切收拾好了。你从不说"我来照顾你们"，但每个人都知道你会的。', partner:'WEEP', partnerText:'她哭的时候，只有你知道什么时候该递纸巾，什么时候该假装没看见。', theme:'aoi',easter:false },
+USOYARE: { code:'USOYARE', role:'葵',  tag:'骗人精葵',  quote:'我跟你们说，上次我骑自行车……', desc:'你的浓眉一挑，死鱼眼一翻，一段真假难辨的故事即将出口。你编故事的时候面不改色，细节丰富到让人怀疑"难道是真的？"——但谢天谢地，你从不拿重要的事开玩笑。你的「嘘やれ」是野活组的保留节目。', partner:'SHIP', partnerText:'你们俩凑在一起，没人能分清哪句是真的。', theme:'aoi',easter:false },
+CARB:  { code:'CARB',  role:'葵',  tag:'碳水狂魔葵',  quote:'骑车40公里？不，是为了去那个便利店看看有没有新出的面包。', desc:'你的骑行路线规划不是按距离，是按沿途便利店的数量。你能骑出41km/h的速度——但每次停下来都是因为"这家店看起来不错"。你骑车是为了吃，吃是为了骑车，这是一个完美的循环。', partner:'NOM', partnerText:'你们一起骑车，一起吃饭，一起感叹"人生啊"。', theme:'aoi',easter:false },
+LURK:  { code:'LURK',  role:'惠那', tag:'云露营惠那',  quote:'人在被炉，心在营地。点赞从不缺席，出门下次一定。', desc:'你是野活组的编外成员——从未正式加入，但每次露营的群聊你都全程在线。你远程给凛提供建议，撮合野活组和凛认识，偶尔还通风报信。你的参与感不靠到场，靠信息量。你知道的永远比在场的人多。', partner:'OWL', partnerText:'你们在不同的地方，看着同一片星空，互相发消息。', theme:'ena',easter:false },
+SHIP:  { code:'SHIP', role:'惠那', tag:'搞事精惠那',  quote:'りんりん～抚子说她马上到哦～', desc:'其实你根本没告诉抚子。你最大的乐趣不是自己搞事，是看别人因为你的安排而相遇。你促成了凛和野活组的第一次接触，方式是"卖队友"。你笑眯眯地站在幕后，看着一切如你所料地发生。', partner:'CHAOS', partnerText:'你们俩的整活组合，能让整个营地鸡飞狗跳。', theme:'ena',easter:false },
+DOGGO: { code:'DOGGO', role:'惠那', tag:'爱犬惠那',  quote:'竹轮在哪我在哪。露营可以不去，狗不能不撸。', desc:'你给竹轮买了35000日元的专属露营装备——包括一顶10000日元的狗帐篷。你计划18岁考驾照，不是为了自己，是为了带竹轮去更远的地方。别人问你为什么不加入野活部，你说"还没打算从归宅部毕业"——其实就是想多陪竹轮。', partner:'WAN!', partnerText:'你们不需要语言。你懂它，它懂你。', theme:'ena',easter:false },
+COZY:  { code:'COZY',  role:'惠那', tag:'被炉星人惠那',  quote:'被炉是宇宙的中心。冬天+被炉+零食+手机=幸福。', desc:'你的作息极其不规律，早起是你最大的敌人。你可以在被炉里度过整个冬天，靠手机远程参与一切社交活动。你知道这样不太好——但被炉真的很暖和，手机真的很好玩，外面的世界可以再等等。', partner:'SEYANA', partnerText:'你们一起躺在被炉里，一句话不说，但都觉得"这样就挺好"。', theme:'ena',easter:false },
+// Easter eggs
+'WAN!': { code:'WAN!', role:'竹轮', tag:'竹轮本犬', quote:'汪！', desc:'你不需要成为人群的焦点——你只需要一个人。你的世界不大：就是那个人 + 一个温暖的窝 + 永远摸不完的头。你的幸福公式很简单：被需要 = 幸福。人类露营关你什么事？你在你的小窝里等着就行——反正那个人会带你去。', partner:'DOGGO', partnerText:'她是你的全世界，你是她的全部。', theme:'easter',easter:true },
+'6CAN': { code:'6CAN', role:'老师', tag:'酒鬼老师', quote:'六罐姐可不是白叫的。', desc:'白天你是所有人的依靠——靠谱、温和、永远在照顾别人。但下班铃一响，脱下外套，打开第一罐啤酒的那一刻，另一个你醒了。你不需要被理解，你只需要再来一罐。戒酒期间你迷上了黄油曲奇——但戒酒结束后又开了一瓶。', partner:'USOYARE', partnerText:'喝醉后听她讲故事，你分不清是自己醉了还是故事太离谱。', theme:'easter',easter:true },
+SAGE:  { code:'SAGE',  role:'爷爷', tag:'露营仙人', quote:'你年轻时帐篷还是帆布的。', desc:'你走过很多路，修过很多车，认识很多人——但从不刻意。你从不教别人该怎么活，你只是活给他们看。有人问你去哪，你说"随便走走"——然后一走就是一年。你的装备不新，但每一样都有故事。你把帐篷、煤油灯、露营指南书传给下一个人，就像把一种生活方式悄悄种进他们的生命。', partner:'LONE', partnerText:'你们坐在一起，各自看书，偶尔抬头对视一眼。你从没说出来——但她是你见过最像你的人。', theme:'easter',easter:true },
+'3776': { code:'3776', role:'中毒者', tag:'富士山中毒者', quote:'3776米。这不是数字，是信仰。', desc:'你对富士山的爱超越了理性。你能从任何角度认出富士山，你能说出每个观景点的最佳时间。你看到富士山的时候，会停下一切，安静地看很久。它不只是山——它是你心里的坐标系。不管走多远，只要能看到它，你就知道自己没走丢。', partner:'PAGE', partnerText:'和她一起安静地看富士山，不用说话，就是最好的陪伴。', theme:'easter',easter:true },
+CHILL: { code:'CHILL', role:'绫乃', tag:'慵懒骑士绫乃', quote:'绫乃的体力是三人中最差的——但没关系，反正骑完摩托瘫在地上也很舒服。', desc:'答应朋友的事你可能拖了很久——但最后你还是骑着摩托、跨了几个县界到了。你体力不好？没事，躺在地上看星星也很舒服。你对朋友的心意从不打折——路上花了多久不重要，重要的是你来了。', partner:'TSUN', partnerText:'你们在路上并排骑行。她开得快，你开得慢，但最后都会在露营地碰头。她知道你一定会到，所以你迟到她也从不催。', theme:'easter',easter:true },
+DRIVE: { code:'DRIVE', role:'樱姐', tag:'飙车党樱姐', quote:'いいよ。', desc:'你不说"我爱你"，你说"いいよ"。两个字，背后是深夜三小时的山路。朋友凌晨迷路了，你没说"你疯了"，你说"发我定位"。你开车穿过黑夜，不是因为你想露营——是因为有人在那个营地里等你。你表面冷淡，但方向盘从不犹豫。', partner:'DASH', partnerText:'你嘴上骂她冒失，但每次都是你开车去救她。她知道你会来，所以她才敢乱跑。', theme:'easter',easter:true },
+ASAKA: { code:'ASAKA', role:'亚咲花', tag:'露营之声亚咲花', quote:'露营地放的歌，十首里有五首是你的。', desc:'你不一定在现场，但你的声音在。你唱过的歌变成了别人的露营BGM，变成了他们出发时的闹铃，变成了篝火旁的大合唱。你创造的不是音乐——是记忆的背景音。每一次有人按下播放键，你就陪他们又出发了一次。', partner:'AFRO', partnerText:'你们是彼此的因果。一支笔创造一个世界，一首歌给它温度。不需要见面——歌响起的时候，你们就在一起。', theme:'easter',easter:true },
+AFRO:  { code:'AFRO',  role:'Afro老师', tag:'部活创世神', quote:'爆炸头是本体，露营是信仰。想不出故事的时候就出去取材。', desc:'你喜欢把去过的地方画进作品里，把认识的人变成角色，把路边吃过的咖喱面画成名场面。你的创作不是凭空想象——是你把生活嚼碎了，重新拼成一幅画。你画的露营地后来变成了别人出发的理由。', partner:'ASAKA', partnerText:'你的世界给了她歌唱的理由，她的歌声让你的世界有了温度。一支笔，一首歌——同一个世界，两种表达。', theme:'easter',easter:true },
+MONO:  { code:'MONO',  role:'摄影部', tag:'摄影部部员', quote:'用镜头记录的日常，和用帐篷记录的星空，是同一种浪漫。', desc:'别人忽略的瞬间——黄昏的光线角度、路边野猫的哈欠——在你眼里全是宝藏。按下快门不是技术活，是本能。你带着相机走走停停，不知道会拍到什么——但你知道，一定会拍到什么。露营的时候，你比谁都安静，但你的眼里装满了别人没注意到的风景。', partner:'AFRO', partnerText:'你们都是「用画面讲故事」的人。一个画，一个拍——同一个世界，两种表达。', theme:'easter',easter:true },
+AQUA:  { code:'AQUA',  role:'水水人', tag:'沼津水水人', quote:'山里的咖喱面确实不错。但你来沼津尝尝海边的橘子——那是另一种甜。', desc:'当全世界的露营爱好者都涌向山梨和富士山的时候，你站在駿河湾边微微一笑。你知道好风景不只在山里——海岸线、海上的鸟居、海风里的咸味，同样是出发的理由。你去过本栖湖，也去过海边。你心里的地图，山和海各占一半。', partner:'3776', partnerText:'你们是静冈的一体两面：你爱海，她爱山。3776米加駿河湾，刚好拼成一个完整的静冈。', theme:'easter',easter:true },
+};
+
+// ============================================================
+// DATA: 50 Questions — 20 randomly selected each test
+// ============================================================
+const QUESTIONS = [
+{ text:'你在本栖湖畔搭好帐篷，篝火燃起，天黑了。这时候你……', camp:'rin', options:[
+{text:'掏出书，在火光下安静地读——这才是此行的目的',scores:{'OWL': 1}},
+{text:'用炉子烧了热水泡杯咖喱面，端着碗看湖面的富士山倒影',scores:{'NOM': 1, 'CHEF': 1, '3776': 1}},
+{text:'发了条消息到群里：「本栖湖～今晚在这里」',scores:{'LURK': 1, 'ASAKA': 1, 'COZY': 1}},
+{text:'安静地坐在湖边，看着湖面倒映的星空——好了，现在可以安心发呆了',scores:{'MONO': 1}}
+]},
+{ text:'冬天一个人在山中露营。下雪了，帐篷外一片白，温度降到零下……', camp:'rin', options:[
+{text:'检查了一遍装备，把暖宝宝贴好，继续看书——这点雪算什么',scores:{'SPA': 2, 'LONE': 1, 'OWL': 1}},
+{text:'在心里列了一张清单：下次要买更好的睡袋、更好的防潮垫、更好的……',scores:{'BROKE': 2, 'USOYARE': 1}},
+{text:'拍了段视频发给朋友：「你看，在下雪诶，超美的～」手机还剩2%电',scores:{'LURK': 1, 'DOGGO': 1, 'ASAKA': 1, 'BOO!': 1}}
+]},
+{ text:'你骑着摩托车在山路上转弯，富士山突然出现在眼前，大得不像话。你……', camp:'rin', options:[
+{text:'停下车，安静地看了五分钟。然后继续上路——但嘴角一直没下来',scores:{'3776': 1, 'SPA': 1, 'CHILL': 1}},
+{text:'「富士山！！！」大叫一声，掏出手机连发了十五条消息，虽然每条内容都差不多',scores:{'3776': 1, 'DASH': 1}},
+{text:'「3776米……」喃喃自语，然后拿出便当，对着富士山吃了起来',scores:{'3776': 1, 'NOM': 1, 'PAGE': 1}}
+]},
+{ text:'一个人露营的清晨。天还没亮你自然醒了。拉开帐篷……', camp:'rin', options:[
+{text:'泡一杯手冲咖啡，对着富士山慢慢喝。没人说话，也不需要',scores:{'3776': 1, 'SPA': 1}},
+{text:'掏出手机狂发消息给所有人：「富士山！！你们看！！！」',scores:{'AFRO': 1, 'COZY': 1}},
+{text:'愣了三秒，然后开始计算这座山海拔多少、从哪个角度拍最好',scores:{'CHOO': 2, 'PAGE': 1}},
+{text:'走到湖边，发现湖面和天空是同一个颜色。坐在那里看了整整一个小时。后来你经常想起这个黄昏',scores:{'MONO': 1, '3776': 1}}
+]},
+{ text:'露营时手机信号不好，一整晚没收到任何消息……', camp:'rin', options:[
+{text:'本来也没打算看手机。没有信号 = 真正的露营',scores:{'OWL': 1, 'SPA': 1, 'SHIP': 1}},
+{text:'突然觉得好孤独。录了一段语音想发给朋友，等有信号再发',scores:{'BOO!': 2, 'ASAKA': 1, 'WEEP': 2}},
+{text:'信号断了之后，某个人发疯一样给你发了三十几条LINE消息——你明早才能看到',scores:{'SHIP': 2, 'CHAOS': 1, 'COZY': 1}},
+{text:'太好了。没有信号的时候，反而能注意到更多细节——篝火的火焰在黑暗中画出各种形状，一看就是半小时',scores:{'MONO': 1}}
+]},
+{ text:'你在山路上看到骑摩托车旅行的陌生人停下来休息。你……', camp:'rin', options:[
+{text:'如果对方需要帮助，会停下来帮忙——但不会主动搭话',scores:{'OWL': 1, 'DRIVE': 1}},
+{text:'「这个型号的车好酷！你骑了多远？从哪来的？路上有什么好玩的？」',scores:{'CHOO': 1, 'CHAOS': 1}},
+{text:'看着对方的摩托车背影，心里想「也许有一天我也能这样」',scores:{'USOYARE': 1, 'DASH': 1, 'DRIVE': 1}},
+{text:'看着对方和摩托车的背影出了神——不是偷看，是觉得这个画面值得被记住',scores:{'MONO': 1, 'DRIVE': 1}}
+]},
+{ text:'露营时，有人在你旁边大声放音乐……', camp:'rin', options:[
+{text:'戴上降噪耳机，继续看书。各有各的玩法，不干涉',scores:{'OWL': 1, 'PAGE': 1, 'SEYANA': 1}},
+{text:'「这首歌不错！什么乐队？」——然后变成了一起听歌，还加了LINE好友',scores:{'CHAOS': 1, 'ASAKA': 1, 'SHIP': 1}},
+{text:'走过去委婉地说：「不好意思，能不能小声一点？我想听篝火的声音。」',scores:{'TSUN': 2, 'MOM': 1}}
+]},
+{ text:'露营最后一晚，篝火快灭了。你……', camp:'rin', options:[
+{text:'看着最后一点火星慢慢熄灭，觉得这一刻和旅途本身一样重要',scores:{'OWL': 1, 'LONE': 1, 'SPA': 1}},
+{text:'「不要灭啊——」往里面扔了最后几根柴，然后对着火焰发了好一会儿呆',scores:{'BOO!': 2, 'ASAKA': 1}},
+{text:'已经睡着了。篝火？什么篝火？',scores:{'COZY': 1, 'SEYANA': 1, 'CHILL': 1}}
+]},
+{ text:'深夜，一个陌生女孩瑟瑟发抖地出现在你的营地——她骑车来看富士山，结果迷路到现在。你……', camp:'nadeshiko', options:[
+{text:'虽然有点慌但还是让她坐下了，还分了热可可给她',scores:{'TSUN': 2, 'DOGGO': 1, 'LONE': 1, 'WAN!': 1}},
+{text:'「骑自行车来的？！你疯了吧！」然后赶紧让她进帐篷暖和',scores:{'MOM': 1, 'WEEP': 1, 'CHAOS': 1}},
+{text:'打了个电话给她姐姐，确认安全后默默把篝火添旺了些',scores:{'PAGE': 1, 'OWL': 1, 'DRIVE': 1}}
+]},
+{ text:'社团讨论第一次正式露营的装备清单。你……', camp:'nadeshiko', options:[
+{text:'「我带帐篷和炉子就够了，多了装不下」',scores:{'DOGGO': 1, 'CARB': 1}},
+{text:'「熏制奶酪！烤棉花糖！还有这个新出的限定口味薯片！」——清单上全是吃的',scores:{'CHEF': 2, 'SUNNY': 1}},
+{text:'「把自己打包寄到露营地比较省运费吧？」——然后真的开始算快递费用',scores:{'CHAOS': 1, 'BROKE': 2, 'DASH': 1, 'SHIP': 1}}
+]},
+{ text:'隔壁营地的人煮了一锅超级香的料理，香味飘过来了……', camp:'nadeshiko', options:[
+{text:'闻着香味继续吃自己的泡面——别人的是别人的',scores:{'TSUN': 1, 'SPA': 1, 'OWL': 1}},
+{text:'端着自己的碗走过去：「你们在吃什么呀？闻起来好香！」——然后被分了一碗',scores:{'NOM': 1, 'DASH': 1, 'CHEF': 1}},
+{text:'心里盘算着要不要假装没带够吃的，然后被某个热情的人发现并投喂',scores:{'USOYARE': 2, 'COZY': 1, 'NOM': 1}}
+]},
+{ text:'你的朋友在营地煮了一大锅咖喱，结果盐放多了，咸得不行……', camp:'nadeshiko', options:[
+{text:'默默加了点水，什么都没说。反正能喝',scores:{'TSUN': 2, 'SPA': 1, 'OWL': 1}},
+{text:'「没事没事，配米饭吃刚刚好！再来一碗！」——然后真的又添了一碗',scores:{'NOM': 1, 'CHEF': 1, 'WEEP': 1}},
+{text:'「啊……我好像忘了买饮料。算了，咸了就多喝水吧」——其实根本没帮上忙',scores:{'SEYANA': 1, 'WEEP': 1, 'USOYARE': 1}}
+]},
+{ text:'你在便利店看到一款新出的「露营限定」口味零食……', camp:'nadeshiko', options:[
+{text:'拿起来看了看配料表，放下了。下次露营再说',scores:{'CARB': 1}},
+{text:'「露营限定？买了买了买了！！」——然后买了三包，当场拆了一包',scores:{'NOM': 1, 'DASH': 1}},
+{text:'发消息到社团群里：「这个有人吃过吗？好吃吗？在线等」——然后在便利店等了十分钟',scores:{'LURK': 1, 'SHIP': 1, 'WEEP': 1}}
+]},
+{ text:'你第一次一个人去露营。到了营地，搭好帐篷，天已经全黑了。篝火烧起来之后，你……', camp:'nadeshiko', options:[
+{text:'掏出手机给朋友发消息：「我一个人到了！这里好安静……有点害怕但又好开心！」',scores:{'SUNNY': 1, 'BOO!': 2, 'LURK': 1, 'WEEP': 1}},
+{text:'把带来的食材全部摆出来——一个人也要吃三菜一汤，这是原则问题',scores:{'NOM': 1, 'CHEF': 2}},
+{text:'坐在篝火旁，突然理解了为什么有人喜欢一个人露营。给那个「独行侠前辈」发了条LINE：「我好像懂了。」',scores:{'PAGE': 1, 'TSUN': 1, 'OWL': 1}}
+]},
+{ text:'露营当晚，有人开始讲山里的怪谈。帐篷外有风声，远处有动物叫……', camp:'nadeshiko', options:[
+{text:'「别讲了别讲了别讲了——」整个人缩进睡袋，只露出眼睛',scores:{'BOO!': 2, 'WEEP': 1, 'NOM': 1}},
+{text:'「嗯～」其实已经快睡着了，根本没在听',scores:{'SEYANA': 2, 'COZY': 1}},
+{text:'面无表情听着，等讲到最恐怖的地方，突然冷冷地补了一句更吓人的',scores:{'TSUN': 2, 'SHIP': 1, 'BOO!': 1}}
+]},
+{ text:'出远门旅行时，你的包里一定会有……', camp:'nadeshiko', options:[
+{text:'一本书。目的地可以变，书不能不带',scores:{'SPA': 1, 'OWL': 1, 'LONE': 1}},
+{text:'零食。而且是那种到了目的地会变得更好吃的零食',scores:{'NOM': 1, 'CHEF': 1}},
+{text:'一本铁道时刻表。你甚至在出发前就把换乘方案做好了',scores:{'CHOO': 2, 'PAGE': 1}}
+]},
+{ text:'社团经费捉襟见肘。有人从二手店买回来一个「超便宜的碗」，发现……', camp:'chiaki', options:[
+{text:'「一千日元买了个破碗？下次经费申请必须过我这关」',scores:{'MOM': 1, '6CAN': 1}},
+{text:'「七百日元！你被人骗了吧？！」笑得最大声，但也帮忙想办法',scores:{'CHAOS': 2, 'BROKE': 1, 'CHEF': 1}},
+{text:'「算了算了，反正可以拿回家给我妈装仙人掌」——反正不是你的钱',scores:{'SEYANA': 1, 'USOYARE': 1, 'WEEP': 1}}
+]},
+{ text:'大家围坐在篝火旁，有人提议每个人讲一个自己最糗的露营经历……', camp:'chiaki', options:[
+{text:'「第一次露营忘了带打火机，用放大镜生的火」——讲完发现大家看你的眼神不太对',scores:{'PAGE': 1, 'LONE': 1, 'SHIP': 1}},
+{text:'「我上次把帐篷搭在斜坡上，半夜滚到了帐篷底部，像睡在滑梯上」——边说边笑到岔气',scores:{'CHAOS': 1, 'BROKE': 1, 'DASH': 1}},
+{text:'「我……我没什么糗事。真的。」——但脸已经红到篝火都黯然失色',scores:{'USOYARE': 1, 'BOO!': 2, 'DOGGO': 1}}
+]},
+{ text:'社团群里有人发了一张新的露营装备图，价格不菲……', camp:'chiaki', options:[
+{text:'默默存图，打开二手网站搜索同款',scores:{'BROKE': 2, 'CARB': 1, 'LURK': 1}},
+{text:'「这个好棒！谁买了借我用用！」——然后被群嘲「你自己买啊」',scores:{'CHAOS': 2, 'WEEP': 1}},
+{text:'「我上次在店里看到过，实际重量比标称重了200克，建议买老款」——发完没人回了',scores:{'CHOO': 2, 'PAGE': 1, '6CAN': 1}}
+]},
+{ text:'新年第一天。你许了一个关于露营的愿望……', camp:'chiaki', options:[
+{text:'「今年也要一个人去更多没去过的地方」',scores:{'LONE': 1, 'OWL': 1, 'CARB': 1}},
+{text:'「希望今年能带家人/朋友来一次露营」——虽然他们不一定想来',scores:{'SUNNY': 1, 'WEEP': 1, 'MOM': 1, 'DOGGO': 1}},
+{text:'「希望今年能攒够钱把想买的装备都买了……」——去年的愿望也是这个',scores:{'BROKE': 2, '6CAN': 1}}
+]},
+{ text:'露营时，你发现有人偷偷把你的篝火柴抱走了（他以为是公共柴堆）……', camp:'chiaki', options:[
+{text:'默默去捡了新的柴。反正山里到处都是',scores:{'OWL': 1, 'SHIP': 1, 'COZY': 1}},
+{text:'「喂喂喂那是我的柴！你拿之前至少问一句吧！」——但最后又分了他一半',scores:{'TSUN': 2, 'CHAOS': 1, 'MOM': 1}},
+{text:'追上去：「你拿柴要干嘛？要不要顺便一起烤红薯？」——结果变成了一场小型野餐',scores:{'SUNNY': 1, 'CHEF': 1, 'NOM': 1, 'SHIP': 1}}
+]},
+{ text:'学校文化祭，社团的展位该怎么布置？', camp:'chiaki', options:[
+{text:'用卡纸搭了个迷你帐篷展示区，旁边放了真实露营装备给人摸',scores:{'CARB': 1, 'CHEF': 1}},
+{text:'搞了个「野活部咖啡厅」——卖手冲咖啡和烤棉花糖，生意好到排长队',scores:{'CHEF': 2, 'NOM': 1}},
+{text:'「我们把被炉搬来吧！」——最后展位变成了一堆人挤在被炉里聊露营趣事',scores:{'COZY': 1, 'AFRO': 1, 'BROKE': 1}}
+]},
+{ text:'你发现一条绝美的林间小路，地图上没有标注……', camp:'chiaki', options:[
+{text:'骑过去看看——大不了掉头。未知本身就是风景',scores:{'DASH': 2, 'LONE': 1, 'DRIVE': 1}},
+{text:'「这条路太棒了！回头一定要带大家来！」已经在心里列好了邀请名单',scores:{'SUNNY': 1, 'NOM': 1, 'DOGGO': 1}},
+{text:'先用手机记下路口坐标，查了一遍安全信息，再决定走不走',scores:{'LURK': 2, 'CHOO': 1, 'PAGE': 1}}
+]},
+{ text:'社团需要决定下一个露营地点。大家在讨论……', camp:'aoi', options:[
+{text:'「我推荐这个营地，海拔1500米，有温泉，晚上能看到银河。」——资料已经整理好了',scores:{'LURK': 2, 'PAGE': 1, '3776': 1}},
+{text:'「去哪都行！只要有好吃的！上次那个营地的烤红薯真的太绝了！」',scores:{'NOM': 1, 'CHEF': 1}},
+{text:'「随便。你们定吧，反正我跟着去就行。」——其实心里已经想好了三个备选方案',scores:{'SEYANA': 1, 'USOYARE': 2}},
+{text:'「山里去了很多次了，要不要试试海边？海边露营看日出不用爬山」',scores:{'AQUA': 1}}
+]},
+{ text:'你的朋友说「想尝试一个人露营但有点害怕」。你怎么回应？', camp:'aoi', options:[
+{text:'「一开始害怕很正常。先从离家近的营地开始，带上喜欢的书和吃的，慢慢就习惯了」',scores:{'MOM': 2, 'PAGE': 1}},
+{text:'「我陪你第一次去！第二次你就不怕了——大概吧！」',scores:{'DASH': 1, 'SUNNY': 1, 'CHAOS': 1}},
+{text:'发了一堆链接：必买装备清单、推荐的营地、天气预报、附近温泉……比旅行社还详细',scores:{'LURK': 2, 'DOGGO': 1, 'COZY': 1}}
+]},
+{ text:'夏天露营，蚊虫非常多。你的防蚊策略是……', camp:'aoi', options:[
+{text:'全身喷满防蚊喷雾，带了蚊香，帐篷有防蚊网——三重防护，万无一失',scores:{'MOM': 2, 'LONE': 1, 'CARB': 1}},
+{text:'「蚊子也是大自然的一部分嘛～」——十分钟后，「蚊子太多了救命啊啊啊」',scores:{'BOO!': 2, 'WEEP': 1, 'CHAOS': 1}},
+{text:'「穿长袖长裤就行了吧？」——结果只有脸被咬了，看起来像过敏',scores:{'SEYANA': 1, 'USOYARE': 1, '6CAN': 1}},
+{text:'「海边就没那么多蚊子——海风吹着，蚊虫站不住脚」',scores:{'AQUA': 1}}
+]},
+{ text:'你正骑着自行车爬一个看不到尽头的上坡。导航显示还有3公里，但你的腿已经快没知觉了……', camp:'aoi', options:[
+{text:'「嗯～算了，下来推吧。」——推着车走也是一种骑行',scores:{'SEYANA': 2, 'COZY': 1}},
+{text:'咬牙继续踩——因为山顶有家面包店，据说他们家的蜜瓜包是附近最好吃的',scores:{'CARB': 2, 'NOM': 1, 'DASH': 1}},
+{text:'「这算什么！上次我从滨松骑到山梨都没死！」——然后开始跟路人吹自己骑过的最远距离',scores:{'USOYARE': 2, 'CHAOS': 1}}
+]},
+{ text:'露营时，有人在你面前一本正经地讲了一个「亲身经历」——但你总觉得哪里不对……', camp:'aoi', options:[
+{text:'「真的假的？！」——然后全信了，还追问细节',scores:{'WEEP': 2, 'SUNNY': 1, 'BOO!': 1}},
+{text:'「嘛～」——其实你一个字都不信，但懒得拆穿',scores:{'SEYANA': 2, 'SHIP': 1}},
+{text:'听完之后，面不改色地补了一句更离谱的，现在轮到他怀疑你了',scores:{'USOYARE': 2, 'TSUN': 1, 'CHAOS': 1}}
+]},
+{ text:'你在餐厅打工攒钱买露营装备。有顾客来买东西，你发现他买的都是露营相关的东西……', camp:'aoi', options:[
+{text:'默默算了一下总价，心想「这位也是露营人啊」',scores:{'PAGE': 1, 'MOM': 1, 'CARB': 1, 'BROKE': 1}},
+{text:'「这个炉子超好用的！上次我用它烧水泡了杯咖喱面，绝了！」',scores:{'SUNNY': 1, 'NOM': 1, '6CAN': 1, 'AFRO': 1}},
+{text:'结完账对着顾客的背影说了一句「一路顺风」，虽然不知道对方要去哪',scores:{'MOM': 2, 'USOYARE': 1, 'SEYANA': 1}},
+{text:'「您也是露营爱好者啊？山里还是海边？我两个都喜欢，但最近觉得海边也不错——」',scores:{'AQUA': 1}}
+]},
+{ text:'大家决定去泡温泉。脱了衣服发现旁边池子里居然是熟人……', camp:'aoi', options:[
+{text:'装作若无其事继续泡。内心：「为什么她们也在」——但也没走',scores:{'SPA': 2, 'LONE': 1, 'TSUN': 1}},
+{text:'「哇好巧好巧好巧！」——直接跨池子过来了',scores:{'SUNNY': 1, 'CHAOS': 1, 'NOM': 1, 'CHEF': 1}},
+{text:'泡在温泉里闭着眼，一句话没说，脸不知道是被蒸气烫的还是别的什么原因',scores:{'USOYARE': 1, 'ASAKA': 1, 'CHILL': 1}}
+]},
+{ text:'你的LINE状态栏写着「正在露营中」。有人评论「好想一起去」，你……', camp:'ena', options:[
+{text:'已读不回。默默计划着下次独自出发的路线',scores:{'OWL': 2, 'LONE': 1, 'PAGE': 1}},
+{text:'「来呀来呀！下次一起去！」——但你已经在群里发完定位了',scores:{'SUNNY': 1, 'COZY': 1, 'LURK': 1, 'SHIP': 2}},
+{text:'「りんりん～下次一起去怎么样？」——其实你根本没打算去，但不妨碍你撮合别人去',scores:{'SHIP': 2, 'WAN!': 1, 'CHILL': 1}}
+]},
+{ text:'社团的LINE群里，有人深夜三点发了一条「好想去看星星」……', camp:'ena', options:[
+{text:'第二天早上看到，回了一句「看到了。下次去。晚安。」',scores:{'LONE': 1, 'TSUN': 1, 'PAGE': 1, 'SHIP': 1}},
+{text:'「走啊！！现在就去！！」——然后发现只有自己在激动，其他人全在睡',scores:{'CHAOS': 1, 'SHIP': 1, 'CHILL': 1}},
+{text:'你也是凌晨三点没睡的人。你回了一句「走吧」，然后真的拿着车钥匙出门了',scores:{'DRIVE': 1, 'DASH': 1, 'USOYARE': 1}}
+]},
+{ text:'一个雨天，你本来计划去露营但取消了。在家你怎么过？', camp:'ena', options:[
+{text:'搭了个室内帐篷，泡了杯咖啡，打开露营视频当背景音——假装自己在山里',scores:{'SPA': 2, 'LONE': 1, 'COZY': 1}},
+{text:'把所有装备翻出来擦了一遍，重新整理了背包，列了下一次露营的采购清单',scores:{'CARB': 2, 'MOM': 1, 'CHOO': 1}},
+{text:'窝在被炉里刷了一整天露营博主的视频，然后给每个人发了「下次一起去这里！！」',scores:{'COZY': 1, 'LURK': 1}}
+]},
+{ text:'有人提议大家一起去看元旦日出。凌晨四点集合，有人迟到了……', camp:'ena', options:[
+{text:'四点钟准时到了，给每个人发了一条「人呢」的LINE，然后就安静等着',scores:{'LONE': 1, 'PAGE': 1, 'MOM': 1, 'CHOO': 1}},
+{text:'「对不起对不起对不起！！！」从远处跑过来，围巾都跑散了一半',scores:{'DASH': 1, 'BROKE': 1, 'WEEP': 1, 'BOO!': 1}},
+{text:'你根本没来。你躺在被炉里刷着群聊，看他们一边等人一边骂你',scores:{'COZY': 1, 'LURK': 1, 'CHILL': 1, 'DRIVE': 1}}
+]},
+{ text:'你在地铁/公交上看到有人背着大包露营装备……', camp:'ena', options:[
+{text:'默默观察对方的装备品牌和型号，心里评估了一下搭配',scores:{'LURK': 2, 'CHOO': 1, 'CARB': 1}},
+{text:'「您好！请问您是要去露营吗？去哪？用什么帐篷？推荐吗？」——对方可能想换车厢',scores:{'SUNNY': 1, 'CHAOS': 1, 'AFRO': 1, 'BROKE': 1}},
+{text:'看了一眼，然后继续看手机。但嘴角微微上扬——「同好」',scores:{'TSUN': 2, 'LONE': 1}}
+]},
+{ text:'你在房间墙上贴了一张地图，上面标记了……', camp:'ena', options:[
+{text:'所有去过的地方，用不同颜色的图钉区分季节。下面还有一本手写笔记',scores:{'PAGE': 1, 'OWL': 1, 'CHOO': 2, 'AFRO': 1}},
+{text:'所有想去的地方，已经插了快三十个图钉。每次看到都觉得自己还有好多地方没去',scores:{'DASH': 1, 'SUNNY': 1, '3776': 1, 'BROKE': 1}},
+{text:'其实没有地图。你在手机备忘录里存了一个列表，但自己也经常忘了看',scores:{'SEYANA': 2, 'LURK': 1, 'COZY': 1}}
+]},
+{ text:'凌晨一点，你朋友从露营地打来电话，声音有点慌：「我好像……找不到回帐篷的路了。」你……', camp:'ena', options:[
+{text:'「发我定位，我马上到。」——虽然你离她有两个小时车程，但你已经拿起了车钥匙',scores:{'DRIVE': 2, 'DASH': 1, 'MOM': 1}},
+{text:'打开地图，远程指导她：「你先往东走，看到那个大石头了吗？对，就是那个，然后左转……」',scores:{'LURK': 2, 'MOM': 1, 'CHOO': 1}},
+{text:'「你往天上看，看到北斗七星了吗？朝着那个方向走。」——你其实也不知道管不管用',scores:{'SAGE': 2, 'SHIP': 1, 'USOYARE': 1}}
+]},
+{ text:'露营结束，大家聚在居酒屋。有人提议干杯……', camp:'easter', options:[
+{text:'「先来六罐啤酒，一人一罐。」——然后一个人喝了四罐，开始讲年轻时露营的故事',scores:{'6CAN': 2, 'SAGE': 1, 'CHAOS': 1}},
+{text:'「我不喝酒，给我乌龙茶。」——但旁边的人都在说「你上次也这么说」',scores:{'USOYARE': 1, 'SHIP': 1}},
+{text:'发了一条动态到SNS：「又一次露营，又一次干杯」',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}}
+]},
+{ text:'你最喜欢的一件露营装备，它的故事是……', camp:'easter', options:[
+{text:'是爷爷用过的老式煤油灯，有几十年的历史，上面的划痕都是故事',scores:{'SAGE': 2, 'LONE': 1, 'WAN!': 1}},
+{text:'是自己打工攒了两个月买的睡袋——拿到手那晚抱着睡了一觉',scores:{'SUNNY': 1, 'BROKE': 2, 'NOM': 1, 'DOGGO': 1}},
+{text:'其实是别人送的。每次用它的时候都会想起那个人',scores:{'DOGGO': 2, 'COZY': 1, 'SEYANA': 1, 'CHOO': 1}}
+]},
+{ text:'你正准备出门露营，你的狗（或者你想象中的狗）看到你拿出装备……', camp:'easter', options:[
+{text:'直接跳进你的背包里，用眼神告诉你：「不带我，你也别想走。」',scores:{'WAN!': 1, 'SUNNY': 1, 'DASH': 1}},
+{text:'淡定地趴在窝里，一副「你走吧，反正你回来还得撸我」的表情',scores:{'DOGGO': 2, 'TSUN': 1, 'SEYANA': 1}},
+{text:'叼着它最喜欢的玩具过来，放在你的装备旁边，然后抬头看你',scores:{'WEEP': 1, 'MOM': 1}}
+]},
+{ text:'圣诞节。社团决定办圣诞露营，每个人要带一份礼物来交换……', camp:'mixed', options:[
+{text:'非常认真地挑了一个实用露营装备，包装得工工整整',scores:{'DOGGO': 2, 'LONE': 1, 'MOM': 1}},
+{text:'「我带了袜子和暖宝宝！」——把家里多余的东西拿来凑数，但包装纸是全场最闪的',scores:{'SUNNY': 1, 'COZY': 1, 'BROKE': 1, 'CARB': 1}},
+{text:'带了一本露营指南书，扉页上写着「爷爷年轻时用的就是这本」——全场最复古',scores:{'SAGE': 2, 'PAGE': 1, 'DASH': 1}}
+]},
+{ text:'毕业季。大家讨论毕业后各自的打算……', camp:'mixed', options:[
+{text:'「继续露营。一个人也好，一群人也罢，帐篷在哪我在哪」',scores:{'DASH': 2, 'LONE': 1, 'TSUN': 1}},
+{text:'「去哪不重要，重要的是露营的时候还能不能吃到好吃的……」',scores:{'NOM': 1, 'WEEP': 1, 'SUNNY': 1}},
+{text:'「嗯～反正你们的群聊我不会退，到时候你们去哪我就跟去哪」',scores:{'SEYANA': 1, 'MOM': 1, 'COZY': 1}}
+]},
+{ text:'旅途中看到一个绝佳的风景。你停下来，发现这个位置……', camp:'mixed', options:[
+{text:'安静地看了很久，把它记在心里，不拍照不发动态',scores:{'OWL': 1, 'PAGE': 1, 'LONE': 1}},
+{text:'从五个角度看了十五分钟，选了最好看的角度，发了一条SNS动态',scores:{'ASAKA': 1, 'LURK': 1, 'SUNNY': 1}},
+{text:'掏出笔记本，只画了一张速写，对自己说「剩下的等回去再慢慢想」',scores:{'CARB': 1, 'PAGE': 1, 'CHOO': 1}},
+{text:'「这个角度……如果等日落再看，光线会更好。」——然后真的坐下来等了二十分钟',scores:{'MONO': 1}}
+]},
+{ text:'樱花季，你来到一个樱花树下的露营地点。樱花正满开……', camp:'mixed', options:[
+{text:'把帐篷搭在花瓣飘不到的地方（要清理很麻烦），然后安静地看书赏花',scores:{'LONE': 1, 'PAGE': 1, 'SPA': 1, 'WAN!': 1}},
+{text:'「樱花+露营！这是什么神仙组合！！」——激动得原地转了三圈，然后开始做樱花主题的露营便当',scores:{'CHEF': 2, 'SUNNY': 1, 'AFRO': 1}},
+{text:'把帐篷搭在樱花树下，然后躺在帐篷里透过天窗看花瓣飘落——被花瓣埋了半截帐篷也不在意',scores:{'COZY': 2, 'CHILL': 1, 'SEYANA': 1}}
+]},
+{ text:'秋天露营，营地周围全是红叶。你……', camp:'mixed', options:[
+{text:'泡了杯茶，坐在折叠椅上，看着红叶发呆——这就是秋天的正确打开方式',scores:{'SPA': 2, 'OWL': 1, 'PAGE': 1, 'CHILL': 1}},
+{text:'捡了一大把红叶，说要带回去做书签，结果一路掉了一大半',scores:{'DASH': 1, 'BOO!': 1, 'SUNNY': 1}},
+{text:'捡了一大把红叶夹进笔记本里，说「等压干了就知道好不好看了」——可能要等半年',scores:{'CARB': 1, 'CHOO': 1, 'ASAKA': 1}}
+]},
+{ text:'你在露营时看到一只野生小动物（松鼠/狐狸/鹿）靠近营地……', camp:'mixed', options:[
+{text:'一动不动，屏住呼吸，用眼睛记录这一刻——不想打扰它',scores:{'OWL': 2, 'PAGE': 1, 'LONE': 1}},
+{text:'「好可爱好可爱好可爱！！！」——小声尖叫，然后激动得手舞足蹈，结果把动物吓跑了',scores:{'SUNNY': 1, 'BOO!': 1, 'ASAKA': 1, 'USOYARE': 1}},
+{text:'「别过来别过来，我什么都没带给你吃……」——但其实偷偷掰了一小块饼干放在远处',scores:{'DOGGO': 2, 'TSUN': 1, 'WAN!': 1}}
+]},
+{ text:'露营时突然下起大雨，你的帐篷开始漏水……', camp:'mixed', options:[
+{text:'冷静地拿出防水胶带，找到漏水点，三分钟修好。然后继续看书',scores:{'CARB': 1, 'MOM': 1, '3776': 1, 'SHIP': 1}},
+{text:'「啊啊啊我的睡袋要湿了！！」——手忙脚乱地把所有东西往中间堆，结果自己没地方坐了',scores:{'BOO!': 2, 'WEEP': 1, 'CHAOS': 1}},
+{text:'「反正都湿了，不如去泡个温泉吧」——然后真的收拾东西去了最近的温泉',scores:{'SPA': 2, 'SEYANA': 1, 'CHILL': 1, 'DRIVE': 1}}
+]},
+{ text:'你攒了很久的钱，终于可以买一件高级露营装备。你选……', camp:'mixed', options:[
+{text:'一个能抗零下20度的睡袋。实用第一，好看第二',scores:{'CARB': 2, 'LONE': 1, 'SPA': 1}},
+{text:'一个超轻的钛合金炉子。煮什么都快，而且背着不累',scores:{'CHEF': 2, 'CHOO': 1, 'DASH': 1}},
+{text:'一个复古设计的煤油灯。虽然重，但每次点亮都觉得自己在拍电影',scores:{'SAGE': 2, 'PAGE': 1, 'AFRO': 1}}
+]},
+{ text:'周五晚上，你收到一条消息：「明天去露营吧！」——但什么都没准备……', camp:'mixed', options:[
+{text:'「好。」——十分钟后已经收拾好背包，装备常年备着，随时可以出发',scores:{'DASH': 2, 'LONE': 1, 'CARB': 1}},
+{text:'「啊啊啊我没吃的！谁有多的零食？我出钱买！」——然后真的开始挨个私聊',scores:{'NOM': 1, 'BROKE': 1, 'WEEP': 1}},
+{text:'「明天？那我今晚不睡了，先把装备单列出来……」——凌晨三点还在查天气预报',scores:{'MOM': 2, 'CHOO': 1, 'LURK': 1}}
+]},
+{ text:'如果可以选择一种超能力带去露营，你选……', camp:'mixed', options:[
+{text:'瞬间点燃篝火。方便、实用、不废话',scores:{'SPA': 1, 'CARB': 1, '6CAN': 1, 'AFRO': 1}},
+{text:'和动物说话。想知道营地附近那只松鼠每天都在聊什么',scores:{'DOGGO': 2, 'WAN!': 1, 'SUNNY': 1}},
+{text:'让食物永远吃不完。野营最大的焦虑就是粮食不够',scores:{'NOM': 1, 'CHEF': 1, 'BROKE': 1}}
+]},
+{ text:'如果让你选一个地方发呆一整天，你会选……', camp:'mixed', options:[
+{text:'山顶。云在脚下，世界在远处，安静得能听见自己的心跳',scores:{'3776': 1}},
+{text:'海边。潮汐的声音有一种山无法替代的节奏——涨潮、退潮、再涨潮',scores:{'AQUA': 1}},
+{text:'森林深处。阳光透过树叶洒下来，地上有松果和蘑菇，像走进另一个世界',scores:{'PAGE': 1}},
+{text:'哪里都行——只要有一把舒服的椅子',scores:{'SEYANA': 1}}
+]},
+{ text:'你看到一片让人心动的风景，你的第一反应是……', camp:'easter', options:[
+{text:'掏出手机，快记下来，发了再说——好的风景转瞬即逝',scores:{'DASH': 1}},
+{text:'先看，再想，最后记录。如果值得，多等几分钟也无妨——光线会变，角度可以更好',scores:{'MONO': 1}},
+{text:'不记录。有些风景用眼睛看就够了，任何记录反而会打断那个瞬间',scores:{'LONE': 1}},
+{text:'记了，但总觉得记不住眼睛看到的感觉。算了，下次再来看',scores:{'WEEP': 1}}
+]},
+{ text:'露营时，你最享受哪种「等待」？', camp:'easter', options:[
+{text:'等篝火烧到最旺——那十分钟的火焰，值得之前半小时的添柴',scores:{'SPA': 1, 'OWL': 1}},
+{text:'等日出。半夜起来摸黑走到观景点，看着天边一点点亮起来——每次都觉得值',scores:{'3776': 1}},
+{text:'等一锅水烧开。泡面也好咖啡也好，等待让结果变得更好',scores:{'NOM': 1}},
+{text:'等天完全黑下来。从黄昏到黑夜，天空的颜色一层层变——那种渐变，赶时间的人永远看不到',scores:{'MONO': 1, 'SAGE': 1}}
+]},
+{ text:'你的露营目的地偏好……', camp:'easter', options:[
+{text:'山。越高越好，越安静越好，越接近天空越好',scores:{'LONE': 1}},
+{text:'海。山是孤独的，海是开阔的——你更喜欢那种没有边界的辽阔感',scores:{'AQUA': 1}},
+{text:'湖。不偏不倚，有山有水的倒影，比海安静比山温柔',scores:{'COZY': 1}},
+{text:'无所谓。重要的是去，不是去哪',scores:{'DASH': 1}}
+]},
+{ text:'翻开手机相册，你发现露营时拍得最多的是……', camp:'mixed', options:[
+{text:'风景。山、湖、日出、星空——它们不会跑，所以可以慢慢拍',scores:{'3776': 1}},
+{text:'人。朋友在篝火旁的笑脸、一起做饭的背影——风景没有他们重要',scores:{'SUNNY': 1}},
+{text:'食物。每一顿饭都值得被记录，拍完才准吃',scores:{'NOM': 1}},
+{text:'细节。柴火堆上的纹理、帐篷拉链上的露珠、被踩弯的野草——这些才是真实的露营',scores:{'MONO': 1, 'PAGE': 1}}
+]},
+{ text:'你一个人在海边露营。天黑了，你坐在沙滩上看着海……', camp:'mixed', options:[
+{text:'觉得有点无聊。海太开阔了，没有山的包围感——下次还是去山里吧',scores:{'3776': 1, 'LONE': 1}},
+{text:'觉得刚刚好。海浪声比山里的风声更催眠，而且地平线比山脊线更好看',scores:{'AQUA': 1, 'CHILL': 1}},
+{text:'掏出手机给朋友发消息：「山顶也不错诶，下次一起来吧」',scores:{'SUNNY': 1, 'COZY': 1}},
+{text:'看着远方发呆——山间的雾气像纱一样飘过，星空清晰得像针尖',scores:{'MONO': 1, 'OWL': 1}}
+]},
+{ text:'除了露营，你平时还有什么特别着迷的事？', camp:'mixed', options:[
+{text:'没什么特别的。露营的时候才会想起来自己还有别的爱好',scores:{'TSUN': 1}},
+{text:'什么都喜欢——路边的小花、咖啡杯里的倒影、街上偶遇的猫、朋友打瞌睡的样子，都值得好好看看',scores:{'MONO': 1}},
+{text:'陪家人和狗。风景是顺便的，他们才是主题',scores:{'DOGGO': 2}},
+{text:'篝火旁的歌声。朋友在弹吉他，其他人在合唱——你录了一段，回来反复听',scores:{'AQUA': 1, 'CHOO': 1}}
+]},
+{ text:'你偶尔会想：如果没有喜欢上露营，现在的你会喜欢什么？', camp:'easter', options:[
+{text:'还是会喜欢户外——可能是登山、骑行、钓鱼。反正离不开大自然',scores:{'CARB': 1}},
+{text:'可能会喜欢摄影。本质上是一样的——一个人去没去过的地方，然后用自己的方式把它留下来',scores:{'MONO': 1}},
+{text:'可能会住在海边，每天看潮起潮落。山有山的魅力，但海有海的自由',scores:{'AQUA': 1}},
+{text:'想不出来。露营已经是你生活的一部分，就像呼吸一样，不需要替代品',scores:{'DASH': 1}}
+]},
+{ text:'如果有人送你一份「露营相关」的礼物，你最希望是……', camp:'easter', options:[
+{text:'一本露营指南书。里面夹着爷爷年轻时手写的笔记',scores:{'SAGE': 1}},
+{text:'一台老式胶片相机。虽然重，但每次过片的声音都让你觉得「这一张，值得认真对待」',scores:{'MONO': 1}},
+{text:'一张海边的露营地年卡。365天，随时可以去看潮汐',scores:{'AQUA': 1}},
+{text:'一个能装下所有食材的保冷箱。实用至上，浪漫靠边',scores:{'NOM': 1}}
+]},
+{ text:'如果有一天你老了，你会选择住在哪里？', camp:'easter', options:[
+{text:'山脚下。推开窗就能看到富士山，每天清晨被鸟鸣叫醒',scores:{'3776': 1, 'SAGE': 1}},
+{text:'海边。每天看一遍潮起潮落，海风会把所有烦恼吹走',scores:{'AQUA': 1, 'CHILL': 1}},
+{text:'哪里都行，但旁边一定要有好吃的——老了更不能亏待自己的胃',scores:{'NOM': 1}},
+{text:'一个有暗房的小房子。白天拍照，晚上冲洗，墙上挂满一辈子的快门',scores:{'MONO': 1, 'PAGE': 1}}
+]},
+
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let shuffledQuestions = [];
+let currentQ = 0;
+let scores = {};
+let questionOrder = [];
+
+function shuffle(arr) {
+const a = [...arr];
+for (let i = a.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[a[i], a[j]] = [a[j], a[i]];
+}
+return a;
+}
+
+// ============================================================
+// SCREENS
+// ============================================================
+function showScreen(id) {
+document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+// Only result page allows scrolling; other pages locked
+if (id === 'resultScreen') {
+document.body.style.overflowY = 'auto';
+document.body.style.overflowX = 'hidden';
+document.body.style.justifyContent = 'flex-start';
+} else {
+document.body.style.overflow = 'hidden';
+document.body.style.justifyContent = 'center';
+}
+}
+
+function selectQuestions(questions, count) {
+// 阵营均衡抽题：五大阵营各至少 2 题，彩蛋至少 1 题
+const byCamp = {};
+for (let i = 0; i < questions.length; i++) {
+const c = questions[i].camp;
+if (!byCamp[c]) byCamp[c] = [];
+byCamp[c].push(i);
+}
+const mainCamps = ['rin', 'nadeshiko', 'chiaki', 'aoi', 'ena'];
+const guaranteed = [];
+for (const camp of mainCamps) {
+const pool = byCamp[camp] || [];
+shuffleArray(pool);
+guaranteed.push(...pool.slice(0, 2));
+}
+if (byCamp['easter']) {
+shuffleArray(byCamp['easter']);
+guaranteed.push(byCamp['easter'][0]);
+}
+const used = new Set(guaranteed);
+const remaining = [];
+for (let i = 0; i < questions.length; i++) {
+if (!used.has(i)) remaining.push(i);
+}
+shuffleArray(remaining);
+const selected = [...guaranteed, ...remaining.slice(0, count - guaranteed.length)];
+shuffleArray(selected);
+return selected.map(i => questions[i]);
+}
+
+function shuffleArray(arr) {
+for (let i = arr.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[arr[i], arr[j]] = [arr[j], arr[i]];
+}
+}
+
+function startQuiz() {
+scores = {};
+currentQ = 0;
+// 阵营均衡抽题：从 50 题中选 20 题
+shuffledQuestions = selectQuestions(QUESTIONS, 20);
+questionOrder = shuffledQuestions.map((_, i) => i);
+showScreen('quizScreen');
+renderQuestion();
+}
+
+function renderQuestion() {
+const q = shuffledQuestions[currentQ];
+const total = shuffledQuestions.length;
+document.getElementById('progressFill').style.width = ((currentQ / total) * 100) + '%';
+document.getElementById('qCounter').textContent = `第 ${currentQ + 1} / ${total} 题`;
+document.getElementById('qText').textContent = q.text;
+const optsEl = document.getElementById('options');
+optsEl.innerHTML = '';
+// Shuffle options for variety
+const labels = ['A','B','C','D'];
+const shuffled = q.options.map((opt, i) => ({...opt, origIdx: i}));
+for (let i = shuffled.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+}
+shuffled.forEach((opt, i) => {
+const btn = document.createElement('button');
+btn.className = 'option';
+btn.textContent = labels[i] + '. ' + opt.text;
+btn.addEventListener('click', () => selectOption(opt.origIdx));
+optsEl.appendChild(btn);
+});
+}
+
+function selectOption(idx) {
+const q = shuffledQuestions[currentQ];
+const opt = q.options[idx];
+
+// Visual feedback: highlight selected
+const allOpts = document.querySelectorAll('.option');
+allOpts.forEach(o => o.style.pointerEvents = 'none');
+// Find the button that corresponds to this option
+const buttons = document.querySelectorAll('#options .option');
+for (const btn of buttons) {
+if (btn.textContent.includes(opt.text.substring(0, 10))) {
+btn.classList.add('selected');
+break;
+}
+}
+
+// Add scores
+for (const [key, val] of Object.entries(opt.scores)) {
+scores[key] = (scores[key] || 0) + val;
+}
+
+setTimeout(() => {
+currentQ++;
+if (currentQ >= shuffledQuestions.length) {
+showResult();
+} else {
+renderQuestion();
+document.getElementById('progressFill').style.width = ((currentQ / shuffledQuestions.length) * 100) + '%';
+document.getElementById('qCounter').textContent = `第 ${currentQ + 1} / ${shuffledQuestions.length} 题`;
+}
+}, 200);
+}
+
+// ============================================================
+// MATCHING ALGORITHM
+// ============================================================
+function computeResult() {
+// Get all 22 main personalities sorted by score
+const mainKeys = Object.keys(PERSONALITIES).filter(k => !PERSONALITIES[k].easter);
+mainKeys.sort((a, b) => (scores[b] || 0) - (scores[a] || 0));
+
+// Get top 2, randomly pick one
+const top2 = mainKeys.slice(0, 2);
+const pick = top2[Math.floor(Math.random() * Math.min(2, top2.length))];
+
+// Check easter eggs: score >= 3 AND probabilistic chance
+// Easter triggers with probability = easterScore / (mainMax * 7)
+const mainMax = scores[top2[0]] || 0;
+const easterKeys = Object.keys(PERSONALITIES).filter(k => PERSONALITIES[k].easter);
+const qualified = easterKeys.filter(k => (scores[k] || 0) >= 3);
+
+if (qualified.length > 0 && mainMax > 0) {
+// Sort by score descending
+qualified.sort((a, b) => (scores[b] || 0) - (scores[a] || 0));
+// Check each qualified easter with probability
+for (const ek of qualified) {
+const prob = (scores[ek] || 0) / (mainMax * 7);
+if (Math.random() < prob) {
+return { key: ek, easter: true };
+}
+}
+}
+
+return { key: pick, easter: false };
+}
+
+function showResult() {
+const result = computeResult();
+const p = PERSONALITIES[result.key];
+const partner = PERSONALITIES[p.partner];
+
+showScreen('resultScreen');
+
+// Apply theme color
+const rs = document.getElementById('resultScreen').querySelector('.result-screen');
+rs.className = 'result-screen theme-' + (p.theme || 'rin');
+
+// Hero image — use default for now, personality-specific images later
+var heroImg = document.querySelector('#resultHero img');
+heroImg.src = HERO_DEFAULT;
+
+document.getElementById('easterTag').innerHTML = result.easter ? '<span class="easter-tag">🔒 隐藏人格解锁</span>' : '';
+document.getElementById('resultBadge').textContent = 'YCTI · 摇曳露营人格';
+document.getElementById('resultCode').textContent = p.code;
+document.getElementById('resultRole').textContent = p.tag;
+document.getElementById('resultQuote').textContent = p.quote;
+document.getElementById('resultDesc').textContent = p.desc;
+var ptColor = THEME_COLORS[partner.theme] || '#7eb8da';
+document.getElementById('resultPartner').innerHTML = 
+'🤝 最佳拍档：<strong style="color:' + ptColor + '">' + partner.code + '</strong> <span style="color:var(--text)">' + partner.tag + '</span> — ' + p.partnerText;
+
+// Store for sharing
+window._resultData = { code: p.code, tag: p.tag, quote: p.quote, desc: p.desc, 
+partnerCode: partner.code, partnerTag: partner.tag, partnerText: p.partnerText, easter: result.easter, theme: p.theme, partnerTheme: partner.theme };
+
+// Submit to GitHub stats
+ghStatsSubmit(result.key);
+}
+
+function restartQuiz() {
+showScreen('startScreen');
+}
+
+// ============================================================
+// SHARE (Canvas) — mirrors #resultScreen layout exactly
+// ============================================================
+function shareResult() {
+const d = window._resultData;
+if (!d) return;
+
+const canvas = document.getElementById('shareCanvas');
+const ctx = canvas.getContext('2d');
+const W = 480, H = 853;
+
+// Theme-derived colors
+const codeColor = THEME_COLORS[d.theme] || '#e8a850';
+const ptColor = THEME_COLORS[d.partnerTheme] || '#7eb8da';
+
+// ===================================================================
+// 1. BACKGROUND — mirror body CSS gradient
+// ===================================================================
+const bg = ctx.createLinearGradient(0, 0, 0, H);
+bg.addColorStop(0,     '#0d0d1f');
+bg.addColorStop(0.25,  '#141428');
+bg.addColorStop(0.45,  '#0a0a18');
+bg.addColorStop(0.60,  '#010108');
+bg.addColorStop(1,     '#010108');
+ctx.fillStyle = bg;
+ctx.fillRect(0, 0, W, H);
+
+// Stars — a few subtle dots to match body::before
+ctx.fillStyle = 'rgba(255,255,255,.35)';
+var stars = [[48,36],[120,22],[216,30],[312,18],[408,26],[168,62],[288,54],[96,80],[384,72],[240,66]];
+for (var si = 0; si < stars.length; si++) {
+ctx.beginPath();
+ctx.arc(stars[si][0], stars[si][1], 0.8, 0, Math.PI * 2);
+ctx.fill();
+}
+
+// ===================================================================
+// 2. HERO IMAGE — 270 px (16:9 aspect on 480 width)
+// ===================================================================
+var heroImg = document.querySelector('#resultHero img');
+if (heroImg && heroImg.complete && heroImg.naturalWidth > 0) {
+var iw = heroImg.naturalWidth, ih = heroImg.naturalHeight;
+var scale = Math.max(W / iw, 270 / ih);
+var sw = W / scale, sh = 270 / scale;
+var sx = (iw - sw) / 2, sy = (ih - sh) / 2;
+ctx.drawImage(heroImg, sx, sy, sw, sh, 0, 0, W, 270);
+} else {
+ctx.fillStyle = '#1e1e38';
+ctx.fillRect(0, 0, W, 270);
+}
+var fade = ctx.createLinearGradient(0, 230, 0, 270);
+fade.addColorStop(0, 'rgba(20,20,40,0)');
+fade.addColorStop(1, '#141428');
+ctx.fillStyle = fade;
+ctx.fillRect(0, 230, W, 40);
+
+// ===================================================================
+// 3. TOP ACCENT BAR — thin gold line
+// ===================================================================
+const ag = ctx.createLinearGradient(0, 0, W, 0);
+ag.addColorStop(0, '#e8a850');
+ag.addColorStop(1, '#f4a261');
+ctx.fillStyle = ag;
+ctx.fillRect(0, 0, W, 3);
+
+// ===================================================================
+// 4. HEADER: badge / easter / code / role / quote
+// ===================================================================
+ctx.textAlign = 'center';
+ctx.textBaseline = 'top';
+
+// Badge
+ctx.font = 'bold 11px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+ctx.fillStyle = codeColor;
+ctx.fillText('YCTI · 摇曳露营人格', 240, 284);
+
+// Easter tag
+if (d.easter) {
+ctx.font = '11px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+ctx.fillStyle = 'rgba(232,168,80,.7)';
+ctx.fillText('🔒 隐藏人格解锁', 240, 302);
+}
+
+// Code — 52 px / bold / THEME COLOR
+ctx.font = 'bold 52px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+ctx.fillStyle = codeColor;
+ctx.fillText(d.code, 240, 308);
+
+// Role / tag — 18 px / normal / #e8e0d8
+ctx.font = '18px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+ctx.fillStyle = '#e8e0d8';
+ctx.fillText(d.tag, 240, 388);
+
+// Quote — 14 px / italic / #9a8c7a
+ctx.font = 'italic 14px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+ctx.fillStyle = '#9a8c7a';
+var q = d.quote.replace(/^["\u201c]|["\u201d]$/g, '');
+ctx.fillText('\u201c' + q + '\u201d', 240, 432);
+
+// ===================================================================
+// 5. DESC CARD
+// ===================================================================
+ctx.textAlign = 'left';
+ctx.textBaseline = 'top';
+ctx.font = '13px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+
+var words = d.desc.split('');
+var lines = [];
+var line = '';
+var maxW = 386;
+for (var i = 0; i < words.length; i++) {
+var tl = line + words[i];
+if (ctx.measureText(tl).width > maxW && line.length > 0) {
+lines.push(line);
+line = words[i];
+} else { line = tl; }
+}
+if (line) lines.push(line);
+
+var lineH = 23;                       // CSS line-height:1.8 -> 13*1.8≈23.4
+var cardPad = 16;
+var descCardY = 476;
+var descCardW = 420;
+var descCardH = lines.length * lineH + cardPad * 2;
+
+ctx.fillStyle = '#1e1e38';
+roundRect(ctx, 30, descCardY, descCardW, descCardH, 14);
+ctx.fill();
+ctx.strokeStyle = '#333350';
+ctx.lineWidth = 1;
+roundRect(ctx, 30, descCardY, descCardW, descCardH, 14);
+ctx.stroke();
+
+ctx.fillStyle = '#e8e0d8';
+for (var li = 0; li < lines.length; li++) {
+ctx.fillText(lines[li], 46, descCardY + cardPad + li * lineH);
+}
+
+var afterDesc = descCardY + descCardH + 14;
+
+// ===================================================================
+// 6. PARTNER CARD — multi-line wrapping with per-segment colors
+//    Segments: label (gray) + code (colored bold) + tag (white) + rest (gray)
+// ===================================================================
+var segs = [
+{ text: '最佳拍档：', color: '#9a8c7a', bold: false },
+{ text: d.partnerCode, color: ptColor, bold: true },
+{ text: ' ' + d.partnerTag, color: '#e8e0d8', bold: false },
+{ text: ' — ' + d.partnerText, color: '#9a8c7a', bold: false }
+];
+
+var fullPartnerText = '';
+for (var si = 0; si < segs.length; si++) fullPartnerText += segs[si].text;
+
+ctx.font = '13px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+var pMaxW = 386;
+
+// Wrap full text into lines
+var pChars = fullPartnerText.split('');
+var pLines = [];
+var pLine = '';
+for (var i = 0; i < pChars.length; i++) {
+var ptl = pLine + pChars[i];
+if (ctx.measureText(ptl).width > pMaxW && pLine.length > 0) {
+pLines.push(pLine);
+pLine = pChars[i];
+} else { pLine = ptl; }
+}
+if (pLine) pLines.push(pLine);
+
+var pCardPad = 12;
+var pLineH = 22;
+var pCardH = pLines.length * pLineH + pCardPad * 2;
+
+// Partner card background
+ctx.fillStyle = '#1e1e38';
+roundRect(ctx, 30, afterDesc, descCardW, pCardH, 12);
+ctx.fill();
+ctx.strokeStyle = '#333350';
+ctx.lineWidth = 1;
+ctx.setLineDash([4, 4]);
+roundRect(ctx, 30, afterDesc, descCardW, pCardH, 12);
+ctx.stroke();
+ctx.setLineDash([]);
+
+// Draw partner text: for each line, determine which segments appear
+ctx.textAlign = 'left';
+ctx.textBaseline = 'top';
+var cursor = 0;
+for (var li = 0; li < pLines.length; li++) {
+var lineText = pLines[li];
+var lineStartX = Math.max(42, (480 - ctx.measureText(lineText).width) / 2);
+var lineY = afterDesc + pCardPad + li * pLineH;
+var segX = lineStartX;
+var lineEnd = cursor + lineText.length;
+
+var segStart = 0;
+for (var si = 0; si < segs.length; si++) {
+var segEnd = segStart + segs[si].text.length;
+if (segEnd > cursor && segStart < lineEnd) {
+var overlapStart = Math.max(segStart, cursor);
+var overlapEnd = Math.min(segEnd, lineEnd);
+var segText = fullPartnerText.substring(overlapStart, overlapEnd);
+if (segText.length > 0) {
+ctx.fillStyle = segs[si].color;
+ctx.font = (segs[si].bold ? 'bold ' : '') + '13px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+ctx.fillText(segText, segX, lineY);
+segX += ctx.measureText(segText).width;
+}
+}
+segStart = segEnd;
+}
+cursor = lineEnd;
+}
+
+// ===================================================================
+// 7. BOTTOM BAR
+// ===================================================================
+ctx.textAlign = 'center';
+ctx.font = '11px "PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
+ctx.fillStyle = 'rgba(255,255,255,.15)';
+ctx.fillText('@悠哉日常大囧 · v0.13.0', 240, 830);
+
+// ===================================================================
+// DOWNLOAD
+// ===================================================================
+const link = document.createElement('a');
+link.download = 'YCTI_' + d.code + '.png';
+link.href = canvas.toDataURL('image/png');
+link.click();
+
+showToast('图片已保存！');
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+ctx.beginPath();
+ctx.moveTo(x + r, y);
+ctx.lineTo(x + w - r, y);
+ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+ctx.lineTo(x + w, y + h - r);
+ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+ctx.lineTo(x + r, y + h);
+ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+ctx.lineTo(x, y + r);
+ctx.quadraticCurveTo(x, y, x + r, y);
+ctx.closePath();
+}
+
+function showToast(msg) {
+const t = document.getElementById('toast');
+t.textContent = msg;
+t.classList.add('show');
+setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ============================================================
+// SHARE MODAL (QR code)
+// ============================================================
+function openShareModal() {
+const d = window._resultData;
+if (!d) return;
+const codeColor = THEME_COLORS[d.theme] || '#e8a850';
+document.getElementById('shareCode').textContent = d.code;
+document.getElementById('shareCode').style.color = codeColor;
+document.getElementById('shareTag').textContent = d.tag;
+document.getElementById('shareQuote').textContent = d.quote;
+document.getElementById('shareOverlay').classList.add('show');
+}
+function closeShareModal() {
+document.getElementById('shareOverlay').classList.remove('show');
+}
+
+// ============================================================
+// STATS (GitHub API)
+// ============================================================
+const STATS_COLORS = {
+LONE:'#7eb8da',TSUN:'#7eb8da',PAGE:'#7eb8da',OWL:'#7eb8da',SPA:'#7eb8da',
+NOM:'#e8a0b0',SUNNY:'#e8a0b0','BOO!':'#e8a0b0',CHEF:'#e8a0b0',CHOO:'#e8a0b0',
+CHAOS:'#b89ad4',WEEP:'#b89ad4',BROKE:'#b89ad4',DASH:'#b89ad4',
+SEYANA:'#a8b878',MOM:'#a8b878',USOYARE:'#a8b878',CARB:'#a8b878',
+LURK:'#c0b8a8',SHIP:'#c0b8a8',DOGGO:'#c0b8a8',COZY:'#c0b8a8',
+'WAN!':'#d4b840','6CAN':'#d4b840',SAGE:'#d4b840','3776':'#d4b840',
+CHILL:'#d4b840',DRIVE:'#d4b840',ASAKA:'#d4b840',AFRO:'#d4b840',
+MONO:'#d4b840',AQUA:'#d4b840'
+};
+const OPACITIES = [1.0, 0.82, 0.66, 0.52, 0.40];
+
+function hexToRgba(hex, alpha) {
+const r = parseInt(hex.slice(1,3), 16);
+const g = parseInt(hex.slice(3,5), 16);
+const b = parseInt(hex.slice(5,7), 16);
+return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function openStats() {
+document.getElementById('resultScreen').classList.remove('active');
+// Mobile: lock body with position:fixed to prevent touch-scroll-through
+const scrollY = window.scrollY;
+document.body.style.position = 'fixed';
+document.body.style.top = `-${scrollY}px`;
+document.body.style.width = '100%';
+document.body.style.overflow = 'hidden';
+document.body.style.justifyContent = 'center';
+const ss = document.getElementById('statsScreen');
+ss.style.display = 'flex';
+loadStats();
+}
+
+function closeStats() {
+document.getElementById('statsScreen').style.display = 'none';
+document.getElementById('resultScreen').classList.add('active');
+// Restore body scroll position
+const scrollY = parseInt(document.body.style.top || '0', 10);
+document.body.style.position = '';
+document.body.style.top = '';
+document.body.style.width = '';
+document.body.style.overflowY = 'auto';
+document.body.style.overflowX = 'hidden';
+document.body.style.justifyContent = 'flex-start';
+window.scrollTo(0, -scrollY);
+}
+
+async function loadStats() {
+const canvas = document.getElementById('statsCanvas');
+const ctx = canvas.getContext('2d');
+// Dynamic canvas size — fill the container, mobile-optimized
+const container = canvas.parentElement;
+const maxW = container.clientWidth - 16;
+const maxH = container.clientHeight - 8;
+const W = Math.max(Math.min(maxW, 600), 280);
+const H = Math.max(Math.min(maxH, Math.round(W * 1.6)), 360);
+const dpr = window.devicePixelRatio || 1;
+canvas.width = W * dpr;
+canvas.height = H * dpr;
+canvas.style.width = W + 'px';
+canvas.style.height = H + 'px';
+ctx.scale(dpr, dpr);
+ctx.clearRect(0, 0, W, H);
+ctx.fillStyle = '#9a8c7a';
+ctx.font = '14px sans-serif';
+ctx.textAlign = 'center';
+ctx.fillText('加载中...', W/2, H/2);
+try {
+const stats = await ghStatsRead();
+const counts = stats.results || {};
+const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+const total = stats.total || 0;
+ctx.clearRect(0, 0, W, H);
+const info = document.getElementById('statsInfo');
+const list = document.getElementById('statsList');
+if (total === 0) {
+info.textContent = '';
+list.innerHTML = '';
+ctx.fillText('还没有人做过测试，快来留下第一份答卷吧！', W/2, H/2);
+return;
+}
+// --- Stats info ---
+info.textContent = `共 ${total} 份答卷`;
+list.innerHTML = '';
+
+// --- Stacked Percentage Bar ---
+const groups = [
+{ name:'凛', short:'凛', color:'#7eb8da', codes:['LONE','TSUN','PAGE','OWL','SPA'], count:0 },
+{ name:'抚子', short:'抚', color:'#e8a0b0', codes:['NOM','SUNNY','BOO!','CHEF','CHOO'], count:0 },
+{ name:'千明', short:'千', color:'#b89ad4', codes:['CHAOS','WEEP','BROKE','DASH'], count:0 },
+{ name:'葵', short:'葵', color:'#a8b878', codes:['SEYANA','MOM','USOYARE','CARB'], count:0 },
+{ name:'惠那', short:'惠', color:'#c0b8a8', codes:['LURK','SHIP','DOGGO','COZY'], count:0 },
+{ name:'隐藏', short:'隐', color:'#d4b840', codes:['WAN!','6CAN','SAGE','3776','CHILL','DRIVE','ASAKA','AFRO','MONO','AQUA'], count:0 }
+];
+for (const [code, count] of entries) {
+for (const g of groups) { if (g.codes.includes(code)) { g.count += count; break; } }
+}
+const activeGroups = groups.filter(g => g.count > 0);
+activeGroups.sort((a, b) => b.count - a.count); // descending by %
+
+const barWrap = document.getElementById('statsStackedBar');
+if (activeGroups.length > 0) {
+// Bar row — same width & border-radius as treemap canvas
+const barRow = document.createElement('div');
+barRow.style.cssText = `display:flex;height:24px;border-radius:12px;overflow:hidden;width:${W}px;max-width:100%;margin:0 auto;`;
+for (const g of activeGroups) {
+const pct = (g.count / total) * 100;
+const seg = document.createElement('div');
+seg.style.cssText = `width:${pct}%;background:${g.color};display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.3);`;
+seg.textContent = pct >= 3 ? g.short : '';
+barRow.appendChild(seg);
+}
+// Labels row below — percentages only
+const lblRow = document.createElement('div');
+lblRow.style.cssText = `display:flex;width:${W}px;max-width:100%;margin:4px auto 0;`;
+for (const g of activeGroups) {
+const pct = (g.count / total) * 100;
+const lbl = document.createElement('div');
+lbl.style.cssText = `width:${pct}%;text-align:center;font-size:11px;color:var(--muted);min-width:0;overflow:hidden;white-space:nowrap;`;
+lbl.textContent = `${pct.toFixed(1)}%`;
+lblRow.appendChild(lbl);
+}
+barWrap.innerHTML = '';
+barWrap.appendChild(barRow);
+barWrap.appendChild(lblRow);
+} else {
+barWrap.innerHTML = '';
+}
+
+// --- Squarified Treemap ---
+const PAD = 3;
+window._treemapBlocks = []; // store for click detection
+const items = entries.map(([code, count], idx) => {
+const p = PERSONALITIES[code];
+return {
+code, count,
+pct: ((count / total) * 100).toFixed(1),
+area: (count / total) * (W * H),
+hex: STATS_COLORS[code] || '#888',
+tag: p ? (p.easter ? '隐藏人格' : p.tag) : code,
+idx
+};
+});
+// Sort by area descending
+items.sort((a, b) => b.area - a.area);
+
+// Assign opacity: within each theme, rank by count desc
+// Easter/hidden personalities always full opacity (bright gold)
+const sortedByTheme = [...items].sort((a,b) => {
+if (a.hex !== b.hex) return a.hex.localeCompare(b.hex);
+return b.count - a.count;
+});
+let prevHex = '';
+let rank = 0;
+for (const it of sortedByTheme) {
+if (it.hex !== prevHex) { rank = 0; prevHex = it.hex; }
+it.alpha = (it.hex === '#d4b840') ? 1.0 : OPACITIES[Math.min(rank, 4)];
+rank++;
+}
+
+squarifyTreemap(ctx, items, PAD, PAD, W - 2*PAD, H - 2*PAD);
+
+// Canvas click → tooltip
+canvas.onclick = function(e) {
+const rect = canvas.getBoundingClientRect();
+const sx = canvas.width / rect.width;
+const sy = canvas.height / rect.height;
+const mx = (e.clientX - rect.left) * sx / dpr;
+const my = (e.clientY - rect.top) * sy / dpr;
+const tt = document.getElementById('treemapTooltip');
+for (const b of window._treemapBlocks) {
+if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) {
+tt.innerHTML = `<b style="color:${b.hex};font-size:15px;">${b.code}</b> <span style="font-size:12px;color:var(--muted)">${b.tag}</span><br><span style="color:var(--muted)">${b.count}份 · ${b.pct}%</span>`;
+tt.style.display = 'block';
+tt.style.left = Math.min(e.clientX + 12, window.innerWidth - 220) + 'px';
+tt.style.top = (e.clientY - 40) + 'px';
+setTimeout(() => { tt.style.display = 'none'; }, 2000);
+return;
+}
+}
+tt.style.display = 'none';
+};
+
+} catch(e) {
+ctx.clearRect(0, 0, W, H);
+ctx.fillStyle = '#9a8c7a';
+ctx.fillText('加载失败，请稍后再试', W/2, H/2);
+console.error('Stats load error:', e);
+}
+}
+
+// ---- Squarified Treemap (D3.js d3-hierarchy) ----
+function squarifyTreemap(ctx, items, x, y, w, h) {
+if (items.length === 0 || w <= 0 || h <= 0) return;
+if (items.length === 1) {
+drawItem(ctx, items[0], x, y, w, h);
+return;
+}
+// Build hierarchy tree for D3
+const root = d3.hierarchy({ children: items })
+.sum(d => d.area)
+.sort((a, b) => b.value - a.value);
+// Compute squarified treemap layout
+d3.treemap()
+.tile(d3.treemapSquarify)
+.size([w, h])
+.paddingInner(2)
+.paddingOuter(1)
+(root);
+// Draw each leaf block
+for (const leaf of root.leaves()) {
+drawItem(ctx, leaf.data, x + leaf.x0, y + leaf.y0, leaf.x1 - leaf.x0, leaf.y1 - leaf.y0);
+}
+}
+
+function drawItem(ctx, item, x, y, w, h) {
+if (w <= 0 || h <= 0) return;
+const R = Math.min(8, w/4, h/4); // rounded corner radius
+ctx.fillStyle = hexToRgba(item.hex, item.alpha);
+ctx.beginPath();
+ctx.roundRect(x, y, w, h, R);
+ctx.fill();
+
+// Store block for click detection
+window._treemapBlocks.push({ x, y, w, h, code: item.code, count: item.count, pct: item.pct, hex: item.hex, tag: item.tag });
+
+// Text inside block
+const minDim = Math.min(w, h);
+ctx.fillStyle = '#fff';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+
+if (minDim >= 50) {
+// Big block: show code + count + pct
+const fs = Math.max(11, Math.min(Math.floor(minDim / 5), 16));
+ctx.font = `bold ${fs}px sans-serif`;
+ctx.fillText(item.code, x + w/2, y + h/2 - fs/2);
+ctx.font = `${Math.max(9, fs - 2)}px sans-serif`;
+ctx.fillStyle = 'rgba(255,255,255,0.8)';
+ctx.fillText(`${item.count}份 ${item.pct}%`, x + w/2, y + h/2 + fs/2);
+} else if (minDim >= 24) {
+// Medium block: show code only
+const fs = Math.max(10, Math.floor(minDim / 4));
+ctx.font = `bold ${fs}px sans-serif`;
+ctx.fillText(item.code, x + w/2, y + h/2);
+} else if (minDim >= 14) {
+// Tiny block: code at min 8px, clickable for tooltip
+const fs = Math.max(8, Math.floor(minDim / 3));
+ctx.font = `bold ${fs}px sans-serif`;
+ctx.textAlign = 'center';
+ctx.fillText(item.code, x + w/2, y + h/2);
+}
+// Ultra-tiny (<14px): no text, but tooltip still works via click
+}
+</script>
+</body>
+</html>
