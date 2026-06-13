@@ -1671,13 +1671,19 @@ function drawItem(ctx, item, x, y, w, h) {
     ctx.font = `${Math.max(9, fs - 2)}px sans-serif`;
     ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.fillText(`${item.count}人 ${item.pct}%`, x + w/2, y + h/2 + fs/2);
-  } else if (minDim >= 30) {
+  } else if (minDim >= 24) {
     // Medium block: show code only
     const fs = Math.max(10, Math.floor(minDim / 4));
     ctx.font = `bold ${fs}px sans-serif`;
     ctx.fillText(item.code, x + w/2, y + h/2);
+  } else if (minDim >= 14) {
+    // Tiny block: code at min 8px, clickable for tooltip
+    const fs = Math.max(8, Math.floor(minDim / 3));
+    ctx.font = `bold ${fs}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(item.code, x + w/2, y + h/2);
   }
-  // Small block: no text, click for tooltip
+  // Ultra-tiny (<14px): no text, but tooltip still works via click
 }
 </script>
 </body>
