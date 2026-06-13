@@ -483,7 +483,7 @@ body::before {
 </div>
 
 <!-- Stats Screen (fullscreen) -->
-<div id="statsScreen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:var(--bg);flex-direction:column;padding:10px;overflow:hidden;">
+<div id="statsScreen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:var(--bg);flex-direction:column;padding:10px;overflow:hidden;touch-action:none;-webkit-overflow-scrolling:none;overscroll-behavior:none;">
   <div style="display:flex;align-items:center;justify-content:center;padding:4px 0 12px;max-width:800px;margin:0 auto;width:100%;position:relative;">
     <button onclick="closeStats()" style="position:absolute;left:0;background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:4px 8px;">← 返回</button>
     <span style="font-size:20px;font-weight:700;color:var(--warm);">露营人格统计</span>
@@ -1476,6 +1476,11 @@ function hexToRgba(hex, alpha) {
 
 function openStats() {
   document.getElementById('resultScreen').classList.remove('active');
+  // Mobile: lock body with position:fixed to prevent touch-scroll-through
+  const scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${scrollY}px`;
+  document.body.style.width = '100%';
   document.body.style.overflow = 'hidden';
   document.body.style.justifyContent = 'center';
   const ss = document.getElementById('statsScreen');
@@ -1486,9 +1491,15 @@ function openStats() {
 function closeStats() {
   document.getElementById('statsScreen').style.display = 'none';
   document.getElementById('resultScreen').classList.add('active');
+  // Restore body scroll position
+  const scrollY = parseInt(document.body.style.top || '0', 10);
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
   document.body.style.overflowY = 'auto';
   document.body.style.overflowX = 'hidden';
   document.body.style.justifyContent = 'flex-start';
+  window.scrollTo(0, -scrollY);
 }
 
 async function loadStats() {
