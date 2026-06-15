@@ -97,24 +97,15 @@ body::before {
 #statsScreen {
   display: none;
   position: relative; z-index: 1;
-  width: 100%; max-width: 640px;
+  width: 100%%;
   padding: 10px;
   flex-direction: column;
 }
-#statsScreen.active { display: flex; }
+#statsScreen.active { display: flex; min-height: 100dvh; }
 #statsHeader {
   display: flex; align-items: center; justify-content: center;
   padding: 4px 0 12px; position: relative;
 }
-#statsHeader .back-link {
-  position: absolute; left: 0;
-  background: none; border: none;
-  color: var(--muted);
-  font-size: 14px; cursor: pointer;
-  padding: 4px 8px; font-family: inherit;
-  text-decoration: none;
-}
-#statsHeader .back-link:hover { color: var(--warm); }
 #statsHeader .title { font-size: 20px; font-weight: 700; color: var(--warm); }
 
 #statsInfo { text-align: center; font-size: 15px; color: var(--warm-glow); margin: 4px 0 8px; font-weight: 600; }
@@ -147,13 +138,12 @@ canvas { max-width: 100%; border-radius: 12px; cursor: pointer; }
 <!-- Stats Screen -->
 <div id="statsScreen">
   <div id="statsHeader">
-    <a href="/" class="back-link">← 返回首页</a>
     <span class="title">露营人格统计 · 管理视图</span>
   </div>
   <div id="statsInfo"></div>
   <div id="statsList"></div>
   <div id="statsStackedBar"></div>
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:300px;padding:8px 0;">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0;">
     <canvas id="statsCanvas" style="max-width:100%;max-height:100%;"></canvas>
     <div id="treemapTooltip"></div>
   </div>
@@ -251,7 +241,7 @@ async function loadStats() {
   const maxW = container.clientWidth - 16;
   const maxH = container.clientHeight - 8;
   const W = Math.max(Math.min(maxW, 600), 280);
-  const H = Math.max(Math.min(maxH, Math.round(W * 1.6)), 360);
+  const H = Math.max(Math.min(maxH, Math.round(W * 2.0)), 360);
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr;
   canvas.height = H * dpr;
