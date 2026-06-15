@@ -335,7 +335,7 @@ async function loadStats() {
     let prevHex = '', rank = 0;
     for (const it of sortedByTheme) {
       if (it.hex !== prevHex) { rank = 0; prevHex = it.hex; }
-      it.alpha = OPACITIES[Math.min(rank, 4)];
+      it.alpha = (it.hex === '#d4b840') ? 1.0 : OPACITIES[Math.min(rank, 4)];
       rank++;
     }
 
