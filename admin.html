@@ -93,24 +93,26 @@ body::before {
 #pwGate button:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(232,168,80,.35); }
 #pwGate .err { color: #e07070; font-size: 12px; margin-top: 8px; display: none; }
 
-/* Stats Screen */
+/* Stats Screen — 全屏覆盖层，与主站一致 */
 #statsScreen {
   display: none;
-  position: relative; z-index: 1;
-  width: 100%%;
-  padding: 10px;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 10;
+  background: var(--bg);
   flex-direction: column;
+  padding: 10px;
+  overflow-y: auto;
 }
-#statsScreen.active { display: flex; min-height: 100dvh; }
+#statsScreen.active { display: flex; }
 #statsHeader {
   display: flex; align-items: center; justify-content: center;
   padding: 4px 0 12px; position: relative;
 }
 #statsHeader .title { font-size: 20px; font-weight: 700; color: var(--warm); }
 
-#statsInfo { text-align: center; font-size: 15px; color: var(--warm-glow); margin: 4px 0 8px; font-weight: 600; }
-#statsList { display: flex; flex-wrap: wrap; gap: 6px 10px; justify-content: center; max-height: 64px; overflow-y: auto; padding: 4px 0; }
-#statsStackedBar { margin: 8px auto 0; }
+#statsInfo { text-align: center; font-size: 15px; color: var(--warm-glow); margin: 4px auto 8px; font-weight: 600; max-width: 800px; width: 100%; }
+#statsList { display: flex; flex-wrap: wrap; gap: 6px 10px; justify-content: center; max-height: 64px; overflow-y: auto; padding: 4px 0; max-width: 800px; margin: 0 auto; width: 100%; }
+#statsStackedBar { margin: 8px auto 0; max-width: 800px; width: 100%; }
 canvas { max-width: 100%; border-radius: 12px; cursor: pointer; }
 #treemapTooltip {
   display: none; position: fixed; z-index: 200;
@@ -137,7 +139,7 @@ canvas { max-width: 100%; border-radius: 12px; cursor: pointer; }
 
 <!-- Stats Screen -->
 <div id="statsScreen">
-  <div id="statsHeader">
+  <div id="statsHeader" style="max-width:800px;margin:0 auto;width:100%;">
     <span class="title">露营人格统计 · 管理视图</span>
   </div>
   <div id="statsInfo"></div>
@@ -163,9 +165,6 @@ function checkPw() {
     sessionStorage.setItem('ycti_admin', '1');
     document.getElementById('pwGate').style.display = 'none';
     document.getElementById('statsScreen').classList.add('active');
-    document.body.style.justifyContent = 'flex-start';
-    document.body.style.padding = '0';
-    document.body.style.overflowY = 'auto';
     loadStats();
   } else {
     document.getElementById('pwErr').style.display = 'block';
@@ -179,9 +178,6 @@ function checkPw() {
   if (sessionStorage.getItem('ycti_admin') === '1') {
     document.getElementById('pwGate').style.display = 'none';
     document.getElementById('statsScreen').classList.add('active');
-    document.body.style.justifyContent = 'flex-start';
-    document.body.style.padding = '0';
-    document.body.style.overflowY = 'auto';
     loadStats();
   }
 })();
@@ -241,7 +237,7 @@ async function loadStats() {
   const maxW = container.clientWidth - 16;
   const maxH = container.clientHeight - 8;
   const W = Math.max(Math.min(maxW, 600), 280);
-  const H = Math.max(Math.min(maxH, Math.round(W * 2.0)), 360);
+  const H = Math.max(Math.min(maxH, Math.round(W * 1.6)), 360);
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr;
   canvas.height = H * dpr;
