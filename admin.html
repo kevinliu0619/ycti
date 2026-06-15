@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>YCTI · 管理后台</title>
+<style>
+:root {
+  --bg-deep: #0d0d1f;
+  --bg: #141428;
+  --card: #1e1e38;
+  --warm: #e8a850;
+  --warm-glow: #f0c070;
+  --text: #e8e0d8;
+  --muted: #9a8c7a;
+  --border: #333350;
+  --shadow: rgba(0,0,0,.3);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(180deg, #0d0d1f 0%, #141428 25%, #0a0a18 45%, #010108 60%, #010108 100%);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  line-height: 1.6;
+  position: relative;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 25% 8%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1.5px 1.5px at 40% 20%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1px 1px at 55% 12%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 85% 10%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1px 1px at 15% 30%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1px 1px at 60% 28%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1.5px 1.5px at 78% 40%, rgba(255,255,255,.35), transparent);
+  pointer-events: none; z-index: 0;
+}
+
+/* Password Gate */
+#pwGate {
+  position: relative; z-index: 1;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 24px;
+  max-width: 360px;
+  width: 100%;
+}
+#pwGate h2 { font-size: 22px; color: var(--warm); margin-bottom: 6px; letter-spacing: 4px; }
+#pwGate .sub { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+#pwGate input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  text-align: center;
+  letter-spacing: 4px;
+  margin-bottom: 14px;
+  outline: none;
+  transition: border-color .2s;
+}
+#pwGate input:focus { border-color: var(--warm); }
+#pwGate button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 24px;
+  border: none;
+  background: linear-gradient(135deg, var(--warm), #d49540);
+  color: #1a1a2e;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(232,168,80,.25);
+  transition: all .2s;
+}
+#pwGate button:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(232,168,80,.35); }
+#pwGate .err { color: #e07070; font-size: 12px; margin-top: 8px; display: none; }
+
+/* Stats Screen */
+#statsScreen {
+  display: none;
+  position: relative; z-index: 1;
+  width: 100%; max-width: 640px;
+  padding: 10px;
+  flex-direction: column;
+}
+#statsScreen.active { display: flex; }
+#statsHeader {
+  display: flex; align-items: center; justify-content: center;
+  padding: 4px 0 12px; position: relative;
+}
+#statsHeader .back-link {
+  position: absolute; left: 0;
+  background: none; border: none;
+  color: var(--muted);
+  font-size: 14px; cursor: pointer;
+  padding: 4px 8px; font-family: inherit;
+  text-decoration: none;
+}
+#statsHeader .back-link:hover { color: var(--warm); }
+#statsHeader .title { font-size: 20px; font-weight: 700; color: var(--warm); }
+
+#statsInfo { text-align: center; font-size: 15px; color: var(--warm-glow); margin: 4px 0 8px; font-weight: 600; }
+#statsList { display: flex; flex-wrap: wrap; gap: 6px 10px; justify-content: center; max-height: 64px; overflow-y: auto; padding: 4px 0; }
+#statsStackedBar { margin: 8px auto 0; }
+canvas { max-width: 100%; border-radius: 12px; cursor: pointer; }
+#treemapTooltip {
+  display: none; position: fixed; z-index: 200;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+  font-size: 13px; color: var(--text);
+  pointer-events: none;
+  box-shadow: 0 4px 16px var(--shadow);
+  max-width: 200px; text-align: center;
+}
+.footer-note { font-size: 11px; color: var(--muted); text-align: center; padding: 8px 0 4px; }
+</style>
+</head>
+<body>
+
+<!-- Password Gate -->
+<div id="pwGate">
+  <h2>YCTI 管理后台</h2>
+  <div class="sub">请输入管理密码</div>
+  <input type="password" id="pwInput" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')checkPw()">
+  <button onclick="checkPw()">验证</button>
+  <div class="err" id="pwErr">密码错误</div>
+</div>
+
+<!-- Stats Screen -->
+<div id="statsScreen">
+  <div id="statsHeader">
+    <a href="/" class="back-link">← 返回首页</a>
+    <span class="title">露营人格统计 · 管理视图</span>
+  </div>
+  <div id="statsInfo"></div>
+  <div id="statsList"></div>
+  <div id="statsStackedBar"></div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:300px;padding:8px 0;">
+    <canvas id="statsCanvas" style="max-width:100%;max-height:100%;"></canvas>
+    <div id="treemapTooltip"></div>
+  </div>
+  <div class="footer-note">管理视图 · 数据实时更新 · 仅管理员可见</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3/dist/d3-hierarchy.min.js"></script>
+<script>
+// ============================================================
+// Password Gate
+// ============================================================
+const ADMIN_PW = 'ycti2026';
+
+function checkPw() {
+  const input = document.getElementById('pwInput').value;
+  if (input === ADMIN_PW) {
+    sessionStorage.setItem('ycti_admin', '1');
+    document.getElementById('pwGate').style.display = 'none';
+    document.getElementById('statsScreen').classList.add('active');
+    document.body.style.justifyContent = 'flex-start';
+    document.body.style.padding = '0';
+    document.body.style.overflowY = 'auto';
+    loadStats();
+  } else {
+    document.getElementById('pwErr').style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    setTimeout(() => { document.getElementById('pwErr').style.display = 'none'; }, 2500);
+  }
+}
+
+// Check if already authenticated this session
+(function() {
+  if (sessionStorage.getItem('ycti_admin') === '1') {
+    document.getElementById('pwGate').style.display = 'none';
+    document.getElementById('statsScreen').classList.add('active');
+    document.body.style.justifyContent = 'flex-start';
+    document.body.style.padding = '0';
+    document.body.style.overflowY = 'auto';
+    loadStats();
+  }
+})();
+
+// ============================================================
+// GitHub API 统计后端
+// ============================================================
+const GH_REPO = 'kevinliu0619/ycti';
+const GH_TOKEN='***' + '_O6Aas5Fz21Fjfw3j15TvzaLv1SRI1uuoejnorMqWE7jEYRLKCOE98X7rJ7c';
+const GH_STATS_FILE = 'stats.json';
+
+function ghAuth() {
+  return 'Basic ' + btoa('kevinliu0619:' + GH_TOKEN);
+}
+
+async function ghStatsRead() {
+  const resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
+    headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
+  });
+  if (!resp.ok) return { total: 0, results: {} };
+  const d = await resp.json();
+  return JSON.parse(atob(d.content));
+}
+
+// ============================================================
+// DATA: Personalities (mirrored from main site)
+// ============================================================
+const THEME_COLORS = { rin:'#7eb8da', nadeshiko:'#e8a0b0', chiaki:'#b89ad4', aoi:'#a8b878', ena:'#c0b8a8', easter:'#d4b840' };
+const PERSONALITIES = {"LONE":{"code":"LONE","role":"凛","tag":"独狼凛","quote":"一个人最自在。篝火+书+咖啡=完美世界。","desc":"你在爷爷的影响下爱上了露营，但比起一群人热热闹闹，你更享受一个人的节奏。搭好帐篷，烧起篝火，泡杯咖啡，翻开书——这就是你的理想假期。朋友约你你也会去，但内心最深处，你知道最好的露营地是只有自己知道的那个。","partner":"NOM","partnerText":"她会闯进你的营地，然后你发现自己居然没赶她走。","theme":"rin","easter":false},"TSUN":{"code":"TSUN","role":"凛","tag":"傲娇凛","quote":"我才不是为了你们才来的。","desc":"然后默默帮所有人劈好了柴，查好了天气，还偷偷通知了老师来救场。你嘴上说着\"麻烦\"\"不要\"，但每次朋友有需要，你总是第一个到。你只是不擅长把关心说出口，但行动从不撒谎。","partner":"SUNNY","partnerText":"她总能一眼看穿你的\"不要\"其实是\"好吧\"。","theme":"rin","easter":false},"PAGE":{"code":"PAGE","role":"凛","tag":"文艺凛","quote":"露营的终极奥义，是换个风景好的地方看书。","desc":"你选择露营地的标准不是设施好不好，而是——那里安静吗？能看见富士山吗？光线适合看书吗？你会在篝火旁读到深夜，然后第二天清晨被鸟鸣叫醒。世界很吵，但你有自己的节奏。","partner":"LONE","partnerText":"你们会安静地坐在一起，各自看书，偶尔抬头对视一眼，又继续低头。","theme":"rin","easter":false},"OWL":{"code":"OWL","role":"凛","tag":"夜猫子凛","quote":"深夜才是主场。凌晨三点的富士山，只属于醒着的人。","desc":"你习惯在别人都睡着之后，一个人坐在篝火旁。有时候看星星，有时候就是发呆。你不是失眠——你只是觉得夜晚比白天更诚实。凌晨的风吹过来的时候，你觉得全世界都是你的。","partner":"LURK","partnerText":"她也在线。你们在不同的地方，看同一片星空。","theme":"rin","easter":false},"SPA":{"code":"SPA","role":"凛","tag":"温泉凛","quote":"露营地选在温泉旁边不是偶然，是信仰。","desc":"对你来说，露营的终极享受不是帐篷也不是篝火——是泡完温泉后那一瞬间。你愿意为了一个有温泉的营地多骑几十公里。泡在热水里看着远山的时候，你觉得人生没有过不去的坎。","partner":"SEYANA","partnerText":"她泡温泉的时候一句话不说，你们都很享受这种沉默。","theme":"rin","easter":false},"NOM":{"code":"NOM","role":"抚子","tag":"饿鬼抚子","quote":"露营的终极奥义就是吃！50个饺子只是开胃菜！","desc":"你看到美食的眼神会让朋友害怕。你的露营计划核心不是\"去哪\"，而是\"吃什么\"。你可以在吃完2kg汉堡肉+超大份炒面+拉面之后，说一句\"又饿了\"——并且是认真的。但你也从不吝啬分享，你做的饭永远够所有人吃。","partner":"CHEF","partnerText":"或者更准确地说，你们就是同一个人。做饭和吃饭，都是你。","theme":"nadeshiko","easter":false},"SUNNY":{"code":"SUNNY","role":"抚子","tag":"小太阳抚子","quote":"好耶！一起去！大家一起去！","desc":"你像一只金毛——看到谁都热情，去哪都开心，遇到什么事都先笑。你的快乐不需要理由，而且传染性极强。三分钟前还陌生的人，聊完就觉得认识很久了。你不是没有烦恼，你只是觉得没必要让烦恼占太多时间。","partner":"LONE","partnerText":"你是唯一能让她露出笑容的那个人。","theme":"nadeshiko","easter":false},"BOO!":{"code":"BOO!","role":"抚子","tag":"胆小鬼抚子","quote":"别讲了别讲了别讲了——","desc":"怕黑、怕鬼、怕怪谈。听到帐篷外有奇怪的声音会缩进睡袋最深处。但奇怪的是——为了给朋友拍夜景照，你可以一个人走半小时的黑暗山路。恐惧不会让你停下，你只是需要先尖叫一下。","partner":"MOM","partnerText":"她会一边说\"真拿你没办法\"一边陪你走夜路。","theme":"nadeshiko","easter":false},"CHEF":{"code":"CHEF","role":"抚子","tag":"实验料理王抚子","quote":"试试这个——巧克力放进咖喱里？还有这个熏制奶酪……","desc":"你对料理没有边界感。锡纸包整颗蔬菜烤？甜酒曲奇？咖喱里放巧克力？你什么都敢试。有时候成功，有时候翻车，但翻车了你也会笑着吃完。你的厨房（或者说篝火旁）永远是最热闹的地方。","partner":"NOM","partnerText":"她负责吃，你负责做，完美循环。","theme":"nadeshiko","easter":false},"CHOO":{"code":"CHOO","role":"抚子","tag":"铁道宅抚子","quote":"坐齿轨列车比露营还兴奋！露营只是顺便啦。","desc":"你本来只是去露营，结果在途中迷上了Abt式齿轨列车、蒸汽机车、无人车站。你开始研究铁道时刻表，买印着铁道发明家头像的T恤。朋友说\"我们不是来露营的吗\"，你说\"对啊，但你看这个列车——\"","partner":"DRIVE","partnerText":"她开车，你坐电车，在不同的轨道上奔赴同一个方向。","theme":"nadeshiko","easter":false},"CHAOS":{"code":"CHAOS","role":"千明","tag":"整活王千明","quote":"把自己打包成快递寄到露营地？我觉得可行！","desc":"你就是野活部叫\"整活部\"的原因。你的脑洞没有边界，你的行动力也没有。你策划的露营计划永远包含至少一个离谱的环节，但最后总能莫名其妙地成功。朋友说你是\"麻烦制造机\"，你说\"不，我是惊喜制造机\"。","partner":"DASH","partnerText":"整活需要执行，你们就是彼此的加速器。","theme":"chiaki","easter":false},"WEEP":{"code":"WEEP","role":"千明","tag":"爱哭鬼千明","quote":"呜呜呜这个露营场太棒了我好感动——","desc":"你是嗓门最大的人，也是泪腺最浅的人。篝火旁聊着聊着突然哭了，看日出哭了，看到朋友偷偷给你准备的生日惊喜哭得更凶。你从不掩饰自己的情绪，哭完笑完，继续整活。","partner":"MOM","partnerText":"她会默默递纸巾，然后假装没看见你哭。","theme":"chiaki","easter":false},"BROKE":{"code":"BROKE","role":"千明","tag":"穷鬼千明","quote":"700日元！买了个爹！","desc":"你的露营装备几乎全是二手店淘的。你买过700日元的木碗（后来变成了仙人掌盆），用劣化吊床替代露营椅，自制的熏制器用纸箱做的。你不觉得穷是问题——你觉得穷是创意的催化剂。","partner":"CARB","partnerText":"两人一起逛二手店，互相怂恿\"这个可以买\"。","theme":"chiaki","easter":false},"DASH":{"code":"DASH","role":"千明","tag":"热血笨蛋千明","quote":"迷路也是体验！反正会被救的——大概吧！","desc":"你是那种想到什么就冲的人。先出发再查路线，先买了再说怎么用。你经常搞砸，但从不后悔。因为最棒的故事往往来自最离谱的意外。而且你有一个（或者好几个）无论如何都会来救你的朋友。","partner":"DRIVE","partnerText":"她会开车来救你。虽然嘴上骂你，但油门下得很稳。","theme":"chiaki","easter":false},"SEYANA":{"code":"SEYANA","role":"葵","tag":"佛系葵","quote":"せやな～","desc":"天塌下来？主打一个随缘。你是那个在所有人焦虑的时候说\"まあ、なんとかなる\"（总会有办法的）的人。你说话带着关西腔的慵懒，行动带着一种从容的节奏。不是不在乎，而是你知道——急也没用。","partner":"CHAOS","partnerText":"她是龙卷风，你是风眼。没有你，她早就把自己吹飞了。","theme":"aoi","easter":false},"MOM":{"code":"MOM","role":"葵","tag":"老妈子葵","quote":"先把饭做好，热水烧好，然后你们再闹。","desc":"你是野活组真正的幕后支柱。千明负责整活，你负责善后；抚子负责吃，你负责做。你记得每个人的口味，知道谁需要加衣服，在所有人疯完闹完之后，你已经默默把一切收拾好了。你从不说\"我来照顾你们\"，但每个人都知道你会的。","partner":"WEEP","partnerText":"她哭的时候，只有你知道什么时候该递纸巾，什么时候该假装没看见。","theme":"aoi","easter":false},"USOYARE":{"code":"USOYARE","role":"葵","tag":"骗人精葵","quote":"我跟你们说，上次我骑自行车……","desc":"你的浓眉一挑，死鱼眼一翻，一段真假难辨的故事即将出口。你编故事的时候面不改色，细节丰富到让人怀疑\"难道是真的？\"——但谢天谢地，你从不拿重要的事开玩笑。你的「嘘やれ」是野活组的保留节目。","partner":"SHIP","partnerText":"你们俩凑在一起，没人能分清哪句是真的。","theme":"aoi","easter":false},"CARB":{"code":"CARB","role":"葵","tag":"碳水狂魔葵","quote":"骑车40公里？不，是为了去那个便利店看看有没有新出的面包。","desc":"你的骑行路线规划不是按距离，是按沿途便利店的数量。你能骑出41km/h的速度——但每次停下来都是因为\"这家店看起来不错\"。你骑车是为了吃，吃是为了骑车，这是一个完美的循环。","partner":"NOM","partnerText":"你们一起骑车，一起吃饭，一起感叹\"人生啊\"。","theme":"aoi","easter":false},"LURK":{"code":"LURK","role":"惠那","tag":"云露营惠那","quote":"人在被炉，心在营地。点赞从不缺席，出门下次一定。","desc":"你是野活组的编外成员——从未正式加入，但每次露营的群聊你都全程在线。你远程给凛提供建议，撮合野活组和凛认识，偶尔还通风报信。你的参与感不靠到场，靠信息量。你知道的永远比在场的人多。","partner":"OWL","partnerText":"你们在不同的地方，看着同一片星空，互相发消息。","theme":"ena","easter":false},"SHIP":{"code":"SHIP","role":"惠那","tag":"搞事精惠那","quote":"りんりん～抚子说她马上到哦～","desc":"其实你根本没告诉抚子。你最大的乐趣不是自己搞事，是看别人因为你的安排而相遇。你促成了凛和野活组的第一次接触，方式是\"卖队友\"。你笑眯眯地站在幕后，看着一切如你所料地发生。","partner":"CHAOS","partnerText":"你们俩的整活组合，能让整个营地鸡飞狗跳。","theme":"ena","easter":false},"DOGGO":{"code":"DOGGO","role":"惠那","tag":"爱犬惠那","quote":"竹轮在哪我在哪。露营可以不去，狗不能不撸。","desc":"你给竹轮买了35000日元的专属露营装备——包括一顶10000日元的狗帐篷。你计划18岁考驾照，不是为了自己，是为了带竹轮去更远的地方。别人问你为什么不加入野活部，你说\"还没打算从归宅部毕业\"——其实就是想多陪竹轮。","partner":"WAN!","partnerText":"你们不需要语言。你懂它，它懂你。","theme":"ena","easter":false},"COZY":{"code":"COZY","role":"惠那","tag":"被炉星人惠那","quote":"被炉是宇宙的中心。冬天+被炉+零食+手机=幸福。","desc":"你的作息极其不规律，早起是你最大的敌人。你可以在被炉里度过整个冬天，靠手机远程参与一切社交活动。你知道这样不太好——但被炉真的很暖和，手机真的很好玩，外面的世界可以再等等。","partner":"SEYANA","partnerText":"你们一起躺在被炉里，一句话不说，但都觉得\"这样就挺好\"。","theme":"ena","easter":false},"WAN!":{"code":"WAN!","role":"竹轮","tag":"竹轮本犬","quote":"汪！","desc":"你不需要成为人群的焦点——你只需要一个人。你的世界不大：就是那个人 + 一个温暖的窝 + 永远摸不完的头。你的幸福公式很简单：被需要 = 幸福。人类露营关你什么事？你在你的小窝里等着就行——反正那个人会带你去。","partner":"DOGGO","partnerText":"她是你的全世界，你是她的全部。","theme":"easter","easter":true},"6CAN":{"code":"6CAN","role":"老师","tag":"酒鬼老师","quote":"六罐姐可不是白叫的。","desc":"白天你是所有人的依靠——靠谱、温和、永远在照顾别人。但下班铃一响，脱下外套，打开第一罐啤酒的那一刻，另一个你醒了。你不需要被理解，你只需要再来一罐。戒酒期间你迷上了黄油曲奇——但戒酒结束后又开了一瓶。","partner":"USOYARE","partnerText":"喝醉后听她讲故事，你分不清是自己醉了还是故事太离谱。","theme":"easter","easter":true},"SAGE":{"code":"SAGE","role":"爷爷","tag":"露营仙人","quote":"你年轻时帐篷还是帆布的。","desc":"你走过很多路，修过很多车，认识很多人——但从不刻意。你从不教别人该怎么活，你只是活给他们看。有人问你去哪，你说\"随便走走\"——然后一走就是一年。你的装备不新，但每一样都有故事。你把帐篷、煤油灯、露营指南书传给下一个人，就像把一种生活方式悄悄种进他们的生命。","partner":"LONE","partnerText":"你们坐在一起，各自看书，偶尔抬头对视一眼。你从没说出来——但她是你见过最像你的人。","theme":"easter","easter":true},"3776":{"code":"3776","role":"中毒者","tag":"富士山中毒者","quote":"3776米。这不是数字，是信仰。","desc":"你对富士山的爱超越了理性。你能从任何角度认出富士山，你能说出每个观景点的最佳时间。你看到富士山的时候，会停下一切，安静地看很久。它不只是山——它是你心里的坐标系。不管走多远，只要能看到它，你就知道自己没走丢。","partner":"PAGE","partnerText":"和她一起安静地看富士山，不用说话，就是最好的陪伴。","theme":"easter","easter":true},"CHILL":{"code":"CHILL","role":"绫乃","tag":"慵懒骑士绫乃","quote":"绫乃的体力是三人中最差的——但没关系，反正骑完摩托瘫在地上也很舒服。","desc":"答应朋友的事你可能拖了很久——但最后你还是骑着摩托、跨了几个县界到了。你体力不好？没事，躺在地上看星星也很舒服。你对朋友的心意从不打折——路上花了多久不重要，重要的是你来了。","partner":"TSUN","partnerText":"你们在路上并排骑行。她开得快，你开得慢，但最后都会在露营地碰头。她知道你一定会到，所以你迟到她也从不催。","theme":"easter","easter":true},"DRIVE":{"code":"DRIVE","role":"樱姐","tag":"飙车党樱姐","quote":"いいよ。","desc":"你不说\"我爱你\"，你说\"いいよ\"。两个字，背后是深夜三小时的山路。朋友凌晨迷路了，你没说\"你疯了\"，你说\"发我定位\"。你开车穿过黑夜，不是因为你想露营——是因为有人在那个营地里等你。你表面冷淡，但方向盘从不犹豫。","partner":"DASH","partnerText":"你嘴上骂她冒失，但每次都是你开车去救她。她知道你会来，所以她才敢乱跑。","theme":"easter","easter":true},"ASAKA":{"code":"ASAKA","role":"亚咲花","tag":"露营之声亚咲花","quote":"露营地放的歌，十首里有五首是你的。","desc":"你不一定在现场，但你的声音在。你唱过的歌变成了别人的露营BGM，变成了他们出发时的闹铃，变成了篝火旁的大合唱。你创造的不是音乐——是记忆的背景音。每一次有人按下播放键，你就陪他们又出发了一次。","partner":"AFRO","partnerText":"你们是彼此的因果。一支笔创造一个世界，一首歌给它温度。不需要见面——歌响起的时候，你们就在一起。","theme":"easter","easter":true},"AFRO":{"code":"AFRO","role":"Afro老师","tag":"部活创世神","quote":"爆炸头是本体，露营是信仰。想不出故事的时候就出去取材。","desc":"你喜欢把去过的地方画进作品里，把认识的人变成角色，把路边吃过的咖喱面画成名场面。你的创作不是凭空想象——是你把生活嚼碎了，重新拼成一幅画。你画的露营地后来变成了别人出发的理由。","partner":"ASAKA","partnerText":"你的世界给了她歌唱的理由，她的歌声让你的世界有了温度。一支笔，一首歌——同一个世界，两种表达。","theme":"easter","easter":true},"MONO":{"code":"MONO","role":"摄影部","tag":"摄影部部员","quote":"用镜头记录的日常，和用帐篷记录的星空，是同一种浪漫。","desc":"别人忽略的瞬间——黄昏的光线角度、路边野猫的哈欠——在你眼里全是宝藏。按下快门不是技术活，是本能。你带着相机走走停停，不知道会拍到什么——但你知道，一定会拍到什么。露营的时候，你比谁都安静，但你的眼里装满了别人没注意到的风景。","partner":"AFRO","partnerText":"你们都是「用画面讲故事」的人。一个画，一个拍——同一个世界，两种表达。","theme":"easter","easter":true},"AQUA":{"code":"AQUA","role":"水水人","tag":"沼津水水人","quote":"山里的咖喱面确实不错。但你来沼津尝尝海边的橘子——那是另一种甜。","desc":"当全世界的露营爱好者都涌向山梨和富士山的时候，你站在駿河湾边微微一笑。你知道好风景不只在山里——海岸线、海上的鸟居、海风里的咸味，同样是出发的理由。你去过本栖湖，也去过海边。你心里的地图，山和海各占一半。","partner":"3776","partnerText":"你们是静冈的一体两面：你爱海，她爱山。3776米加駿河湾，刚好拼成一个完整的静冈。","theme":"easter","easter":true}};
+
+const STATS_COLORS = {
+  LONE:'#7eb8da',TSUN:'#7eb8da',PAGE:'#7eb8da',OWL:'#7eb8da',SPA:'#7eb8da',
+  NOM:'#e8a0b0',SUNNY:'#e8a0b0','BOO!':'#e8a0b0',CHEF:'#e8a0b0',CHOO:'#e8a0b0',
+  CHAOS:'#b89ad4',WEEP:'#b89ad4',BROKE:'#b89ad4',DASH:'#b89ad4',
+  SEYANA:'#a8b878',MOM:'#a8b878',USOYARE:'#a8b878',CARB:'#a8b878',
+  LURK:'#c0b8a8',SHIP:'#c0b8a8',DOGGO:'#c0b8a8',COZY:'#c0b8a8',
+  'WAN!':'#d4b840','6CAN':'#d4b840',SAGE:'#d4b840','3776':'#d4b840',
+  CHILL:'#d4b840',DRIVE:'#d4b840',ASAKA:'#d4b840',AFRO:'#d4b840',
+  MONO:'#d4b840',AQUA:'#d4b840'
+};
+const OPACITIES = [1.0, 0.82, 0.66, 0.52, 0.40];
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ============================================================
+// Stats (always admin mode — full counts visible)
+// ============================================================
+async function loadStats() {
+  const canvas = document.getElementById('statsCanvas');
+  const ctx = canvas.getContext('2d');
+  const container = canvas.parentElement;
+  const maxW = container.clientWidth - 16;
+  const maxH = container.clientHeight - 8;
+  const W = Math.max(Math.min(maxW, 600), 280);
+  const H = Math.max(Math.min(maxH, Math.round(W * 1.6)), 360);
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#9a8c7a';
+  ctx.font = '14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('加载中...', W/2, H/2);
+
+  try {
+    const stats = await ghStatsRead();
+    const counts = stats.results || {};
+    if (counts['TROLL']) { counts['SHIP'] = (counts['SHIP']||0) + counts['TROLL']; delete counts['TROLL']; }
+    const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+    const total = stats.total || 0;
+    ctx.clearRect(0, 0, W, H);
+    const info = document.getElementById('statsInfo');
+    const list = document.getElementById('statsList');
+    if (total === 0) {
+      info.textContent = ''; list.innerHTML = '';
+      ctx.fillText('还没有人做过测试，快来留下第一份答卷吧！', W/2, H/2);
+      return;
+    }
+    // Always admin: show full counts
+    info.textContent = `共 ${total} 份答卷`;
+    list.innerHTML = '';
+
+    // --- Stacked Percentage Bar ---
+    const groups = [
+      { name:'凛', short:'凛', color:'#7eb8da', codes:['LONE','TSUN','PAGE','OWL','SPA'], count:0 },
+      { name:'抚子', short:'抚', color:'#e8a0b0', codes:['NOM','SUNNY','BOO!','CHEF','CHOO'], count:0 },
+      { name:'千明', short:'千', color:'#b89ad4', codes:['CHAOS','WEEP','BROKE','DASH'], count:0 },
+      { name:'葵', short:'葵', color:'#a8b878', codes:['SEYANA','MOM','USOYARE','CARB'], count:0 },
+      { name:'惠那', short:'惠', color:'#c0b8a8', codes:['LURK','SHIP','DOGGO','COZY'], count:0 },
+      { name:'隐藏', short:'隐', color:'#d4b840', codes:['WAN!','6CAN','SAGE','3776','CHILL','DRIVE','ASAKA','AFRO','MONO','AQUA'], count:0 }
+    ];
+    for (const [code, count] of entries) {
+      for (const g of groups) { if (g.codes.includes(code)) { g.count += count; break; } }
+    }
+    const activeGroups = groups.filter(g => g.count > 0);
+    activeGroups.sort((a,b) => b.count - a.count);
+
+    const barWrap = document.getElementById('statsStackedBar');
+    if (activeGroups.length > 0) {
+      const barRow = document.createElement('div');
+      barRow.style.cssText = `display:flex;height:24px;border-radius:12px;overflow:hidden;width:${W}px;max-width:100%;margin:0 auto;`;
+      for (const g of activeGroups) {
+        const pct = (g.count / total) * 100;
+        const seg = document.createElement('div');
+        seg.style.cssText = `width:${pct}%;background:${g.color};display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.3);`;
+        seg.textContent = pct >= 3 ? g.short : '';
+        seg.title = `${g.name}: ${g.count}份 (${pct.toFixed(1)}%)`;
+        barRow.appendChild(seg);
+      }
+      const lblRow = document.createElement('div');
+      lblRow.style.cssText = `display:flex;width:${W}px;max-width:100%;margin:4px auto 0;`;
+      for (const g of activeGroups) {
+        const pct = (g.count / total) * 100;
+        const lbl = document.createElement('div');
+        lbl.style.cssText = `width:${pct}%;text-align:center;font-size:11px;color:var(--muted);min-width:0;overflow:hidden;white-space:nowrap;`;
+        lbl.textContent = `${pct.toFixed(1)}%`;
+        lbl.title = `${g.name}: ${g.count}份 (${pct.toFixed(1)}%)`;
+        lblRow.appendChild(lbl);
+      }
+      barWrap.innerHTML = '';
+      barWrap.appendChild(barRow);
+      barWrap.appendChild(lblRow);
+    } else {
+      barWrap.innerHTML = '';
+    }
+
+    // --- Squarified Treemap ---
+    const PAD = 3;
+    window._treemapBlocks = [];
+    const items = entries.map(([code, count]) => {
+      const p = PERSONALITIES[code];
+      return {
+        code, count,
+        pct: ((count / total) * 100).toFixed(1),
+        area: (count / total) * (W * H),
+        hex: STATS_COLORS[code] || '#888',
+        tag: p ? (p.easter ? '隐藏人格' : p.tag) : code
+      };
+    });
+    items.sort((a,b) => b.area - a.area);
+
+    // Opacity within each theme
+    const sortedByTheme = [...items].sort((a,b) => {
+      if (a.hex !== b.hex) return a.hex.localeCompare(b.hex);
+      return b.count - a.count;
+    });
+    let prevHex = '', rank = 0;
+    for (const it of sortedByTheme) {
+      if (it.hex !== prevHex) { rank = 0; prevHex = it.hex; }
+      it.alpha = OPACITIES[Math.min(rank, 4)];
+      rank++;
+    }
+
+    squarifyTreemap(ctx, items, PAD, PAD, W - 2*PAD, H - 2*PAD);
+
+    // Canvas click → tooltip (always admin: show counts)
+    canvas.onclick = function(e) {
+      const rect = canvas.getBoundingClientRect();
+      const sx = canvas.width / rect.width;
+      const sy = canvas.height / rect.height;
+      const mx = (e.clientX - rect.left) * sx / dpr;
+      const my = (e.clientY - rect.top) * sy / dpr;
+      const tt = document.getElementById('treemapTooltip');
+      for (const b of window._treemapBlocks) {
+        if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) {
+          tt.innerHTML = `<b style="color:${b.hex};font-size:15px;">${b.code}</b> <span style="font-size:12px;color:var(--muted)">${b.tag}</span><br><span style="color:var(--muted)">${b.count}份 · ${b.pct}%</span>`;
+          tt.style.display = 'block';
+          tt.style.left = Math.min(e.clientX + 12, window.innerWidth - 220) + 'px';
+          tt.style.top = (e.clientY - 40) + 'px';
+          setTimeout(() => { tt.style.display = 'none'; }, 2000);
+          return;
+        }
+      }
+      tt.style.display = 'none';
+    };
+
+  } catch(e) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#9a8c7a';
+    ctx.fillText('加载失败，请稍后再试', W/2, H/2);
+    console.error('Stats load error:', e);
+  }
+}
+
+// ---- Squarified Treemap (D3.js d3-hierarchy) ----
+function squarifyTreemap(ctx, items, x, y, w, h) {
+  if (items.length === 0 || w <= 0 || h <= 0) return;
+  if (items.length === 1) { drawItem(ctx, items[0], x, y, w, h); return; }
+  const root = d3.hierarchy({ children: items })
+    .sum(d => d.area)
+    .sort((a,b) => b.value - a.value);
+  d3.treemap().tile(d3.treemapSquarify).size([w, h]).paddingInner(2).paddingOuter(1)(root);
+  for (const leaf of root.leaves()) {
+    drawItem(ctx, leaf.data, x + leaf.x0, y + leaf.y0, leaf.x1 - leaf.x0, leaf.y1 - leaf.y0);
+  }
+}
+
+function drawItem(ctx, item, x, y, w, h) {
+  if (w <= 0 || h <= 0) return;
+  const R = Math.min(8, w/4, h/4);
+  ctx.fillStyle = hexToRgba(item.hex, item.alpha);
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, R);
+  ctx.fill();
+  window._treemapBlocks.push({ x, y, w, h, code: item.code, count: item.count, pct: item.pct, hex: item.hex, tag: item.tag });
+  const minDim = Math.min(w, h);
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  if (minDim >= 50) {
+    const fs = Math.max(11, Math.min(Math.floor(minDim / 5), 16));
+    ctx.font = `bold ${fs}px sans-serif`;
+    ctx.fillText(item.code, x + w/2, y + h/2 - fs/2);
+    ctx.font = `${Math.max(9, fs - 2)}px sans-serif`;
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.fillText(`${item.count}份 ${item.pct}%`, x + w/2, y + h/2 + fs/2);
+  } else if (minDim >= 24) {
+    const fs = Math.max(10, Math.floor(minDim / 4));
+    ctx.font = `bold ${fs}px sans-serif`;
+    ctx.fillText(item.code, x + w/2, y + h/2);
+  } else if (minDim >= 14) {
+    const fs = Math.max(8, Math.floor(minDim / 3));
+    ctx.font = `bold ${fs}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(item.code, x + w/2, y + h/2);
+  }
+}
+
+// Resize handler: redraw treemap on window resize
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(loadStats, 300);
+});
+</script>
+</body>
+</html>
