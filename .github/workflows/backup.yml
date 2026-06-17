@@ -1,0 +1,34 @@
+name: Daily Backup
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # 每天 UTC 0:00（北京时间 8:00）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create backup
+        run: |
+          mkdir -p backups
+          DATE=$(date -u +'%Y-%m-%d')
+          cp stats.json "backups/stats-${DATE}.json"
+          cp last_aggregation.txt "backups/last_aggregation-${DATE}.txt"
+
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backups/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "backup: ${DATE}"
+            git push
+          fi
