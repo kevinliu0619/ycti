@@ -23,7 +23,7 @@ cursor_time = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(cursor)) if cursor 
 print(f"Cursor: {cursor_time}")
 
 # git log --name-only --since=... -- results/  (without --diff-filter=A which breaks with --since)
-cmd = ['git', 'log', f'--since={cursor_time}', '--name-only', '--pretty=format:', '--', 'results/']
+cmd = ['git', 'log', f'--since={cursor_time}', '--name-only', '--pretty=format:', 'origin/results', '--', 'results/']
 result = subprocess.run(cmd, capture_output=True, text=True)
 
 pattern = re.compile(r'.*_([A-Z0-9!]+)\.json$')

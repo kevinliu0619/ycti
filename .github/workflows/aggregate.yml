@@ -16,6 +16,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch results branch
+        run: git fetch origin results:refs/remotes/origin/results || true
+
       - name: Run aggregation
         run: python3 aggregate_stats.py
 
