@@ -193,13 +193,39 @@ function ghAuth() {
   return 'Basic ' + btoa('kevinliu0619:' + GH_TOKEN);
 }
 
+// 读：走 raw.githubusercontent（无限速、CORS 开放），失败再退到匿名 api
+// 这里刻意不带 GH_TOKEN —— 失效凭据会被 GitHub 静默降级成匿名（60次/小时），
+// 共享出口 IP 很快耗尽 → 403。全部失败时抛错，由 loadStats 显示"加载失败"。
 async function ghStatsRead() {
-  const resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE, {
-    headers: { Authorization: ghAuth(), Accept: 'application/vnd.github+json', 'User-Agent': 'YCTI' }
-  });
-  if (!resp.ok) return { total: 0, results: {} };
-  const d = await resp.json();
-  return JSON.parse(atob(d.content));
+  var bust = '?t=' + Date.now();
+  var urls = [
+    'https://raw.githubusercontent.com/' + GH_REPO + '/main/' + GH_STATS_FILE + bust,
+    'https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE + bust
+  ];
+  var lastErr = null;
+  for (var i = 0; i < urls.length; i++) {
+    var ctl = null, timer = null;
+    try {
+      if (typeof AbortController !== 'undefined') {
+        ctl = new AbortController();
+        timer = setTimeout(function() { ctl.abort(); }, 10000);
+      }
+      var resp = await fetch(urls[i], {
+        cache: 'no-store',
+        signal: ctl ? ctl.signal : undefined,
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+      if (timer) { clearTimeout(timer); timer = null; }
+      if (!resp.ok) { lastErr = new Error('stats read HTTP ' + resp.status); continue; }
+      if (i === 0) return await resp.json();
+      var d = await resp.json();
+      return JSON.parse(atob(String(d.content || '').replace(/\s/g, '')));
+    } catch (e) {
+      if (timer) { clearTimeout(timer); timer = null; }
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error('stats read failed');
 }
 
 // ============================================================
@@ -363,11 +389,16 @@ async function loadStats() {
     };
 
   } catch(e) {
-    ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#9a8c7a';
-    ctx.fillText('加载失败，请稍后再试', W/2, H/2);
-    console.error('Stats load error:', e);
-  }
+      // 失败（限流/网络）与"真的没数据"必须是两种状态，不能都画成空态
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#9a8c7a';
+      ctx.fillText('加载失败，请稍后再试', W/2, H/2);
+      var failInfo = document.getElementById('statsInfo');
+      var failList = document.getElementById('statsList');
+      if (failInfo) failInfo.textContent = '';
+      if (failList) failList.innerHTML = '';
+      console.error('Stats load error:', e);
+    }
 }
 
 // ---- Squarified Treemap (D3.js d3-hierarchy) ----
