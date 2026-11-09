@@ -1,8 +1,13 @@
 name: Aggregate Stats
 
+# 说明：
+#   主链路已改为 Worker 在每份答卷写入后立即重算 stats.json（见 worker/src/index.js）。
+#   这个工作流保留为「兜底 + 校正」：万一 Worker 那边写失败，这里跑一次全量重算就能对齐。
+#   注意 GitHub 对本仓库的 schedule 有严重限流（配每2小时，实测平均6小时），不要依赖它做实时性。
+
 on:
   schedule:
-    - cron: '0 */2 * * *'   # 每 2 小时（与统计页「统计每2小时更新」文案一致）
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 permissions:
@@ -33,7 +38,9 @@ jobs:
           git add stats.json
           if git diff --cached --quiet; then
             echo "No changes to commit（数据无变化）"
-          else
-            git commit -m "aggregate: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-            git push
+            exit 0
           fi
+          git commit -m "aggregate: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          # Worker 也会在每份答卷后写 stats.json，先变基再推，避免 non-fast-forward
+          git pull --rebase origin main
+          git push
