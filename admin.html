@@ -149,7 +149,7 @@ canvas { max-width: 100%; border-radius: 12px; cursor: pointer; }
     <canvas id="statsCanvas" style="max-width:100%;max-height:100%;"></canvas>
     <div id="treemapTooltip"></div>
   </div>
-  <div class="footer-note">管理视图 · 统计每2小时更新 · 仅管理员可见</div>
+  <div class="footer-note">管理视图 · 统计实时更新 · 仅管理员可见</div>
 </div>
 
 <script>/*! d3-hierarchy v3.1.3 | MIT | Copyright 2010-2026 Mike Bostock | inlined: 去掉 jsdelivr 外部依赖，国内网络不可达时 treemap 会整屏失败 */
@@ -198,6 +198,7 @@ const GH_STATS_FILE = 'stats.json';
 async function ghStatsRead() {
   var bust = '?t=' + Date.now();
   var urls = [
+    'https://api.ycti.fun/stats' + bust,
     'https://raw.githubusercontent.com/' + GH_REPO + '/main/' + GH_STATS_FILE + bust,
     'https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_STATS_FILE + bust
   ];
@@ -216,7 +217,7 @@ async function ghStatsRead() {
       });
       if (timer) { clearTimeout(timer); timer = null; }
       if (!resp.ok) { lastErr = new Error('stats read HTTP ' + resp.status); continue; }
-      if (i === 0) return await resp.json();
+      if (i < 2) return await resp.json();
       var d = await resp.json();
       return JSON.parse(atob(String(d.content || '').replace(/\s/g, '')));
     } catch (e) {
