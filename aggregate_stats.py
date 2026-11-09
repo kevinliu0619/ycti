@@ -1,60 +1,110 @@
 #!/usr/bin/env python3
-"""Aggregate new result files → stats.json (incremental via git log --since)"""
-import json, os, re, subprocess, time
+"""全量重算 stats.json
+
+以 results 分支的文件列表为唯一事实来源：每次从头数一遍，幂等。
+旧的增量方案（git log --since + 游标）会重复计入边界提交，导致统计虚高。
+
+输出结构：
+  {"total": N, "results": {CODE: n, ...}, "langs": {"zh": n, "ja": n}}
+（不含时间戳：数据没变时文件内容不变，避免产生空提交）
+"""
+import collections
+import json
+import os
+import re
+import subprocess
+import time
 
 STATS_FILE = 'stats.json'
 CURSOR_FILE = 'last_aggregation.txt'
+BRANCH = 'origin/results'
+PATTERN = re.compile(r'_([A-Z0-9!]+)\.json$')
 
-# Read cursor (last aggregation timestamp, seconds since epoch)
-cursor = 0
-if os.path.exists(CURSOR_FILE):
-    with open(CURSOR_FILE) as f:
-        cursor = int(f.read().strip() or 0)
 
-# Read existing stats as base
-stats = {"total": 0, "results": {}}
-if os.path.exists(STATS_FILE):
-    with open(STATS_FILE) as f:
-        stats = json.load(f)
-print(f"Base: total={stats.get('total',0)}, types={len(stats.get('results',{}))}")
+def git(*args):
+    return subprocess.run(['git', *args], capture_output=True, check=True).stdout
 
-# Find new result files since cursor using git log (NO --diff-filter=A)
-cursor_time = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(cursor)) if cursor else '2026-06-01T00:00:00'
-print(f"Cursor: {cursor_time}")
 
-# git log --name-only --since=... -- results/  (without --diff-filter=A which breaks with --since)
-cmd = ['git', 'log', f'--since={cursor_time}', '--name-only', '--pretty=format:', 'origin/results', '--', 'results/']
-result = subprocess.run(cmd, capture_output=True, text=True)
+def list_records():
+    """列出 results 分支上的所有记录文件 → [(path, blob_sha), ...]"""
+    out = git('ls-tree', '-r', BRANCH, '--', 'results/').decode('utf-8', 'replace')
+    entries = []
+    for line in out.splitlines():
+        if not line.strip():
+            continue
+        meta, path = line.split('\t', 1)
+        if not path.endswith('.json'):
+            continue
+        parts = meta.split()
+        if len(parts) < 3 or parts[1] != 'blob':
+            continue
+        entries.append((path, parts[2]))
+    return entries
 
-pattern = re.compile(r'.*_([A-Z0-9!]+)\.json$')
-new_counts = {}
-new_files = 0
 
-for line in result.stdout.strip().split('\n'):
-    line = line.strip()
-    if not line or not line.endswith('.json'):
-        continue
-    match = pattern.match(os.path.basename(line))
-    if not match:
-        continue
-    code = match.group(1)
-    new_counts[code] = new_counts.get(code, 0) + 1
-    new_files += 1
+def count_langs(shas):
+    """一次 cat-file --batch 批量读取所有记录内容，统计 lang 字段"""
+    langs = collections.Counter()
+    if not shas:
+        return langs
+    proc = subprocess.run(
+        ['git', 'cat-file', '--batch'],
+        input='\n'.join(shas).encode(),
+        capture_output=True,
+        check=True,
+    )
+    raw = proc.stdout
+    pos = 0
+    while pos < len(raw):
+        nl = raw.find(b'\n', pos)
+        if nl < 0:
+            break
+        header = raw[pos:nl].decode('utf-8', 'replace').split()
+        pos = nl + 1
+        if len(header) < 3:
+            continue
+        try:
+            size = int(header[2])
+        except ValueError:
+            continue
+        blob = raw[pos:pos + size]
+        pos += size + 1  # 内容后跟一个换行
+        try:
+            body = json.loads(blob.decode('utf-8', 'replace'))
+        except Exception:
+            continue
+        langs[str(body.get('lang') or 'unknown')] += 1
+    return langs
 
-print(f"New files: {new_files}")
-print(f"New counts: {new_counts}")
 
-# Merge
-for code, count in new_counts.items():
-    stats["total"] = stats.get("total", 0) + count
-    stats["results"][code] = stats["results"].get(code, 0) + count
+def main():
+    entries = list_records()
 
-# Write
-with open(STATS_FILE, 'w') as f:
-    json.dump(stats, f, ensure_ascii=False)
+    counts = collections.Counter()
+    for path, _ in entries:
+        m = PATTERN.search(os.path.basename(path))
+        if m:
+            counts[m.group(1)] += 1
 
-new_cursor = int(time.time())
-with open(CURSOR_FILE, 'w') as f:
-    f.write(str(new_cursor))
+    langs = count_langs([sha for _, sha in entries])
 
-print(f"Done: +{new_files}, total={stats['total']}")
+    stats = {
+        'total': sum(counts.values()),
+        'results': dict(sorted(counts.items(), key=lambda kv: -kv[1])),
+        'langs': dict(sorted(langs.items(), key=lambda kv: -kv[1])),
+    }
+
+    with open(STATS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(stats, f, ensure_ascii=False, separators=(',', ':'))
+
+    # 游标文件仅保留给人工排查，聚合本身不再依赖它
+    with open(CURSOR_FILE, 'w') as f:
+        f.write(str(int(time.time())))
+
+    print(f"files={len(entries)} total={stats['total']} "
+          f"types={len(counts)} langs={dict(langs)}")
+    print('top5:', list(stats['results'].items())[:5])
+
+
+if __name__ == '__main__':
+    main()
