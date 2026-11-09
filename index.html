@@ -497,7 +497,7 @@ body::before {
 #analysisFx{position:fixed;top:0;right:0;bottom:0;left:0;z-index:210;background:var(--bg);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:12vh}
 #analysisFx::before{content:'';position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;background-image:radial-gradient(1.3px 1.3px at 30px 40px,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 150px 95px,rgba(255,255,255,.38),transparent),radial-gradient(1.5px 1.5px at 95px 170px,rgba(255,255,255,.3),transparent),radial-gradient(1px 1px at 210px 30px,rgba(255,255,255,.26),transparent);background-size:260px 260px;opacity:.85}
 #analysisFx .fx-rain{position:absolute;top:0;right:0;bottom:0;left:0;overflow:hidden;pointer-events:none}
-.fx-m{position:absolute;font-weight:700;line-height:1;white-space:nowrap;will-change:transform,opacity;animation-name:fxFly;animation-timing-function:linear;animation-fill-mode:both;text-shadow:0 0 6px currentColor,0 0 16px currentColor,0 0 32px currentColor}
+.fx-m{position:absolute;font-weight:700;line-height:1;white-space:nowrap;will-change:transform,opacity;animation-name:fxFly;animation-timing-function:linear;animation-fill-mode:both;text-shadow:0 0 4px currentColor,0 0 12px currentColor,0 0 22px currentColor}
 .fx-m::after{content:'';position:absolute;left:100%;top:50%;width:120px;height:9px;margin-top:-4.5px;background:linear-gradient(90deg,currentColor,rgba(255,255,255,0));-webkit-clip-path:polygon(0 0,100% 50%,0 100%);clip-path:polygon(0 0,100% 50%,0 100%);transform-origin:0 50%;transform:rotate(-45deg);opacity:.92}
 .fx-tip{position:absolute;left:0;right:0;top:7vh;text-align:center;color:var(--warm);font-size:14px;font-weight:500;letter-spacing:2px;opacity:.85}
 .fx-btn{position:relative;z-index:2;background:var(--warm);color:#191919;border:none;border-radius:999px;padding:13px 34px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.5);opacity:0;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease}
@@ -517,7 +517,7 @@ body::before {
       <div class="subtitle-cn" data-i18n="subtitleCn">摇曳露营人格测试</div>
       <button class="btn btn-primary" onclick="startQuiz()" data-i18n="startBtn">开始测试</button>
       <div class="video-wrapper"><video id="homeVideo" class="home-video" data-src="home.mp4" poster="home-poster.webp" preload="none" width="960" height="720" autoplay loop muted playsinline webkit-playsinline x5-video-player-type="h5-page" x5-video-player-fullscreen="false" disableRemotePlayback disablePictureInPicture></video></div>
-      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.22.0</div>
+      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.22.1</div>
     </div>
   </div>
 
@@ -547,7 +547,7 @@ body::before {
         <button class="btn btn-primary" onclick="restartQuiz()" data-i18n="restart">重新测试</button>
 <button class="btn-icon" onclick="openShareModal()" title="分享"><img src="data:image/png;base64,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" alt="二维码" style="width:22px;height:22px;display:block"></button>
       </div>
-      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.22.0</div>
+      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.22.1</div>
     </div>
   </div>
 </div>
@@ -789,7 +789,7 @@ const I18N = {
     title:'YCTI · 摇曳露营人格测试',
     subtitleCn:'摇曳露营人格测试',
     startBtn:'开始测试',
-    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.22.0',
+    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.22.1',
     loadingAnalyzing:'正在分析你的摇曳露营人格',
     loadingWait:'初次加载可能较慢，请耐心等待',
     fxView:'分析完成 · 查看结果',
@@ -813,7 +813,7 @@ const I18N = {
     title:'YCTI · ゆるキャン△性格診断',
     subtitleCn:'ゆるキャン△性格診断',
     startBtn:'テスト開始',
-    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.22.0',
+    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.22.1',
     loadingAnalyzing:'あなたのゆるキャン性格を分析中',
     loadingWait:'初回読み込みは少し時間がかかることがあります',
     fxView:'分析完了 · 結果を見る',
@@ -1489,8 +1489,9 @@ function computeResult() {
 //   1 分 = 1 颗字；2 分以上用更大字号表示，避免字雨过密
 //   全部飞完就循环重来，直到用户点「查看结果」
 // ============================================================
-var FX_WAVE_MS = 2000;      // 一轮流星的总时长
-var FX_METEOR_MS = 1700;    // 单颗飞行时长（越长同屏越密）
+var FX_WAVE_MS = 5000;      // 一轮流星的总时长（放慢，让"一轮"能被感知）
+var FX_METEOR_MS = 2600;    // 单颗飞行时长（越长越慢、同屏越密）
+var FX_DENSITY = 0.65;      // 密度曲线：0=均匀，越大越"两头疏、中间密"
 var FX_MIN_MS = 900;        // 最短展示时间（避免图太快就绪时一闪而过）
 
 function prefersReducedMotion() {
@@ -1567,7 +1568,7 @@ function startAnalysisFx(onView) {
     if (stopped) return;
     var W = window.innerWidth, H = window.innerHeight;
     var n = meteors.length || 1;
-    var stagger = Math.max(22, FX_WAVE_MS / n);
+    // 发射节奏由下面的密度曲线决定，不再用均匀 stagger
 
     for (var i = 0; i < meteors.length; i++) {
       var m = meteors[i];
@@ -1589,11 +1590,15 @@ function startAnalysisFx(onView) {
       el.className = 'fx-m';
       el.textContent = m.ch;
       el.style.color = far ? hexToRgba(m.color, 0.55) : m.color;
-      el.style.fontSize = (far ? 11 : 18) + (Math.min(m.pts, 4) - 1) * (far ? 2 : 7) + 'px';
+      el.style.fontSize = (far ? 12 : 19) + (Math.min(m.pts, 4) - 1) * (far ? 2 : 7) + 'px';
       el.style.left = Math.round(sx) + 'px';
       el.style.top = Math.round(sy) + 'px';
       el.style.animationDuration = (far ? FX_METEOR_MS * 1.35 : FX_METEOR_MS) + 'ms';
-      el.style.animationDelay = Math.round(i * stagger + Math.random() * 80) + 'ms';
+      // 疏→密→疏：把"第 i 颗"映射到时间轴
+      // t(u) = W*(u + a*sin(2πu)/2π)：导数在 u=0/1 最大（两头疏），u=0.5 最小（中间密）
+      var u = n > 1 ? i / (n - 1) : 0.5;
+      var t = FX_WAVE_MS * (u + FX_DENSITY * Math.sin(2 * Math.PI * u) / (2 * Math.PI));
+      el.style.animationDelay = Math.round(Math.max(0, t) + Math.random() * 40) + 'ms';
       (function(node) {
         node.addEventListener('animationend', function() {
           if (node.parentNode) node.parentNode.removeChild(node);
