@@ -189,15 +189,11 @@ function checkPw() {
 // GitHub API 统计后端
 // ============================================================
 const GH_REPO = 'kevinliu0619/ycti';
-const GH_TOKEN='ghp_zZPn5eLWAKroAvTmlh9C'+'mts6mtllLm3fwBv8';
 const GH_STATS_FILE = 'stats.json';
 
-function ghAuth() {
-  return 'Basic ' + btoa('kevinliu0619:' + GH_TOKEN);
-}
 
 // 读：走 raw.githubusercontent（无限速、CORS 开放），失败再退到匿名 api
-// 这里刻意不带 GH_TOKEN —— 失效凭据会被 GitHub 静默降级成匿名（60次/小时），
+// 读取不携带任何凭据 —— 失效凭据会被 GitHub 静默降级成匿名（60次/小时），
 // 共享出口 IP 很快耗尽 → 403。全部失败时抛错，由 loadStats 显示"加载失败"。
 async function ghStatsRead() {
   var bust = '?t=' + Date.now();

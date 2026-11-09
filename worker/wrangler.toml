@@ -1,0 +1,16 @@
+name = "ycti-api"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+account_id = "3401ab93eadac539070407232247c77c"
+
+# workers.dev 保留（方便我用 curl 自测），正式入口是 api.ycti.fun
+workers_dev = true
+
+# 自定义域名：部署时自动创建 api.ycti.fun 的 DNS 记录并把 Worker 挂上去
+# 前提：zone ycti.fun 状态为 active
+[[routes]]
+pattern = "api.ycti.fun"
+custom_domain = true
+
+[observability]
+enabled = true
