@@ -1,13 +1,17 @@
-name: Aggregate Stats
+name: Aggregate Stats (fallback)
 
 # 说明：
-#   主链路已改为 Worker 在每份答卷写入后立即重算 stats.json（见 worker/src/index.js）。
-#   这个工作流保留为「兜底 + 校正」：万一 Worker 那边写失败，这里跑一次全量重算就能对齐。
-#   注意 GitHub 对本仓库的 schedule 有严重限流（配每2小时，实测平均6小时），不要依赖它做实时性。
+#   实时统计已由 Worker 负责（每份答卷写入后立刻用 git trees 全量重算 stats.json）。
+#   这个工作流只是「兜底校正」：万一 Worker 那边写失败，跑一次全量重算就能对齐。
+#
+#   注意：
+#   1. GitHub 对本仓库的 schedule 有严重限流（配每2小时，实测平均6小时），不要依赖它做实时性
+#   2. Worker 也在写 stats.json，直接 commit + pull --rebase 会撞车导致任务失败并发邮件；
+#      所以这里改成「每次重试都 reset 到最新 main 再重算」，重算本身是幂等的
 
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 3 * * *'   # 每天一次兜底校正
   workflow_dispatch:
 
 permissions:
@@ -28,19 +32,34 @@ jobs:
       - name: Fetch results branch
         run: git fetch origin results:refs/remotes/origin/results --depth=1 || true
 
-      - name: Recompute stats (full, idempotent)
-        run: python3 aggregate_stats.py
-
-      - name: Commit & push
+      - name: Recompute & push (retry on conflict)
         run: |
+          set -uo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add stats.json
-          if git diff --cached --quiet; then
-            echo "No changes to commit（数据无变化）"
-            exit 0
-          fi
-          git commit -m "aggregate: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          # Worker 也会在每份答卷后写 stats.json，先变基再推，避免 non-fast-forward
-          git pull --rebase origin main
-          git push
+
+          for i in 1 2 3; do
+            # 每次都基于最新 main 重算：既避免和 Worker 的提交撞车，又因为是全量重算所以幂等
+            git fetch origin main
+            git reset --hard origin/main
+            python3 aggregate_stats.py
+
+            git add stats.json
+            if git diff --cached --quiet; then
+              echo "统计已是最新，无需提交"
+              exit 0
+            fi
+
+            git commit -m "aggregate: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            if git push origin HEAD:main; then
+              echo "已更新 stats.json（第 $i 次尝试）"
+              exit 0
+            fi
+
+            echo "第 $i 次推送失败（多半是与 Worker 的提交撞车），3 秒后重试…"
+            sleep 3
+          done
+
+          # 兜底连续失败也不让任务变红：实时统计由 Worker 维护，这里只是校正
+          echo "::warning::兜底聚合 3 次推送均失败；实时统计由 Worker 维护，本次跳过"
+          exit 0
