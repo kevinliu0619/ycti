@@ -94,8 +94,26 @@ def main():
         'langs': dict(sorted(langs.items(), key=lambda kv: -kv[1])),
     }
 
+    # 语义比较后再决定要不要写文件：
+    # Worker 写的 JSON 与这里的 key 顺序不同（JS 会把 "3776" 这类数字键排在最前），
+    # 只比文本会每天误判为"有变化"，与 Worker 来回提交打架。
+    existing = None
+    try:
+        with open(STATS_FILE, encoding='utf-8') as f:
+            existing = json.load(f)
+    except Exception:
+        existing = None
+
+    new_text = json.dumps(stats, ensure_ascii=False, separators=(',', ':'))
+
+    if existing == stats:
+        print('统计无变化（语义一致），不写文件')
+        with open(CURSOR_FILE, 'w') as f:
+            f.write(str(int(time.time())))
+        return
+
     with open(STATS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(stats, f, ensure_ascii=False, separators=(',', ':'))
+        f.write(new_text)
 
     # 游标文件仅保留给人工排查，聚合本身不再依赖它
     with open(CURSOR_FILE, 'w') as f:
