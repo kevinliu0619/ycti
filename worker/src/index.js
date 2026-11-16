@@ -156,6 +156,59 @@ function rateLimited(ip) {
   return n > 10;
 }
 
+// ============================================================
+// /s —— 分享卡诊断页（临时）
+// 微信/QQ 抓 GitHub Pages 不成功时，用这个「小、快、边缘可达」的页面做 A/B。
+// 同时把每次命中记到 results 分支的 probe/ 下，用来确认抓取器到底来没来。
+// ============================================================
+const SHARE_HTML = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YCTI · 摇曳露营人格测试</title>
+<meta name="description" content="测测你最像摇曳露营里的谁">
+<link rel="image_src" href="https://api.ycti.fun/share-card.jpg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="YCTI">
+<meta property="og:title" content="YCTI · 摇曳露营人格测试">
+<meta property="og:description" content="测测你最像摇曳露营里的谁">
+<meta property="og:url" content="https://api.ycti.fun/s">
+<meta property="og:image" content="https://api.ycti.fun/share-card.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>body{margin:0;background:#141428;color:#e8e0d8;font-family:sans-serif;
+display:flex;align-items:center;justify-content:center;height:100vh;text-align:center}</style>
+</head><body><img src="https://api.ycti.fun/share-card.jpg" alt="YCTI"
+ style="position:absolute;left:-9999px;width:1200px;height:630px">
+<div><h1 style="font-size:22px">YCTI · 摇曳露营人格测试</h1>
+<p style="color:#9a8c7a">分享卡诊断页 · <a href="https://ycti.fun/" style="color:#e8a850">去测试</a></p></div>
+</body></html>`;
+
+async function logProbe(pat, request) {
+  if (!pat) return;
+  const ua = request.headers.get('User-Agent') || '';
+  const rec = {
+    ts: new Date().toISOString(),
+    path: new URL(request.url).pathname,
+    ua: ua.slice(0, 200),
+    country: request.headers.get('CF-IPCountry') || '',
+    isWeChat: /MicroMessenger|WeChat/i.test(ua),
+    isQQ: /QQ\//i.test(ua),
+  };
+  const name = 'probe/' + Date.now() + '_' + Math.random().toString(36).slice(2, 7) + '.json';
+  try {
+    await fetch('https://api.github.com/repos/' + REPO + '/contents/' + name, {
+      method: 'PUT',
+      headers: ghHeaders(pat, true),
+      body: JSON.stringify({
+        message: 'probe: share hit',
+        content: b64encode(JSON.stringify(rec)),
+        branch: BRANCH,
+      }),
+    });
+  } catch (e) {}
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -164,6 +217,30 @@ export default {
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: cors });
+    }
+
+    // 分享卡诊断页（临时 A/B 用）
+    if (url.pathname === '/s') {
+      if (env.GH_PAT && ctx && ctx.waitUntil) {
+        ctx.waitUntil(logProbe(env.GH_PAT, request).catch(() => {}));
+      }
+      return new Response(SHARE_HTML, {
+        headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' },
+      });
+    }
+
+    // 分享图：由 Worker 取一次 GitHub Pages 的图，之后长期缓存在 CF 边缘
+    if (url.pathname === '/share-card.jpg') {
+      if (env.GH_PAT && ctx && ctx.waitUntil) {
+        ctx.waitUntil(logProbe(env.GH_PAT, request).catch(() => {}));
+      }
+      const r = await fetch('https://ycti.fun/share-card.jpg', {
+        cf: { cacheEverything: true, cacheTtl: 604800 },
+      });
+      const h = new Headers(r.headers);
+      h.set('Cache-Control', 'public, max-age=604800');
+      h.set('Content-Type', 'image/jpeg');
+      return new Response(r.body, { status: r.status, headers: h });
     }
 
     // 健康检查：用来验证自定义域名是否可达
