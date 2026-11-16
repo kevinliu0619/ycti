@@ -347,6 +347,9 @@ body::before {
 .share-card-box .sc-author { font-size: 12px; color: var(--muted); letter-spacing: .5px; }
 .share-card-box .sc-author a { color: var(--warm); text-decoration: none;
   border-bottom: 1px solid rgba(232,168,80,.45); padding-bottom: 1px; }
+.share-card-box .sc-avatar { width: 16px; height: 16px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.7); box-sizing: border-box;
+  object-fit: cover; vertical-align: -3px; margin: 0 6px 0 2px; }
 .share-card-box .sc-close { padding: 9px 36px; font-size: 13px; }
 .result-actions .btn-icon {
   width: 42px; height: 42px;
@@ -490,7 +493,7 @@ body::before {
       <div class="subtitle-cn" data-i18n="subtitleCn">摇曳露营人格测试</div>
       <button class="btn btn-primary" onclick="startQuiz()" data-i18n="startBtn">开始测试</button>
       <div class="video-wrapper"><video id="homeVideo" class="home-video" data-src="home.mp4" poster="home-poster.webp" preload="none" width="960" height="720" autoplay loop muted playsinline webkit-playsinline x5-video-player-type="h5-page" x5-video-player-fullscreen="false" disableRemotePlayback disablePictureInPicture></video></div>
-      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.30.0</div>
+      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.31.0</div>
     </div>
   </div>
 
@@ -523,7 +526,7 @@ body::before {
       <div class="result-actions">
         <button class="btn btn-primary" onclick="openShareCard()" data-i18n="makeCard">生成我的人格卡片</button>
       </div>
-      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.30.0</div>
+      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.31.0</div>
     </div>
   </div>
 </div>
@@ -560,7 +563,7 @@ body::before {
     <div class="sc-title" data-i18n="cardTitle">我的 YCTI 结果</div>
     <div class="sc-imgwrap"><img id="shareCardImg" alt="结果卡片"></div>
     <div class="sc-tip" id="shareCardTip" data-i18n="saveHint">长按图片保存到相册</div>
-    <div class="sc-author"><span data-i18n="followAuthor">关注作者：小红书</span> <a href="https://xhslink.cn/o/Axxh2ZcEQD" target="_blank" rel="noopener">@悠哉日常大囧</a></div>
+    <div class="sc-author"><span data-i18n="followAuthor">关注作者：</span><img class="sc-avatar" src="data:image/jpeg;base64,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" alt=""><a href="https://xhslink.cn/o/Axxh2ZcEQD" target="_blank" rel="noopener">@悠哉日常大囧</a></div>
     <button class="btn btn-secondary sc-close" onclick="closeShareCard()" data-i18n="cardClose">关闭</button>
   </div>
 </div>
@@ -752,7 +755,7 @@ const I18N = {
     title:'YCTI · 摇曳露营人格测试',
     subtitleCn:'摇曳露营人格测试',
     startBtn:'开始测试',
-    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.30.0',
+    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.31.0',
     loadingAnalyzing:'正在分析你的摇曳露营人格',
     loadingWait:'初次加载可能较慢，请耐心等待',
     fxView:'分析完成 · 查看结果',
@@ -764,7 +767,7 @@ const I18N = {
     resultBadge:'YCTI · 摇曳露营人格',
     viewStats:'查看统计',
     restart:'重新测试',
-    followAuthor:'关注作者：小红书',
+    followAuthor:'关注作者：',
     partnerPrefix:'🤝 最佳拍档：',
     rarityT3:'★★★ 极稀有',
     rarityT2:'★★ 稀有',
@@ -788,7 +791,7 @@ const I18N = {
     title:'YCTI · ゆるキャン△性格診断',
     subtitleCn:'ゆるキャン△性格診断',
     startBtn:'テスト開始',
-    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.30.0',
+    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.31.0',
     loadingAnalyzing:'あなたのゆるキャン性格を分析中',
     loadingWait:'初回読み込みは少し時間がかかることがあります',
     fxView:'分析完了 · 結果を見る',
@@ -800,7 +803,7 @@ const I18N = {
     resultBadge:'YCTI · ゆるキャン△性格診断',
     viewStats:'統計を見る',
     restart:'もう一度テスト',
-    followAuthor:'作者をフォロー：小紅書',
+    followAuthor:'作者をフォロー：',
     partnerPrefix:'🤝 ベストパートナー：',
     rarityT3:'★★★ 超レア',
     rarityT2:'★★ レア',
