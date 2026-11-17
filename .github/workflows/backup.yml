@@ -19,7 +19,6 @@ jobs:
           mkdir -p backups
           DATE=$(date -u +'%Y-%m-%d')
           cp stats.json "backups/stats-${DATE}.json"
-          cp last_aggregation.txt "backups/last_aggregation-${DATE}.txt"
 
       - name: Commit & push
         run: |
