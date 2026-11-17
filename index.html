@@ -492,7 +492,7 @@ body::before {
       <div class="subtitle-cn" data-i18n="subtitleCn">摇曳露营人格测试</div>
       <button class="btn btn-primary" onclick="startQuiz()" data-i18n="startBtn">开始测试</button>
       <div class="video-wrapper"><video id="homeVideo" class="home-video" data-src="home.mp4" poster="home-poster.webp" preload="none" width="960" height="720" autoplay loop muted playsinline webkit-playsinline x5-video-player-type="h5-page" x5-video-player-fullscreen="false" disableRemotePlayback disablePictureInPicture></video></div>
-      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.31.1</div>
+      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.32.0</div>
     </div>
   </div>
 
@@ -525,7 +525,7 @@ body::before {
       <div class="result-actions">
         <button class="btn btn-primary" onclick="openShareCard()" data-i18n="makeCard">生成我的人格卡片</button>
       </div>
-      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.31.1</div>
+      <div class="bottom-bar">@悠哉日常大囧 · YCTI.FUN · v0.32.0</div>
     </div>
   </div>
 </div>
@@ -754,7 +754,7 @@ const I18N = {
     title:'YCTI · 摇曳露营人格测试',
     subtitleCn:'摇曳露营人格测试',
     startBtn:'开始测试',
-    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.31.1',
+    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.32.0',
     loadingAnalyzing:'正在分析你的摇曳露营人格',
     loadingWait:'初次加载可能较慢，请耐心等待',
     fxView:'分析完成 · 查看结果',
@@ -790,7 +790,7 @@ const I18N = {
     title:'YCTI · ゆるキャン△性格診断',
     subtitleCn:'ゆるキャン△性格診断',
     startBtn:'テスト開始',
-    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.31.1',
+    bottomBar:'@悠哉日常大囧 · YCTI.FUN · v0.32.0',
     loadingAnalyzing:'あなたのゆるキャン性格を分析中',
     loadingWait:'初回読み込みは少し時間がかかることがあります',
     fxView:'分析完了 · 結果を見る',
@@ -855,13 +855,12 @@ function initLang() {
     var stored = localStorage.getItem('ycti_lang');
     if (stored) { currentLang = stored; applyI18N(); return; }
   } catch(e) {}
-  fetch('https://ipapi.co/json/')
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      currentLang = (d.country === 'JP') ? 'ja' : 'zh';
-      applyI18N();
-    })
-    .catch(function() { applyI18N(); });
+  // 用浏览器首选语言判断，不再请求 ipapi.co：
+  // 原来是 613ms 的阻塞请求，还把访客 IP 交给了第三方；
+  // 按语言判断也比按国家准——在日本用中文浏览器的人应该看到中文。
+  var primary = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+  currentLang = /^ja/i.test(primary) ? 'ja' : 'zh';
+  applyI18N();
 }
 
 // ============================================================
@@ -1273,7 +1272,7 @@ function startQuiz() {
   resetPreloads();   // 每次重测重置预取（含隐藏容器）
   currentQ = 0;
   prefetchRarityStats();   // 后台预取全站分布，结果页要用来算稀有度
-  // 阵营均衡抽题：从 50 题中选 20 题
+  // 阵营均衡抽题：从 60 题中选 20 题
   shuffledQuestions = selectQuestions(QUESTIONS, 20);
   questionOrder = shuffledQuestions.map((_, i) => i);
   showScreen('quizScreen');
@@ -2035,10 +2034,6 @@ function buildShareCard(d, cb) {
       pLines[pLines.length - 1] = (pLast.length > 1 ? pLast.slice(0, -1) : pLast) + '\u2026';
     }
     var partnerH = (partnerName ? 34 : 0) + pLines.length * pLineH;
-    // 右侧「二维码 + 下方产品名」是一个整体块，和左侧拍档区域顶边对齐、底边取较低的那个；
-    // 拍档字多就往下面长，不会把顶部顶上去。
-    var bandBottom = Math.max(qy + partnerH, qy + bandTotal);
-    var bandH = bandBottom - qy;
 
     var codeBlock = codeSize * 0.74 + 24;
     var roleBlock = 28 + 18;
